@@ -1,20 +1,20 @@
 %% Clear parameters
-clc; clear all;
+clc; clear all; close all;
 
 T = 0.01;
-tsim = 30;
+tsim = 10;
 
 %% Parameters
-mo = 1.5;                   % kg
-mh = 1.0;                   % kg
+mo = 0.2;                   % kg
+mh = 0.4;                   % kg
 
 ro = 0.1;                   % m
 rh = 0.2;                   % m
 
 g = 9.82;                   % m/s^2
 
-theta0 = 0*(pi/180);        % rad
-phi0 = 2*(pi/180);          % rad
+theta0 = 10*(pi/180);        % rad
+phi0 = 10*(pi/180);          % rad
 
 %% Build Matrices
 
@@ -182,10 +182,12 @@ grid on;
 title('Hand angular velocity');
 
 subplot(2,2,2);
-plot(tout,dphi.signals.values.*180/pi);
-legend('dphi');
+plot(tout,dphi.signals.values.*180/pi); hold on;
+yyaxis right;
+plot(tout,phi.signals.values.*180/pi);
+legend('dphi','phi');
 grid on;
-title('Object angular velocity (about hand CoM)');
+title('Object angular velocity and angle (about hand CoM)');
 
 subplot(2,2,3);
 plot(tout,theta.signals.values.*180/pi);
@@ -194,12 +196,56 @@ grid on;
 title('Hand angle');
 
 subplot(2,2,4);
-plot(tout,phi.signals.values.*180/pi);
-legend('phi');
+plot(tau.time,tau.signals.values);
+legend('tau');
 grid on;
-title('Object angle (about hand CoM)');
+title('Demanded Torque');
 
 
 
-% figure; hold on;
-% plot(tout,tau.signals.values);
+%% Visulisation?
+% ezplot((x-1).^2+(y-1).^2-0.5.^2); pbaspect([1 1 1])
+xh = 0;
+yh = 0;
+
+xo = (rh + ro).*sin(phi.signals.values);
+yo = (rh + ro).*cos(phi.signals.values);
+
+lxh = rh.*sin(theta.signals.values);
+lyh = rh.*cos(theta.signals.values);
+
+syms x y
+circ =@(a,b,r) (x - a)^2 + (y - b).^2 - r^2;
+
+figure(2);
+hold on;
+axis([-0.5 0.5 -0.3 0.5]);
+pbaspect([1 1 1]); 
+
+fimplicit(circ(xh,yh,rh),'-b','linewidth',2);
+h = fimplicit(circ(xo(1),yo(1),ro),'-b','linewidth',2);
+line = plot([0,lxh(1)],[0,lyh(1)],'-b','linewidth',2);
+txt = text(-0.45,0.45, sprintf('theta = %3f, phi = %3f', theta.signals.values(1), phi.signals.values(1)));
+
+
+for i=2:size(tout)
+    delete(h);
+    delete(line);
+    delete(txt);
+    
+    h = fimplicit(circ(xo(i),yo(i),ro),'-r','linewidth',2);
+    line = plot([0,lxh(i)],[0,lyh(i)],'-b','linewidth',2);
+    caption = sprintf('t = %3f', i*0.01);
+    title(caption);
+    
+    txt = text(-0.45,0.45, sprintf('theta = %3f, phi = %3f', theta.signals.values(i), phi.signals.values(i)));
+    
+    pause(0.001)
+    drawnow;
+%     h = fimplicit(circ(xo(i),yo(i),ro)); 
+    
+end
+
+
+
+
