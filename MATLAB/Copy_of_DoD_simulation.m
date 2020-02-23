@@ -36,8 +36,8 @@ tau_min = -100;             % Nm
 % x(4) = object CoM angle relative to hand CoM [rad]
 
 MM = [
-    (mo + mh)*rh^2, -mo*rh*(ro + rh);
-    -mo*rh*(ro + rh), 2*mo*(rh + ro)^2];
+    (mo + mh)*rh^2, 2*mo*rh*ro;
+    2*mo*rh*ro, mo*(rh^2 + (rh+ro)^2)];
 
 KK = [0, 0; 0, -mo*g*(rh + ro)];
 
@@ -203,10 +203,52 @@ title('Demanded Torque');
 
 
 
-%% Visulisation?
 
-runVis(rh, ro, phi, theta, tout);
+%% Visualisation
+runVis(rh, ro, phi, theta, tout)
 
+% %% Visulisation?
+% % ezplot((x-1).^2+(y-1).^2-0.5.^2); pbaspect([1 1 1])
+% xh = 0;
+% yh = 0;
+% 
+% xo = (rh + ro).*sin(phi.signals.values);
+% yo = (rh + ro).*cos(phi.signals.values);
+% 
+% lxh = rh.*sin(theta.signals.values);
+% lyh = rh.*cos(theta.signals.values);
+% 
+% syms x y
+% circ =@(a,b,r) (x - a)^2 + (y - b).^2 - r^2;
+% 
+% figure(2);
+% hold on;
+% axis([-0.5 0.5 -0.3 0.5]);
+% pbaspect([1 1 1]); 
+% 
+% fimplicit(circ(xh,yh,rh),'-b','linewidth',2);
+% h = fimplicit(circ(xo(1),yo(1),ro),'-b','linewidth',2);
+% line = plot([0,lxh(1)],[0,lyh(1)],'-b','linewidth',2);
+% txt = text(-0.45,0.45, sprintf('theta = %3f, phi = %3f', theta.signals.values(1), phi.signals.values(1)));
+% 
+% 
+% for i=2:size(tout)
+%     delete(h);
+%     delete(line);
+%     delete(txt);
+%     
+%     h = fimplicit(circ(xo(i),yo(i),ro),'-r','linewidth',2);
+%     line = plot([0,lxh(i)],[0,lyh(i)],'-b','linewidth',2);
+%     caption = sprintf('t = %3f', i*0.01);
+%     title(caption);
+%     
+%     txt = text(-0.45,0.45, sprintf('theta = %3f, phi = %3f', theta.signals.values(i), phi.signals.values(i)));
+%     
+%     pause(0.001)
+%     drawnow;
+% %     h = fimplicit(circ(xo(i),yo(i),ro)); 
+%     
+% end
 
 
 
