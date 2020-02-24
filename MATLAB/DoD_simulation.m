@@ -1,5 +1,6 @@
 %% Clear parameters
-clc; clear all; close all;
+clc; clear all; 
+% close all;
 
 T = 0.01;
 tsim = 10;
@@ -14,13 +15,7 @@ rh = 0.2;                   % m
 g = 9.82;                   % m/s^2
 
 theta0 = 10*(pi/180);        % rad
-phi0 = 10*(pi/180);          % rad
-
-%% Build Matrices
-
-% MM = [
-%     rh^2*(mo + mh), -mo*rh*(ro + rh);
-%     -mo*rh*(ro + rh), 2*mo*(rh + ro)^2];
+phi0 = 5*(pi/180);          % rad
 
 
 %% Motor parameters
@@ -38,6 +33,11 @@ tau_min = -100;             % Nm
 MM = [
     (mo + mh)*rh^2, -mo*rh*(ro + rh);
     -mo*rh*(ro + rh), 2*mo*(rh + ro)^2];
+
+
+% MM = [
+%     (mo + mh)*rh^2, -mo*rh^2;
+%     -mo*rh^2, mo*(rh^2 + (rh + ro)^2)];
 
 KK = [0, 0; 0, -mo*g*(rh + ro)];
 
@@ -173,7 +173,7 @@ bineq = [fracU_max; -fracU_min];
 sim('DoD_simulink_model');
 
 
-figure;  
+figure(1);  clf;
 subplot(2,2,1); hold on;
 plot(tout,dtheta.signals.values.*180/pi);
 plot(tout,ref.signals.values.*180/pi,'r');
@@ -207,7 +207,7 @@ title('Demanded Torque');
 
 runVis(rh, ro, phi, theta, tout);
 
-
+% 
 
 
 

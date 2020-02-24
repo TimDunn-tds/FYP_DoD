@@ -10,7 +10,7 @@ yo = (rh + ro).*cos(phi.signals.values);
 lxh = rh.*sin(theta.signals.values);
 lyh = rh.*cos(theta.signals.values);
 
-alph = (rh/ro).*(phi.signals.values-theta.signals.values);
+alph = phi.signals.values + (rh/ro).*(phi.signals.values-theta.signals.values);
 lxo = xo + ro.*sin(alph);
 lyo = yo + ro.*cos(alph);
 
@@ -18,6 +18,7 @@ syms x y
 circ =@(a,b,r) (x - a)^2 + (y - b).^2 - r^2;
 
 figure(2);
+clf;
 hold on;
 axis([-0.5 0.5 -0.3 0.5]);
 pbaspect([1 1 1]); 
@@ -47,7 +48,7 @@ for i=2:size(tout)
     caption = sprintf('t = %3f', i*0.01);
     title(caption);
     
-    txt = text(-0.45,0.45, sprintf('theta = %3f, phi = %3f', theta.signals.values(i), phi.signals.values(i)));
+    txt = text(-0.45,0.45, sprintf('theta = %3f, phi = %3f, alpha = %3f', theta.signals.values(i)*180/pi, phi.signals.values(i)*180/pi, alph(i)*180/pi));
     
     pause(0.001)
     drawnow;
