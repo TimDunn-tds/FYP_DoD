@@ -4,13 +4,14 @@ function void = runVis(rh, ro, phi, theta, tout)
 xh = 0;
 yh = 0;
 
-xo = (rh + ro).*sin(phi.signals.values);
-yo = (rh + ro).*cos(phi.signals.values);
+xo = (rh + ro).*sin(phi.signals.values + theta.signals.values);
+yo = (rh + ro).*cos(phi.signals.values + theta.signals.values);
 
 lxh = rh.*sin(theta.signals.values);
 lyh = rh.*cos(theta.signals.values);
 
-alph = phi.signals.values + (rh/ro).*(phi.signals.values-theta.signals.values);
+% alph = phi.signals.values + (rh/ro).*(phi.signals.values-theta.signals.values);
+alph = (rh/ro)*phi.signals.values + theta.signals.values;
 lxo = xo + ro.*sin(alph);
 lyo = yo + ro.*cos(alph);
 

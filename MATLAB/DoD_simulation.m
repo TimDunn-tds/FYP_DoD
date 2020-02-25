@@ -3,7 +3,7 @@ clc; clear all;
 % close all;
 
 T = 0.01;
-tsim = 10;
+tsim = 100;
 
 %% Parameters
 mo = 0.2;                   % kg
@@ -11,6 +11,9 @@ mh = 0.4;                   % kg
 
 ro = 0.1;                   % m
 rh = 0.2;                   % m
+
+Jh = mh*rh^2;
+Jo = mo*ro^2;
 
 g = 9.82;                   % m/s^2
 
@@ -30,18 +33,21 @@ tau_min = -100;             % Nm
 % x(3) = hand angle [rad]
 % x(4) = object CoM angle relative to hand CoM [rad]
 
-MM = [
-    (mo + mh)*rh^2, -mo*rh*(ro + rh);
-    -mo*rh*(ro + rh), 2*mo*(rh + ro)^2];
-
-
 % MM = [
-%     (mo + mh)*rh^2, -mo*rh^2;
-%     -mo*rh^2, mo*(rh^2 + (rh + ro)^2)];
+%     (mo + mh)*rh^2, -mo*rh*(ro + rh);
+%     -mo*rh*(ro + rh), 2*mo*(rh + ro)^2];
 
+MM = [
+        mo*(rh + ro)^2 + Jh, mo*(ro + rh)^2 + Jo*(ro/rh);
+        mo*(ro + rh)^2 + Jo*(ro/rh), mo*(ro + rh)^2 + Jo*(ro/rh)^2];
+        
+        
+        
 KK = [0, 0; 0, -mo*g*(rh + ro)];
+% KK = [mo*g*(rh + ro)*sin(theta + phi); mo*g*(rh + ro)*sin(theta + phi)];
 
-DD = zeros(2);
+% DD = zeros(2);
+DD = [1 0; 0 1];
 
 e = [1;0];
 
@@ -205,7 +211,7 @@ title('Demanded Torque');
 
 %% Visulisation?
 
-runVis(rh, ro, phi, theta, tout);
+% runVis(rh, ro, phi, theta, tout);
 
 % 
 
