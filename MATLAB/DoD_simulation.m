@@ -7,14 +7,17 @@ tsim = 10;
 
 %% Parameters
 mo = 0.2;                   % kg
-mh = 0.4;                   % kg
+mh = 0.5;                   % kg
 
 ro = 0.1;                   % m
 rh = 0.2;                   % m
 
+Jo = mo*ro^2;
+Jh = mh*rh^2;
+
 g = 9.82;                   % m/s^2
 
-theta0 = 10*(pi/180);        % rad
+theta0 = 0*(pi/180);        % rad
 phi0 = 5*(pi/180);          % rad
 
 
@@ -30,20 +33,34 @@ tau_min = -100;             % Nm
 % x(3) = hand angle [rad]
 % x(4) = object CoM angle relative to hand CoM [rad]
 
-MM = [
-    (mo + mh)*rh^2, -mo*rh*(ro + rh);
-    -mo*rh*(ro + rh), 2*mo*(rh + ro)^2];
+% MM = [
+%     (mo + mh)*rh^2, -mo*rh*(ro + rh);
+%     -mo*rh*(ro + rh), 2*mo*(rh + ro)^2];
 
-
+% 
 % MM = [
 %     (mo + mh)*rh^2, -mo*rh^2;
 %     -mo*rh^2, mo*(rh^2 + (rh + ro)^2)];
 
+% MM = [
+%     mh*rh^2 + mo*(ro+rh)^2, mo*(rh*ro - rh^2);
+%     mo*(rh*ro - rh^2), mo*(rh+ro)^2 + mo*rh^2];
+
+MM = [
+    Jh + Jo + mo*(rh + ro)^2,  mo*(rh + ro)^2 + (rh/ro)*Jo;
+    mo*(rh + ro)^2 + (rh/ro)*Jo, mo*(rh + ro)^2 + (rh^2/ro^2)*Jo];
+
+% KK = [-mo*g*(rh + ro), 0; 0, -mo*g*(rh + ro)];
 KK = [0, 0; 0, -mo*g*(rh + ro)];
 
-DD = zeros(2);
+
+DD = [0, 0; 0, 0];
 
 e = [1;0];
+
+
+
+
 
 % Create matrices 
 A = [MM\-DD, MM\-KK; eye(2,2), zeros(2,2)];
