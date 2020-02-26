@@ -3,7 +3,7 @@ clc; clear all;
 % close all;
 
 T = 0.01;
-tsim = 10;
+tsim = 100;
 
 %% Parameters
 mo = 0.2;                   % kg
@@ -46,15 +46,20 @@ tau_min = -100;             % Nm
 %     mh*rh^2 + mo*(ro+rh)^2, mo*(rh*ro - rh^2);
 %     mo*(rh*ro - rh^2), mo*(rh+ro)^2 + mo*rh^2];
 
+% MM = [
+%     Jh + Jo + mo*(rh + ro)^2,  mo*(rh + ro)^2 + (rh/ro)*Jo;
+%     mo*(rh + ro)^2 + (rh/ro)*Jo, mo*(rh + ro)^2 + (rh^2/ro^2)*Jo];
+
+
 MM = [
-    Jh + Jo + mo*(rh + ro)^2,  mo*(rh + ro)^2 + (rh/ro)*Jo;
-    mo*(rh + ro)^2 + (rh/ro)*Jo, mo*(rh + ro)^2 + (rh^2/ro^2)*Jo];
+    Jh + Jo*(2*(rh/ro) + (rh^2/ro^2) + 1), -Jo*(rh/ro + (rh^2/ro^2));
+    -Jo*(rh/ro + (rh^2/ro^2)), Jo*(rh^2/ro^2) + mo*(rh + ro)^2];
 
 % KK = [-mo*g*(rh + ro), 0; 0, -mo*g*(rh + ro)];
 KK = [0, 0; 0, -mo*g*(rh + ro)];
 
 
-DD = [0, 0; 0, 0];
+DD = [0.01, 0; 0, 0.01];
 
 e = [1;0];
 
@@ -222,7 +227,7 @@ title('Demanded Torque');
 
 %% Visulisation?
 
-runVis(rh, ro, phi, theta, tout);
+% runVis(rh, ro, phi, theta, tout);
 
 % 
 
