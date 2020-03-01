@@ -1,4 +1,4 @@
-function void = runVis(rh, ro, phi, theta, tout)
+function void = runVis(rh, ro, phi, theta, dphi, dtheta, tout)
 %% Visulisation?
 % ezplot((x-1).^2+(y-1).^2-0.5.^2); pbaspect([1 1 1])
 xh = 0;
@@ -30,15 +30,17 @@ line_o = plot([xo(1), lxo(1)],[yo(1),lyo(1)],'-r','linewidth',2);
 pbaspect([1 1 1]); 
 
 txt = text(-0.35,0.45, sprintf('theta = %3f, phi = %3f', theta.signals.values(1), phi.signals.values(1)));
+txt2= text(-0.35, 0.4, sprintf('dtheta = %3f, dphi = %3f', dtheta.signals.values(1)*180/pi, dphi.signals.values(1)*180/pi));
 
 
-for i=2:5:size(tout)
+for i=2:2:size(tout)
     delete(h);
     delete(line_h);
     
     delete(line_o);
     
     delete(txt);
+    delete(txt2);
     
     h = fimplicit(circ(xo(i),yo(i),ro),'-r','linewidth',2);
     line_h = plot([0,lxh(i)],[0,lyh(i)],'-b','linewidth',2);
@@ -50,6 +52,7 @@ for i=2:5:size(tout)
     
     txt = text(-0.35,0.45, sprintf('theta = %3f, phi = %3f, alpha = %3f', theta.signals.values(i)*180/pi,...
         (phi.signals.values(i))*180/pi, alph(i)*180/pi));
+    txt2= text(-0.35, 0.4, sprintf('dtheta = %3f, dphi = %3f', dtheta.signals.values(i)*180/pi, dphi.signals.values(i)*180/pi));
     
 %     pause(0.001)
     drawnow;

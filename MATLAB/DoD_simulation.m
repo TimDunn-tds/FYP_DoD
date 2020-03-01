@@ -6,8 +6,8 @@ T = 0.01;
 tsim = 15;
 
 %% Parameters
-mo = 0.1;                   % kg
-mh = 0.3;                   % kg
+% mo = 0.1;                   % kg
+% mh = 0.3;                   % kg
 
 ro = 0.1;                  % m
 rh = 0.2;                   % m
@@ -16,8 +16,8 @@ thick = 0.02;               % m
 
 p = 1180;                   % kg/m3
 
-% mo = pi*(ro^2)*thick;
-% mh = pi*(rh^2)*thick;
+mo = pi*(ro^2)*thick;
+mh = pi*(rh^2)*thick;
 
 Jo = 0.5*mo*(ro^2);
 Jh = 0.5*mh*(rh^2);
@@ -25,12 +25,12 @@ Jh = 0.5*mh*(rh^2);
 g = 9.82;                   % m/s^2
 
 theta0 = 1*(pi/180);        % rad
-phi0 = 359*(pi/180);          % rad
+phi0 = 5*(pi/180);          % rad
 
 
 %% Motor parameters
-tau_max = 20;              % Nm
-tau_min = -20;             % Nm
+tau_max = 10;              % Nm
+tau_min = -10;             % Nm
 
 
 %% Linearised Plant Model (linearised about upright balancing position)
@@ -40,23 +40,23 @@ tau_min = -20;             % Nm
 % x(3) = hand angle [rad]
 % x(4) = object CoM angle relative to hand CoM [rad]
 
-% MM = [
-%     (mo + mh)*rh^2, -mo*rh*(ro + rh);
-%     -mo*rh*(ro + rh), 2*mo*(rh + ro)^2];
+MM = [
+    (mo + mh)*rh^2, -mo*rh*(ro + rh);
+    -mo*rh*(ro + rh), 2*mo*(rh + ro)^2];
 
 % MM = [
 %     Jh + Jo*(2*(rh/ro) + (rh^2/ro^2) + 1), -Jo*(rh/ro + (rh^2/ro^2));
 %     -Jo*(rh/ro + (rh^2/ro^2)), Jo*(rh^2/ro^2) + mo*(rh + ro)^2];
 % 
-MM = [
-    Jh + Jo*(-2*(rh/ro) + (rh^2/ro^2) + 1), Jo*(rh/ro - (rh^2/ro^2));
-    Jo*(rh/ro - (rh^2/ro^2)), Jo*(rh^2/ro^2) + mo*(rh + ro)^2];
+% MM = [
+%     Jh + Jo*(-2*(rh/ro) + (rh^2/ro^2) + 1), 2*Jo*(rh/ro - (rh^2/ro^2));
+%     2*Jo*(rh/ro - (rh^2/ro^2)), Jo*(rh^2/ro^2) + mo*((rh + ro)^2)];
 
 % KK = [-mo*g*(rh + ro), 0; 0, -mo*g*(rh + ro)];
 KK = [0, 0; 0, -mo*g*(rh + ro)];
 
 
-DD = [0.00, 0; 0, 0];
+DD = [0.001, 0; 0, 0];
 
 e = [1;0];
 
@@ -204,7 +204,7 @@ subplot(2,2,3);
 plot(tout,phi.signals.values.*180/pi);
 legend('phi');
 grid on;
-title('Hand angle');
+title('Object angle (about hand CoM');
 
 subplot(2,2,4);
 plot(tau.time,tau.signals.values);
@@ -215,7 +215,7 @@ title('Demanded Torque');
 
 %% Visulisation?
 
-runVis(rh, ro, phi, theta, tout);
+runVis(rh, ro, phi, theta, dphi, dtheta, tout);
 
 
 
