@@ -32,7 +32,7 @@ pbaspect([1 1 1]);
 txt = text(-0.35,0.45, sprintf('theta = %3f, phi = %3f', theta.signals.values(1), phi.signals.values(1)));
 
 
-for i=2:size(tout)
+for i=2:5:size(tout)
     delete(h);
     delete(line_h);
     
@@ -49,9 +49,9 @@ for i=2:size(tout)
     title(caption);
     
     txt = text(-0.35,0.45, sprintf('theta = %3f, phi = %3f, alpha = %3f', theta.signals.values(i)*180/pi,...
-        (theta.signals.values(i) + phi.signals.values(i))*180/pi, alph(i)*180/pi));
+        (phi.signals.values(i))*180/pi, alph(i)*180/pi));
     
-    pause(0.001)
+%     pause(0.001)
     drawnow;
     pbaspect([1 1 1]);
 %     h = fimplicit(circ(xo(i),yo(i),ro)); 

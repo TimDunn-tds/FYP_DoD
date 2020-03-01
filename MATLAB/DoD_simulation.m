@@ -3,27 +3,34 @@ clc; clear all;
 % close all;
 
 T = 0.01;
-tsim = 100;
+tsim = 15;
 
 %% Parameters
-mo = 0.2;                   % kg
-mh = 0.5;                   % kg
+mo = 0.1;                   % kg
+mh = 0.3;                   % kg
 
-ro = 0.1;                   % m
+ro = 0.1;                  % m
 rh = 0.2;                   % m
 
-Jo = mo*ro^2;
-Jh = mh*rh^2;
+thick = 0.02;               % m
+
+p = 1180;                   % kg/m3
+
+% mo = pi*(ro^2)*thick;
+% mh = pi*(rh^2)*thick;
+
+Jo = 0.5*mo*(ro^2);
+Jh = 0.5*mh*(rh^2);
 
 g = 9.82;                   % m/s^2
 
-theta0 = 0*(pi/180);        % rad
-phi0 = 5*(pi/180);          % rad
+theta0 = 1*(pi/180);        % rad
+phi0 = 359*(pi/180);          % rad
 
 
 %% Motor parameters
-tau_max = 100;              % Nm
-tau_min = -100;             % Nm
+tau_max = 20;              % Nm
+tau_min = -20;             % Nm
 
 
 %% Linearised Plant Model (linearised about upright balancing position)
@@ -37,34 +44,21 @@ tau_min = -100;             % Nm
 %     (mo + mh)*rh^2, -mo*rh*(ro + rh);
 %     -mo*rh*(ro + rh), 2*mo*(rh + ro)^2];
 
+% MM = [
+%     Jh + Jo*(2*(rh/ro) + (rh^2/ro^2) + 1), -Jo*(rh/ro + (rh^2/ro^2));
+%     -Jo*(rh/ro + (rh^2/ro^2)), Jo*(rh^2/ro^2) + mo*(rh + ro)^2];
 % 
-% MM = [
-%     (mo + mh)*rh^2, -mo*rh^2;
-%     -mo*rh^2, mo*(rh^2 + (rh + ro)^2)];
-
-% MM = [
-%     mh*rh^2 + mo*(ro+rh)^2, mo*(rh*ro - rh^2);
-%     mo*(rh*ro - rh^2), mo*(rh+ro)^2 + mo*rh^2];
-
-% MM = [
-%     Jh + Jo + mo*(rh + ro)^2,  mo*(rh + ro)^2 + (rh/ro)*Jo;
-%     mo*(rh + ro)^2 + (rh/ro)*Jo, mo*(rh + ro)^2 + (rh^2/ro^2)*Jo];
-
-
 MM = [
-    Jh + Jo*(2*(rh/ro) + (rh^2/ro^2) + 1), -Jo*(rh/ro + (rh^2/ro^2));
-    -Jo*(rh/ro + (rh^2/ro^2)), Jo*(rh^2/ro^2) + mo*(rh + ro)^2];
+    Jh + Jo*(-2*(rh/ro) + (rh^2/ro^2) + 1), Jo*(rh/ro - (rh^2/ro^2));
+    Jo*(rh/ro - (rh^2/ro^2)), Jo*(rh^2/ro^2) + mo*(rh + ro)^2];
 
 % KK = [-mo*g*(rh + ro), 0; 0, -mo*g*(rh + ro)];
 KK = [0, 0; 0, -mo*g*(rh + ro)];
 
 
-DD = [0.01, 0; 0, 0.01];
+DD = [0.00, 0; 0, 0];
 
 e = [1;0];
-
-
-
 
 
 % Create matrices 
@@ -187,13 +181,8 @@ bineq = [fracU_max; -fracU_min];
 
 
 
-
-
-
-
 %% Run simulation
 sim('DoD_simulink_model');
-
 
 figure(1);  clf;
 subplot(2,2,1); hold on;
@@ -205,15 +194,15 @@ title('Hand angular velocity');
 
 subplot(2,2,2);
 plot(tout,dphi.signals.values.*180/pi); hold on;
-yyaxis right;
-plot(tout,phi.signals.values.*180/pi);
-legend('dphi','phi');
+% yyaxis right;
+% plot(tout,phi.signals.values.*180/pi);
+legend('dphi');
 grid on;
-title('Object angular velocity and angle (about hand CoM)');
+title('Object angular velocity (about hand CoM)');
 
 subplot(2,2,3);
-plot(tout,theta.signals.values.*180/pi);
-legend('theta');
+plot(tout,phi.signals.values.*180/pi);
+legend('phi');
 grid on;
 title('Hand angle');
 
@@ -224,12 +213,10 @@ grid on;
 title('Demanded Torque');
 
 
-
 %% Visulisation?
 
-% runVis(rh, ro, phi, theta, tout);
+runVis(rh, ro, phi, theta, tout);
 
-% 
 
 
 
