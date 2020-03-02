@@ -1,17 +1,16 @@
 %% Clear parameters
 clc; clear all; 
-
-
+% close all;
 
 T = 0.01;
-tsim = 15;
+tsim = 10;
 
 %% Parameters
 % mo = 0.1;                   % kg
 % mh = 0.3;                   % kg
 
-ro = 0.05;                  % m
-rh = 0.15;                   % m
+ro = 0.1;                  % m
+rh = 0.2;                   % m
 
 thick = 0.02;               % m
 
@@ -238,19 +237,7 @@ title('Demanded Torque');
 
 %% Visulisation?
 % 
-F = runVis(rh, ro, phi, theta, dphi, dtheta, tout);
-
-%% Save video
-writerObj = VideoWriter('DoD_vid.avi');
-writerObj.FrameRate = 100;
-
-open(writerObj);
-
-for i=1:length(F)
-    frame = F(i);
-    writeVideo(writerObj, frame);
-end
-close(writerObj);
+runVis(rh, ro, phi, theta, dphi, dtheta, tout);
 
 
 
