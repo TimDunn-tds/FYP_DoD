@@ -24,13 +24,13 @@ Jh = 0.5*mh*(rh^2);
 
 g = 9.82;                   % m/s^2
 
-theta0 = 1*(pi/180);        % rad
-phi0 = 5*(pi/180);          % rad
+theta0 = 0*(pi/180);        % rad
+phi0 = -5*(pi/180);          % rad
 
 
 %% Motor parameters
-tau_max = 10;              % Nm
-tau_min = -10;             % Nm
+tau_max = 1;              % Nm
+tau_min = -1;             % Nm
 
 
 %% Linearised Plant Model (linearised about upright balancing position)
@@ -40,17 +40,17 @@ tau_min = -10;             % Nm
 % x(3) = hand angle [rad]
 % x(4) = object CoM angle relative to hand CoM [rad]
 
-MM = [
-    (mo + mh)*rh^2, -mo*rh*(ro + rh);
-    -mo*rh*(ro + rh), 2*mo*(rh + ro)^2];
+% MM = [
+%     (mo + mh)*rh^2, -mo*rh*(ro + rh);
+%     -mo*rh*(ro + rh), 2*mo*(rh + ro)^2];
 
 % MM = [
 %     Jh + Jo*(2*(rh/ro) + (rh^2/ro^2) + 1), -Jo*(rh/ro + (rh^2/ro^2));
 %     -Jo*(rh/ro + (rh^2/ro^2)), Jo*(rh^2/ro^2) + mo*(rh + ro)^2];
 % 
-% MM = [
-%     Jh + Jo*(-2*(rh/ro) + (rh^2/ro^2) + 1), 2*Jo*(rh/ro - (rh^2/ro^2));
-%     2*Jo*(rh/ro - (rh^2/ro^2)), Jo*(rh^2/ro^2) + mo*((rh + ro)^2)];
+MM = [
+    Jh + Jo*(-2*(rh/ro) + (rh^2/ro^2) + 1), 2*Jo*(rh/ro - (rh^2/ro^2));
+    2*Jo*(rh/ro - (rh^2/ro^2)), Jo*(rh^2/ro^2) + mo*((rh + ro)^2)];
 
 % KK = [-mo*g*(rh + ro), 0; 0, -mo*g*(rh + ro)];
 KK = [0, 0; 0, -mo*g*(rh + ro)];
@@ -91,7 +91,7 @@ n_out = size(Cc,1);     % No. outputs to regulate
 n_states = size(Acd,1); % No. states
 
 
-N_MPC = 20; % Horizon
+N_MPC = 40; % Horizon
 
 % Quadratic cost weighting
 Ru = 1;         % Penalty on input moves (i.e. ||u[k]-u[k-1]||)
@@ -185,12 +185,13 @@ bineq = [fracU_max; -fracU_min];
 sim('DoD_simulink_model');
 
 figure(1);  clf;
-subplot(2,2,1); hold on;
-plot(tout,dtheta.signals.values.*180/pi);
-plot(tout,ref.signals.values.*180/pi,'r');
-legend('dtheta');
+
+subplot(2,2,1);
+plot(tout,phi.signals.values.*180/pi); hold on;
+plot(tout, theta.signals.values.*180/pi);
+legend('phi','theta');
 grid on;
-title('Hand angular velocity');
+title('Object angle (about hand CoM');
 
 subplot(2,2,2);
 plot(tout,dphi.signals.values.*180/pi); hold on;
@@ -200,11 +201,12 @@ legend('dphi');
 grid on;
 title('Object angular velocity (about hand CoM)');
 
-subplot(2,2,3);
-plot(tout,phi.signals.values.*180/pi);
-legend('phi');
+subplot(2,2,3); hold on;
+plot(tout,dtheta.signals.values.*180/pi);
+plot(tout,ref.signals.values.*180/pi,'r');
+legend('dtheta');
 grid on;
-title('Object angle (about hand CoM');
+title('Hand angular velocity');
 
 subplot(2,2,4);
 plot(tau.time,tau.signals.values);
@@ -214,8 +216,8 @@ title('Demanded Torque');
 
 
 %% Visulisation?
-
-runVis(rh, ro, phi, theta, dphi, dtheta, tout);
+% 
+% runVis(rh, ro, phi, theta, dphi, dtheta, tout);
 
 
 
