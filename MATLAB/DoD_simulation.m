@@ -1,8 +1,6 @@
 %% Clear parameters
 clc; clear all; 
 
-
-
 T = 0.01;
 tsim = 15;
 
@@ -10,15 +8,15 @@ tsim = 15;
 % mo = 0.1;                   % kg
 % mh = 0.3;                   % kg
 
-ro = 0.05;                  % m
+ro = 0.075;                  % m
 rh = 0.15;                   % m
 
-thick = 0.02;               % m
+thick = 0.01;               % m
 
 p = 1180;                   % kg/m3
 
-mo = pi*(ro^2)*thick;
-mh = pi*(rh^2)*thick;
+mo = pi*(ro^2)*thick*p;
+mh = pi*(rh^2)*thick*p;
 
 Jo = 0.5*mo*(ro^2);
 Jh = 0.5*mh*(rh^2);
@@ -26,7 +24,7 @@ Jh = 0.5*mh*(rh^2);
 g = 9.82;                   % m/s^2
 
 theta0 = 0*(pi/180);        % rad
-phi0 = -15*(pi/180);          % rad
+phi0 = -8*(pi/180);          % rad
 
 
 %% Motor parameters
@@ -88,7 +86,7 @@ Qc = [
     1, 0, 0;
     0, 1, 0;
     0, 0, 1];           % penalise state
-Rc = 1;                 % penalise actuator 
+Rc = 10;                 % penalise actuator 
 
 Kc = zeros(1,length(idx));
 Kc(:,idx)   = lqrd(Ac, Bc, Qc, Rc, T);	% Feedback gain matrix
@@ -241,16 +239,16 @@ title('Demanded Torque');
 F = runVis(rh, ro, phi, theta, dphi, dtheta, tout);
 
 %% Save video
-writerObj = VideoWriter('DoD_vid.avi');
-writerObj.FrameRate = 100;
-
-open(writerObj);
-
-for i=1:length(F)
-    frame = F(i);
-    writeVideo(writerObj, frame);
-end
-close(writerObj);
+% writerObj = VideoWriter('DoD_vid.avi');
+% writerObj.FrameRate = 100;
+% 
+% open(writerObj);
+% 
+% for i=1:length(F)
+%     frame = F(i);
+%     writeVideo(writerObj, frame);
+% end
+% close(writerObj);
 
 
 

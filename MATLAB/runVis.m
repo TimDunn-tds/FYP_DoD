@@ -32,10 +32,9 @@ pbaspect([1 1 1]);
 txt = text(-0.35,0.45, sprintf('theta = %3f, phi = %3f', theta.signals.values(1), phi.signals.values(1)));
 txt2= text(-0.35, 0.4, sprintf('dtheta = %3f, dphi = %3f', dtheta.signals.values(1)*180/pi, dphi.signals.values(1)*180/pi));
 
-
 F(1) = getframe(gcf);
 
-for i=2:1:size(tout)
+for i=2:5:size(tout)
     delete(h);
     delete(line_h);
     
