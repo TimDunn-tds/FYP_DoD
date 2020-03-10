@@ -10,8 +10,11 @@ tsim = 15;
 
 ro = 0.075;                  % m
 rh = 0.15;                   % m
+% 
+% ro = ro/2;
+% rh = rh/2;
 
-thick = 0.01;               % m
+thick = 0.02;               % m
 
 p = 1180;                   % kg/m3
 
@@ -84,9 +87,9 @@ Dc  = Dr;
 %% Design LQG
 Qc = [
     1, 0, 0;
-    0, 1, 0;
-    0, 0, 1];           % penalise state
-Rc = 10;                 % penalise actuator 
+    0, 10, 0;
+    0, 0, 10];           % penalise state
+Rc = 100;                 % penalise actuator 
 
 Kc = zeros(1,length(idx));
 Kc(:,idx)   = lqrd(Ac, Bc, Qc, Rc, T);	% Feedback gain matrix
@@ -235,7 +238,7 @@ title('Demanded Torque');
 
 
 %% Visulisation?
-% 
+
 F = runVis(rh, ro, phi, theta, dphi, dtheta, tout);
 
 %% Save video
