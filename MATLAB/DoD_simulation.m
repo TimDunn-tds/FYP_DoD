@@ -208,14 +208,14 @@ sim('DoD_simulink_model');
 
 figure(1);  clf;
 
-subplot(2,2,1);
+ax1 = subplot(2,2,1);
 plot(tout,phi.signals.values.*180/pi); hold on;
 % plot(tout, theta.signals.values.*180/pi);
 legend('phi');
 grid on;
 title('Object angle (about hand CoM');
 
-subplot(2,2,2);
+ax2 = subplot(2,2,2);
 plot(tout,dphi.signals.values.*180/pi); hold on;
 % yyaxis right;
 % plot(tout,phi.signals.values.*180/pi);
@@ -223,18 +223,20 @@ legend('dphi');
 grid on;
 title('Object angular velocity (about hand CoM)');
 
-subplot(2,2,3); hold on;
+ax3 = subplot(2,2,3); hold on;
 plot(tout,dtheta.signals.values.*180/pi);
 plot(tout,ref.signals.values.*180/pi,'r');
 legend('dtheta');
 grid on;
 title('Hand angular velocity');
 
-subplot(2,2,4);
+ax4 = subplot(2,2,4);
 plot(tau.time,tau.signals.values);
 legend('tau');
 grid on;
 title('Demanded Torque');
+
+linkaxes([ax1, ax2, ax3, ax4], 'x');
 
 
 %% Visulisation?
