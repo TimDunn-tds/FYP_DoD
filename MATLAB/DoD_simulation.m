@@ -8,13 +8,14 @@ tsim = 15;
 % mo = 0.1;                   % kg
 % mh = 0.3;                   % kg
 
-ro = 0.075;                  % m
+% ro = 0.075;                  % m
+ro = 0.15;
 rh = 0.15;                   % m
 % 
 % ro = ro/2;
 % rh = rh/2;
 
-thick = 0.02;               % m
+thick = 0.01;               % m
 
 p = 1180;                   % kg/m3
 
@@ -27,7 +28,7 @@ Jh = 0.5*mh*(rh^2);
 g = 9.82;                   % m/s^2
 
 theta0 = 0*(pi/180);        % rad
-phi0 = -8*(pi/180);          % rad
+phi0 = -1*(pi/180);          % rad
 
 
 %% Motor parameters
@@ -50,9 +51,14 @@ tau_min = -1;             % Nm
 %     Jh + Jo*(2*(rh/ro) + (rh^2/ro^2) + 1), -Jo*(rh/ro + (rh^2/ro^2));
 %     -Jo*(rh/ro + (rh^2/ro^2)), Jo*(rh^2/ro^2) + mo*(rh + ro)^2];
 % 
+% MM = [
+%     Jh + Jo*(-2*(rh/ro) + (rh^2/ro^2) + 1), 2*Jo*(rh/ro - (rh^2/ro^2));
+%     2*Jo*(rh/ro - (rh^2/ro^2)), Jo*(rh^2/ro^2) + mo*((rh + ro)^2)];
+
 MM = [
-    Jh + Jo*(-2*(rh/ro) + (rh^2/ro^2) + 1), 2*Jo*(rh/ro - (rh^2/ro^2));
-    2*Jo*(rh/ro - (rh^2/ro^2)), Jo*(rh^2/ro^2) + mo*((rh + ro)^2)];
+    Jh + Jo*(rh^2/ro^2), 2*Jo*(rh^2/ro^2);
+    2*Jo*(rh^2/ro^2), Jo*(rh^2/ro^2) + mo*((rh + ro)^2)];
+
 
 % KK = [-mo*g*(rh + ro), 0; 0, -mo*g*(rh + ro)];
 KK = [0, 0; 0, -mo*g*(rh + ro)];
@@ -87,9 +93,9 @@ Dc  = Dr;
 %% Design LQG
 Qc = [
     1, 0, 0;
-    0, 10, 0;
-    0, 0, 10];           % penalise state
-Rc = 100;                 % penalise actuator 
+    0, 1, 0;
+    0, 0, 1];           % penalise state
+Rc = 50;                 % penalise actuator 
 
 Kc = zeros(1,length(idx));
 Kc(:,idx)   = lqrd(Ac, Bc, Qc, Rc, T);	% Feedback gain matrix
@@ -104,7 +110,7 @@ Nu          = NN(end);
 
 
 
-%% 
+%% Old MPC
 % %% Create MPC Controller
 % 
 % % System dimensions
@@ -236,10 +242,16 @@ legend('tau');
 grid on;
 title('Demanded Torque');
 
+% figure(3); clf; hold on;
+% alph = (rh/ro).*(phi.signals.values - theta.signals.values);
+% plot(theta.time, abs(alph), 'DisplayName', 'alpha');
+% plot(theta.time, abs(theta.signals.values), 'DisplayName', 'theta');
+% legend;
+
 
 %% Visulisation?
 
-F = runVis(rh, ro, phi, theta, dphi, dtheta, tout);
+% F = runVis(rh, ro, phi, theta, dphi, dtheta, tout);
 
 %% Save video
 % writerObj = VideoWriter('DoD_vid.avi');
