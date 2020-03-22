@@ -80,7 +80,7 @@ Qc = [
     1, 0, 0;
     0, 1, 0;
     0, 0, 1];           % penalise state
-Rc = 1;                 % penalise actuator 
+Rc = 10;                 % penalise actuator 
 
 Kc = zeros(1,length(idx));
 Kc(:,idx)   = lqrd(Ac, Bc, Qc, Rc, T);	% Feedback gain matrix
@@ -237,7 +237,7 @@ title('Demanded Torque');
 
 %% Visulisation?
 
-F = runVis(rh, ro, phi, theta, dphi, dtheta, tout);
+% F = runVis(rh, ro, phi, theta, dphi, dtheta, tout);
 
 %% Save video
 % writerObj = VideoWriter('DoD_vid.avi');
