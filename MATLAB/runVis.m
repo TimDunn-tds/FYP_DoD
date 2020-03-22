@@ -10,7 +10,7 @@ yo = (rh + ro).*cos(phi.signals.values);
 lxh = rh.*sin(theta.signals.values);
 lyh = rh.*cos(theta.signals.values);
 
-alph = theta.signals.values + (rh/ro).*(phi.signals.values - theta.signals.values);
+alph = (rh/ro).*(phi.signals.values - theta.signals.values);
 lxo = xo + ro.*sin(alph);
 lyo = yo + ro.*cos(alph);
 
@@ -34,7 +34,7 @@ txt2= text(-0.35, 0.4, sprintf('dtheta = %3f, dphi = %3f', dtheta.signals.values
 
 F(1) = getframe(gcf);
 
-for i=2:5:size(tout)
+for i=2:4:size(tout)
     delete(h);
     delete(line_h);
     

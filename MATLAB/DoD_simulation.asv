@@ -80,7 +80,7 @@ Qc = [
     1, 0, 0;
     0, 1, 0;
     0, 0, 1];           % penalise state
-Rc = 1;                 % penalise actuator 
+Rc = 10;                 % penalise actuator 
 
 Kc = zeros(1,length(idx));
 Kc(:,idx)   = lqrd(Ac, Bc, Qc, Rc, T);	% Feedback gain matrix
@@ -199,14 +199,14 @@ sim('DoD_simulink_model');
 
 figure(1);  clf;
 
-ax1 = subplot(2,2,1);
+subplot(2,2,1);
 plot(tout,phi.signals.values.*180/pi); hold on;
 % plot(tout, theta.signals.values.*180/pi);
 legend('phi');
 grid on;
 title('Object angle (about hand CoM');
 
-ax2 = subplot(2,2,2);
+subplot(2,2,2);
 plot(tout,dphi.signals.values.*180/pi); hold on;
 % yyaxis right;
 % plot(tout,phi.signals.values.*180/pi);
@@ -214,40 +214,30 @@ legend('dphi');
 grid on;
 title('Object angular velocity (about hand CoM)');
 
-<<<<<<< HEAD
-ax3 = subplot(2,2,3); hold on;
-plot(tout,dtheta.signals.values.*180/pi);
-plot(tout,ref.signals.values.*180/pi,'r');
-=======
 subplot(2,2,3); hold on;
 plot(tout,dtheta.signals.values.*(60/(2*pi)));
 plot(tout,ref.signals.values.*(60/(2*pi)),'r');
 ylabel('RPM');
->>>>>>> c9b18debea748a60d9fc5302ef7ad748cf9f25e1
 legend('dtheta');
 grid on;
 title('Hand angular velocity');
 
-ax4 = subplot(2,2,4);
+subplot(2,2,4);
 plot(tau.time,tau.signals.values);
 legend('tau');
 grid on;
 title('Demanded Torque');
 
-<<<<<<< HEAD
-linkaxes([ax1, ax2, ax3, ax4], 'x');
-=======
 % figure(3); clf; hold on;
 % alph = (rh/ro).*(phi.signals.values - theta.signals.values);
 % plot(theta.time, abs(alph), 'DisplayName', 'alpha');
 % plot(theta.time, abs(theta.signals.values), 'DisplayName', 'theta');
 % legend;
->>>>>>> c9b18debea748a60d9fc5302ef7ad748cf9f25e1
 
 
 %% Visulisation?
 
-F = runVis(rh, ro, phi, theta, dphi, dtheta, tout);
+% F = runVis(rh, ro, phi, theta, dphi, dtheta, tout);
 
 %% Save video
 % writerObj = VideoWriter('DoD_vid.avi');
