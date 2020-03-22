@@ -214,16 +214,13 @@ legend('dphi');
 grid on;
 title('Object angular velocity (about hand CoM)');
 
-<<<<<<< HEAD
 ax3 = subplot(2,2,3); hold on;
 plot(tout,dtheta.signals.values.*180/pi);
 plot(tout,ref.signals.values.*180/pi,'r');
-=======
 subplot(2,2,3); hold on;
 plot(tout,dtheta.signals.values.*(60/(2*pi)));
 plot(tout,ref.signals.values.*(60/(2*pi)),'r');
 ylabel('RPM');
->>>>>>> c9b18debea748a60d9fc5302ef7ad748cf9f25e1
 legend('dtheta');
 grid on;
 title('Hand angular velocity');
@@ -234,15 +231,12 @@ legend('tau');
 grid on;
 title('Demanded Torque');
 
-<<<<<<< HEAD
 linkaxes([ax1, ax2, ax3, ax4], 'x');
-=======
 % figure(3); clf; hold on;
 % alph = (rh/ro).*(phi.signals.values - theta.signals.values);
 % plot(theta.time, abs(alph), 'DisplayName', 'alpha');
 % plot(theta.time, abs(theta.signals.values), 'DisplayName', 'theta');
 % legend;
->>>>>>> c9b18debea748a60d9fc5302ef7ad748cf9f25e1
 
 
 %% Visulisation?
