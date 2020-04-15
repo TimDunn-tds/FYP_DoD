@@ -11,11 +11,14 @@ tsim = 10;
 ro = 0.075;                  % m
 % ro = 0.15;
 rh = 0.15;                   % m
+
+ro = 0.05;
+rh = 0.1;
 % 
 % ro = ro/2;
 % rh = rh/2;
 
-thick = 0.01;               % m
+thick = 0.008;               % m
 
 p = 1180;                   % kg/m3
 
@@ -36,7 +39,7 @@ tau_max = 1;              % Nm
 tau_min = -1;             % Nm
 
 
-%% Linearised Plant Model (linearised about upright balancing position)
+%% Plant Model (linearised about upright balancing position???)
 % State variables:
 % x(1) = hand angular velocity [rad/s]
 % x(2) = object angular velocity about hand CoM [rad/s]
@@ -62,8 +65,9 @@ B = [MM\e; zeros(2,1)];
 Cr = [1, 0, 0, 0]; % Regulate hand velocity
 Dr = 0; % No feedthrough?
 
-Cm = [0, 0, 1, 1]; % Measure hand and object positions
-Dm = 0;
+Cm = [0, 0, 1, 0;
+      0, 0, 0, 1]; % Measure hand and object positions
+Dm = [0;0];
 
 % Reduced-state continuous-time model for control design
 idx = [1 2 4];                % Only include these states
@@ -72,7 +76,7 @@ Bc  = B(idx,:);
 Cc  = Cr(:,idx);
 Dc  = Dr;
 
-
+   
 % [Acd, Bcd] = c2d(Ac,Bc,T);
 
 %% Design LQG
@@ -80,7 +84,8 @@ Qc = [
     1, 0, 0;
     0, 1, 0;
     0, 0, 1];           % penalise state
-Rc = 1;                 % penalise actuator 
+% Qc = eye(4);
+Rc = 10;                 % penalise actuator 
 
 Kc = zeros(1,length(idx));
 Kc(:,idx)   = lqrd(Ac, Bc, Qc, Rc, T);	% Feedback gain matrix
@@ -92,7 +97,21 @@ Nx          = zeros(length(Cr),1);
 Nx(idx,:)   = NN(1:length(idx));
 Nu          = NN(end);
 
+% Design Observer
+% initial uncertainty and intial state
+mup_init = [0; 0; theta0; phi0];
+Pp_init = diag([1, 1, 1, 1]);
 
+% mup_init = [theta0; phi0];
+% Pp_init = diag([0.01, 0.01]);
+
+
+[Aod, Bod] = c2d(A, B, T);
+
+Qo = 0.000001*eye(size(A,1));
+Ro = 0.000001*eye(size(Cm,1));
+
+[~,Lo] = kalmd(ss(Aod, [Bod eye(length(B))], Cm, [Dm zeros(size(Dm,1),length(B))]), Qo, Ro, T);
 
 
 %% Old MPC
@@ -197,42 +216,56 @@ Nu          = NN(end);
 %% Run simulation
 sim('DoD_simulink_model');
 
+%% Plot
 figure(1);  clf;
 
-subplot(2,2,1);
-plot(tout,phi.signals.values.*180/pi); hold on;
+ax1 = subplot(2,2,1);
+plot(tout,phi.signals.values.*180/pi,'DisplayName','real phi'); hold on;
+plot(tout,mup.signals.values(:,4).*180/pi,'DisplayName','kf phi');
 % plot(tout, theta.signals.values.*180/pi);
-legend('phi');
+legend;
 grid on;
-title('Object angle (about hand CoM');
+title('Object angle (about hand CoM)');
 
-subplot(2,2,2);
-plot(tout,dphi.signals.values.*180/pi); hold on;
+ax2 = subplot(2,2,2);
+plot(tout,dphi.signals.values.*180/pi,'DisplayName','real dphi'); hold on;
+plot(tout, mup.signals.values(:,2).*180/pi,'DisplayName','kf dphi');
 % yyaxis right;
 % plot(tout,phi.signals.values.*180/pi);
-legend('dphi');
+legend;
 grid on;
 title('Object angular velocity (about hand CoM)');
 
-subplot(2,2,3); hold on;
-plot(tout,dtheta.signals.values.*(60/(2*pi)));
-plot(tout,ref.signals.values.*(60/(2*pi)),'r');
+ax3 = subplot(2,2,3); hold on;
+plot(tout,dtheta.signals.values.*(60/(2*pi)),'DisplayName','real dtheta');
+plot(tout,mup.signals.values(:,1).*(60/(2*pi)),'DisplayName','kf dtheta');
+plot(tout,ref.signals.values.*(60/(2*pi)),'r','DisplayName','ref');
 ylabel('RPM');
 legend('dtheta');
 grid on;
 title('Hand angular velocity');
 
-subplot(2,2,4);
+ax4 = subplot(2,2,4);
 plot(tau.time,tau.signals.values);
 legend('tau');
 grid on;
 title('Demanded Torque');
+ylabel('Torque [Nm]');
 
+linkaxes([ax1 ax2 ax3 ax4],'x');
 % figure(3); clf; hold on;
 % alph = (rh/ro).*(phi.signals.values - theta.signals.values);
 % plot(theta.time, abs(alph), 'DisplayName', 'alpha');
 % plot(theta.time, abs(theta.signals.values), 'DisplayName', 'theta');
 % legend;
+
+
+% figure(3); clf; hold on;
+% plot(tout, squeeze(Pp.signals.values(1,1,:)), 'DisplayName','dtheta');
+% plot(tout, squeeze(Pp.signals.values(2,2,:)), 'DisplayName','dphi');
+% plot(tout, squeeze(Pp.signals.values(3,3,:)), 'DisplayName','theta');
+% plot(tout, squeeze(Pp.signals.values(4,4,:)), 'DisplayName','phi');
+
 
 
 %% Visulisation?
