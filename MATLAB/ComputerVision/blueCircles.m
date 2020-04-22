@@ -1,7 +1,7 @@
 close all
 %% Prepare calibration images
 numImages = 8;
-files = cell(1,numImages);
+files = cell(1, numImages);
 
 for i = 1:numImages
     files{i} = fullfile('checkerboardTest', sprintf('img_%d.jpg', i));
