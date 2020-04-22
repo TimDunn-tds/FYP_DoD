@@ -145,7 +145,7 @@ imagePoints = imagePoints + newOrigin; % adds newOrigin to every row of imagePoi
 % caused by undistortImage with output view of 'full'. This would not be
 % needed if the output was 'same'. The adjustment makes the points compatible
 % with the cameraParameters of the original image.
-boxes = boxes + [newOrigin, 0, 0]; % zero padding is added for widht and height
+boxes = boxes + [newOrigin, 0, 0]; % zero padding is added for width and height
 
 % Get the top-left and the top-right corners.
 box1 = double(boxes(1, :));
