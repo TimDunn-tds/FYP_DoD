@@ -8,12 +8,12 @@ tsim = 10;
 % mo = 0.1;                   % kg
 % mh = 0.3;                   % kg
 
-ro = 0.075;                  % m
+ro = 0.06;                  % m
 % ro = 0.15;
-rh = 0.15;                   % m
+rh = 0.12;                   % m
 
-ro = 0.05;
-rh = 0.1;
+% ro = 0.05;
+% rh = 0.1;
 % 
 % ro = ro/2;
 % rh = rh/2;
@@ -100,7 +100,7 @@ Nu          = NN(end);
 % Design Observer
 % initial uncertainty and intial state
 mup_init = [0; 0; theta0; phi0];
-Pp_init = diag([1, 1, 1, 1]);
+Pp_init = diag([0.1, 0.1, 0.1, 0.1]);
 
 % mup_init = [theta0; phi0];
 % Pp_init = diag([0.01, 0.01]);
@@ -108,8 +108,8 @@ Pp_init = diag([1, 1, 1, 1]);
 
 [Aod, Bod] = c2d(A, B, T);
 
-Qo = 0.000001*eye(size(A,1));
-Ro = 0.000001*eye(size(Cm,1));
+Qo = 0.001*eye(size(A,1));
+Ro = 0.001*eye(size(Cm,1));
 
 [~,Lo] = kalmd(ss(Aod, [Bod eye(length(B))], Cm, [Dm zeros(size(Dm,1),length(B))]), Qo, Ro, T);
 
@@ -259,13 +259,13 @@ linkaxes([ax1 ax2 ax3 ax4],'x');
 % plot(theta.time, abs(theta.signals.values), 'DisplayName', 'theta');
 % legend;
 
-
+% 
 % figure(3); clf; hold on;
 % plot(tout, squeeze(Pp.signals.values(1,1,:)), 'DisplayName','dtheta');
 % plot(tout, squeeze(Pp.signals.values(2,2,:)), 'DisplayName','dphi');
 % plot(tout, squeeze(Pp.signals.values(3,3,:)), 'DisplayName','theta');
 % plot(tout, squeeze(Pp.signals.values(4,4,:)), 'DisplayName','phi');
-
+% legend;
 
 
 %% Visulisation?
