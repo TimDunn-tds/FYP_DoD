@@ -52,7 +52,7 @@ MM = [
 
 KK = [0, 0; 0, -mo*g*(rh + ro)];
 
-DD = [0.001, 0; 0, 0];
+DD = [0.00, 0; 0, 0];
 
 e = [1;0];
 
@@ -225,6 +225,8 @@ plot(tout,mup.signals.values(:,4).*180/pi,'DisplayName','kf phi');
 % plot(tout, theta.signals.values.*180/pi);
 legend;
 grid on;
+ylabel('Angle [degrees]');
+xlabel('Time [s]');
 title('Object angle (about hand CoM)');
 
 ax2 = subplot(2,2,2);
@@ -234,6 +236,8 @@ plot(tout, mup.signals.values(:,2).*180/pi,'DisplayName','kf dphi');
 % plot(tout,phi.signals.values.*180/pi);
 legend;
 grid on;
+ylabel('Angle [degrees/s]');
+xlabel('Time [s]');
 title('Object angular velocity (about hand CoM)');
 
 ax3 = subplot(2,2,3); hold on;
@@ -284,6 +288,52 @@ F = runVis(rh, ro, phi, theta, dphi, dtheta, tout);
 % end
 % close(writerObj);
 
+
+
+%% Useful plotting stuff
+% figure(1);  clf;
+% 
+% ax1 = subplot(2,2,1);
+% plot(tout,phi.signals.values.*180/pi,'DisplayName','phi'); hold on;
+% % plot(tout,mup.signals.values(:,4).*180/pi,'DisplayName','kf phi');
+% % plot(tout, theta.signals.values.*180/pi);
+% ylabel('Angle [\circ]');
+% xlabel('Time [s]');
+% % legend;
+% grid on;
+% title('Object angle \phi');
+% 
+% ax2 = subplot(2,2,2);
+% plot(tout,dphi.signals.values.*180/pi,'DisplayName','dphi'); hold on;
+% % plot(tout, mup.signals.values(:,2).*180/pi,'DisplayName','kf dphi');
+% % yyaxis right;
+% % plot(tout,phi.signals.values.*180/pi);
+% ylabel('Angle [\circ/s]');
+% xlabel('Time [s]');
+% % legend;
+% grid on;
+% title('Object angular velocity d\phi/dt');
+% 
+% ax3 = subplot(2,2,3);
+% plot(tout,theta.signals.values.*180/pi,'DisplayName','\theta'); hold on;
+% % plot(tout,mup.signals.values(:,4).*180/pi,'DisplayName','kf phi');
+% % plot(tout, theta.signals.values.*180/pi);
+% ylabel('Angle [\circ]');
+% xlabel('Time [s]');
+% % legend;
+% grid on;
+% title('Hand angle \theta');
+% 
+% ax4 = subplot(2,2,4);
+% plot(tout,dtheta.signals.values.*180/pi,'DisplayName','dphi'); hold on;
+% % plot(tout, mup.signals.values(:,2).*180/pi,'DisplayName','kf dphi');
+% % yyaxis right;
+% % plot(tout,phi.signals.values.*180/pi);
+% ylabel('Angle [\circ/s]');
+% xlabel('Time [s]');
+% % legend;
+% grid on;
+% title('Hand angular velocity d\theta/dt');
 
 
 
