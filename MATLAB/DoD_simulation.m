@@ -111,7 +111,7 @@ Pp_init = diag([0.1, 0.1, 0.1, 0.1]);
 Qo = 0.001*eye(size(A,1));
 Ro = 0.001*eye(size(Cm,1));
 
-[~,Lo] = kalmd(ss(Aod, [Bod eye(length(B))], Cm, [Dm zeros(size(Dm,1),length(B))]), Qo, Ro, T);
+% [~,Lo] = kalmd(ss(Aod, [Bod eye(length(B))], Cm, [Dm zeros(size(Dm,1),length(B))]), Qo, Ro, T);
 
 
 %% Old MPC
