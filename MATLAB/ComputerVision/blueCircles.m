@@ -64,7 +64,7 @@ imHSV = rgb2hsv(im);
 
 figure(6); 
 imshow(imHSV, 'InitialMagnification', magnification);
-title('HSV version of image');
+title('HSV version of test image');
 
 % Get the saturation channel.
 sat = imHSV(:, :, 2);
@@ -74,8 +74,8 @@ t = graythresh(sat);
 imCoin = (sat > t);
 
 figure(7); 
-imshow(imCoin, 'InitialMagnification', magnification);
-title('Segmented Coins');
+imshow(~imCoin, 'InitialMagnification', magnification);
+title('Segmented Circles (inverted colours)');
 
 % % Attempt levels of thresholding
 % t2 = multithresh(sat,3);
@@ -105,24 +105,29 @@ title('Segmented Coins');
 %% Detect circles
 % Find connected components.
 blobAnalysis = vision.BlobAnalysis('AreaOutputPort', true,...
-    'CentroidOutputPort', false,...
+    'CentroidOutputPort', true,...
     'BoundingBoxOutputPort', true,...
     'MinimumBlobArea', 200, 'ExcludeBorderBlobs', true);
-[areas, boxes] = blobAnalysis(imCoin(1:263,:));
+[areas, centroid, boxes] = blobAnalysis(imCoin(1:263,:));
 
 % Sort connected components in descending order by area
 [~, idx] = sort(areas, 'Descend');
 
 % Get the two largest components.
 boxes = double(boxes(idx(1:2), :));
+centroid = double(centroid(idx(1:2),:));
 
+% Append radius
+circles = [centroid, [mean(boxes(1,3:4))/2; mean(boxes(2,3:4))/2]];
 % Reduce the size of the image for display.
 scale = magnification / 100;
 imDetectedCoins = imresize(im, scale);
 
 % Insert labels for the coins.
-imDetectedCoins = insertObjectAnnotation(imDetectedCoins, 'rectangle', ...
-    scale * boxes, 'blue circle');
+% imDetectedCoins = insertObjectAnnotation(imDetectedCoins, 'rectangle', ...
+%     scale * boxes, 'blue circle');
+imDetectedCoins = insertObjectAnnotation(imDetectedCoins, 'circle', ...
+    scale * circles, 'blue circle');
 figure; imshow(imDetectedCoins);
 title('Detected Circles');
 
