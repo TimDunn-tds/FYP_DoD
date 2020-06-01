@@ -220,41 +220,43 @@ sim('DoD_simulink_model');
 figure(1);  clf;
 
 ax1 = subplot(2,2,1);
-plot(tout,phi.signals.values.*180/pi,'DisplayName','real phi'); hold on;
-plot(tout,mup.signals.values(:,4).*180/pi,'DisplayName','kf phi');
+plot(tout,phi.signals.values.*180/pi,'DisplayName','phi'); hold on;
+% plot(tout,mup.signals.values(:,4).*180/pi,'DisplayName','kf phi');
 % plot(tout, theta.signals.values.*180/pi);
 legend;
 grid on;
-ylabel('Angle [degrees]');
+ylabel('Angle [\circ]');
 xlabel('Time [s]');
 title('Object angle (about hand CoM)');
 
 ax2 = subplot(2,2,2);
-plot(tout,dphi.signals.values.*180/pi,'DisplayName','real dphi'); hold on;
-plot(tout, mup.signals.values(:,2).*180/pi,'DisplayName','kf dphi');
+plot(tout,dphi.signals.values.*180/pi,'DisplayName','dphi'); hold on;
+% plot(tout, mup.signals.values(:,2).*180/pi,'DisplayName','kf dphi');
 % yyaxis right;
 % plot(tout,phi.signals.values.*180/pi);
 legend;
 grid on;
-ylabel('Angle [degrees/s]');
+ylabel('Angle [\circ/s]');
 xlabel('Time [s]');
 title('Object angular velocity (about hand CoM)');
 
 ax3 = subplot(2,2,3); hold on;
-plot(tout,dtheta.signals.values.*(60/(2*pi)),'DisplayName','real dtheta');
-plot(tout,mup.signals.values(:,1).*(60/(2*pi)),'DisplayName','kf dtheta');
+plot(tout,dtheta.signals.values.*(60/(2*pi)),'DisplayName','dtheta');
+% plot(tout,mup.signals.values(:,1).*(60/(2*pi)),'DisplayName','kf dtheta');
 plot(tout,ref.signals.values.*(60/(2*pi)),'r','DisplayName','ref');
 ylabel('RPM');
-legend('dtheta');
+xlabel('Time [s]');
+legend('location','best')
 grid on;
 title('Hand angular velocity');
 
 ax4 = subplot(2,2,4);
 plot(tau.time,tau.signals.values);
-legend('tau');
+legend('tau','location','best');
 grid on;
 title('Demanded Torque');
 ylabel('Torque [Nm]');
+xlabel('Time [s]');
 
 linkaxes([ax1 ax2 ax3 ax4],'x');
 % figure(3); clf; hold on;
@@ -274,7 +276,7 @@ linkaxes([ax1 ax2 ax3 ax4],'x');
 
 %% Visulisation?
 
-F = runVis(rh, ro, phi, theta, dphi, dtheta, tout);
+% F = runVis(rh, ro, phi, theta, dphi, dtheta, tout);
 
 %% Save video
 % writerObj = VideoWriter('DoD_vid.avi');
