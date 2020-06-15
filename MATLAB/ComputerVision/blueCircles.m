@@ -74,7 +74,7 @@ t = graythresh(sat);
 imCoin = (sat > t);
 
 figure(7); 
-imshow(~imCoin, 'InitialMagnification', magnification);
+imshow(imCoin, 'InitialMagnification', magnification);
 title('Segmented Circles (inverted colours)');
 
 % % Attempt levels of thresholding
