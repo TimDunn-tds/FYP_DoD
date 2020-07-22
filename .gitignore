@@ -1,5 +1,23 @@
 MATLAB/DoD_vid.avi
 
+# Doc files for STM32
+STM32/doc
+
+# Drivers files for STM32
+STM32/drivers
+
+# Toolchain files for STM32
+STM32/toolchain
+
+# Utilities
+STM32/util
+
+# More stuff to ignore
+STM32/workspace/STM32Cube_F4_FW
+STM32/workspace/CMSIS-FreeRTOS
+STM32/workspace/CMSIS_5
+STM32/workspace/Unity
+
 # Images for CB
 *.jpg
 
