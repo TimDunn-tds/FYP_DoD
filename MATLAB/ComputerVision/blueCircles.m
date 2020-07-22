@@ -1,14 +1,16 @@
 close all
 %% Prepare calibration images
-numImages = 8;
+numImages = 16;
 files = cell(1, numImages);
 
 for i = 1:numImages
-    files{i} = fullfile('checkerboardTest', sprintf('img_%d.jpg', i));
+%     files{i} = fullfile('checkerboardTest', sprintf('img_%d.jpg', i));
+    files{i} = fullfile('hiRes', sprintf('im%d.jpg', i));
+
 end
 
 % Display a calibration image
-magnification = 50;
+magnification = 100;
 I = imread(files{3});
 figure(1);
 imshow(I, 'InitialMagnification', magnification);
@@ -23,7 +25,7 @@ files = files(imagesUsed);
 figure(2);
 for i = 1:numel(files)
   I = imread(files{i});
-  subplot(3, 3, i);
+  subplot(ceil(sqrt(numImages)), ceil(sqrt(numImages)), i);
   imshow(I);
   hold on;
   plot(imagePoints(:,1,i),imagePoints(:,2,i),'ro');
@@ -31,7 +33,8 @@ end
 
 % Generate world coordinates of the board corners in the pattern-centric
 % coordinate system, with the upper-left corner at 0,0
-squareSize = 24; % [mm]
+% squareSize = 24; % [mm]
+squareSize = 11; % [mm]
 worldPoints = generateCheckerboardPoints(boardSize, squareSize);
 
 % Calibrate the camera
@@ -46,16 +49,22 @@ title('Reprojection Errors');
 
 
 %% Pick the image to be used for measuring
-imOrig = imread(fullfile('checkerboardTest','img_4.jpg'));
+imOrig = imread(fullfile('hiRes','imCirc.jpg'));
 figure(4);
 imshow(imOrig, 'InitialMagnification', magnification);
 title('Input Image');
 
-%% Undistort the image
-[im, newOrigin] = undistortImage(imOrig, cameraParams, 'OutputView', 'full');
+%% Undistort the circle image
+[im, ~] = undistortImage(imOrig, cameraParams, 'OutputView', 'full');
 figure(5); 
 imshow(im, 'InitialMagnification', magnification);
 title('Undistorted Image');
+
+%% Undistort the circle image
+[IBase, newOrigin] = undistortImage(I, cameraParams, 'OutputView', 'full');
+% figure(5); 
+% imshow(im, 'InitialMagnification', magnification);
+% title('Undistorted Image');
 
 %% Segment the coins
 clc;
@@ -108,7 +117,7 @@ blobAnalysis = vision.BlobAnalysis('AreaOutputPort', true,...
     'CentroidOutputPort', true,...
     'BoundingBoxOutputPort', true,...
     'MinimumBlobArea', 200, 'ExcludeBorderBlobs', true);
-[areas, centroid, boxes] = blobAnalysis(imCoin(1:263,:));
+[areas, centroid, boxes] = blobAnalysis(imCoin(:,:));
 
 % Sort connected components in descending order by area
 [~, idx] = sort(areas, 'Descend');
@@ -134,7 +143,7 @@ title('Detected Circles');
 
 %% Compute Extrinsics
 % Detect the checkerboard.
-[imagePoints, boardSize] = detectCheckerboardPoints(im);
+[imagePoints, boardSize] = detectCheckerboardPoints(IBase);
 
 % Adjust the imagePoints so that they are expressed in the coordinate system
 % used in the original image, before it was undistorted.  This adjustment
@@ -191,9 +200,16 @@ wp_bo2_cent = pointsToWorld(cameraParams, R, t, ip_box2_cent);
 dist = hypot((wp_bo1_cent(1) - wp_bo2_cent(1)), (wp_bo1_cent(2) - wp_bo2_cent(2)));
 
 fprintf('Measured distance between the two circle centres = %0.2f mm\n', dist);
+%should be 108mm
 
 %% Measure angle between the coins
 theta = atan2((wp_bo2_cent(1) - wp_bo1_cent(1)), (wp_bo2_cent(2) - wp_bo1_cent(2)));
 
 fprintf('Measured angle between the two circle centres = %0.2f deg from positive y axis\n', rad2deg(theta));
+
+
+%% Save params
+figure;
+showExtrinsics(cameraParams,'CameraCentric')
+save('deskDrawerParamsHR.mat','cameraParams');
 

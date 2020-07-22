@@ -18,9 +18,9 @@ rh = 0.12;                   % m
 % ro = ro/2;
 % rh = rh/2;
 
-thick = 0.008;               % m
+thick = 0.01;               % m
 
-p = 1180;                   % kg/m3
+p = 1200;                   % kg/m3
 
 mo = pi*(ro^2)*thick*p;
 mh = pi*(rh^2)*thick*p;
@@ -276,7 +276,7 @@ linkaxes([ax1 ax2 ax3 ax4],'x');
 
 %% Visulisation?
 
-F = runVis(rh, ro, phi, theta, dphi, dtheta, tout);
+% F = runVis(rh, ro, phi, theta, dphi, dtheta, tout);
 
 %% Save video
 % writerObj = VideoWriter('DoD_vid.avi');
