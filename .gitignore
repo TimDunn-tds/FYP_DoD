@@ -1,4 +1,5 @@
-MATLAB/DoD_vid.avi
+# Ignore videos
+*.avi
 
 # Doc files for STM32
 STM32/doc

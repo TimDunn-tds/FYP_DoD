@@ -10,7 +10,6 @@
 #include "potentiometer.h"
 #include "encoder.h"
 #include "motor.h"
-#include "mpu6050.h"
 #include "kalman.h"
 
 #include "heartbeat_task.h"
@@ -20,8 +19,6 @@
 #include "MPC_task.h"
 #include "sysID_task.h"
 
-#include "stepper_motor.h"
-// #include "bluetooth.h"
 
 static void SystemClock_Config(void);
 static void Error_Handler(void);
@@ -33,10 +30,6 @@ int main(void)
 
     // Initialise scheduler
     osKernelInitialize();
-
-    // Init stepper motors and set speed to 0.
-    // stepper_motor_init();
-    // stepper_turn_off(0,NULL);
 
 
     // Initialise hardware modules
@@ -55,7 +48,7 @@ int main(void)
     // kf_init();
 
     // Initialise task modules
-    // heartbeat_task_init();
+    heartbeat_task_init();
     // dimmer_task_init();
     // controller_task_init();
     cmd_task_init();

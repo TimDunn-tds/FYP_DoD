@@ -10,7 +10,7 @@
 #include "potentiometer.h"
 #include "encoder.h"
 #include "dimmer_task.h"
-#include "mpu6050.h"
+// #include "mpu6050.h"
 #include "log_data.h"
 #include "kalman.h"
 

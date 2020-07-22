@@ -17,27 +17,27 @@ static float _kf_mean_init[KF_N_STATE] =
 static const float _kf_sqrtcov_init[KF_N_STATE][KF_N_STATE] =
 {
     // #include "kf_sqrtcov.def"
-    #include "kf_sqrtcovnew.def"
+    // #include "kf_sqrtcovnew.def"
     // #include "kf_sqrtcovtotal.def"
-    // {0.0f, 0.0f, 0.0f},
-    // {0.0f, 0.0f, 0.0f},
-    // {0.0f, 0.0f, 0.0f},
+    {0.0f, 0.0f, 0.0f},
+    {0.0f, 0.0f, 0.0f},
+    {0.0f, 0.0f, 0.0f},
 };
 
 static const float _kf_A[KF_N_STATE][KF_N_STATE] = 
 {
     // #include "kf_A.def"
-    #include "kf_Anew.def"
+    // #include "kf_Anew.def"
     // #include "kf_Atotal.def"
-    // {0.0f, 0.0f, 0.0f},
-    // {0.0f, 0.0f, 0.0f},
-    // {0.0f, 0.0f, 0.0f},
+    {0.0f, 0.0f, 0.0f},
+    {0.0f, 0.0f, 0.0f},
+    {0.0f, 0.0f, 0.0f},
 };
 
 static const float _kf_B[KF_N_STATE][KF_N_INPUT] = 
 {
     // #include "kf_B.def"
-    #include "kf_Bnew.def"
+    // #include "kf_Bnew.def"
     // #include "kf_Btotal.def"
 
 };
@@ -45,38 +45,38 @@ static const float _kf_B[KF_N_STATE][KF_N_INPUT] =
 static const float _kf_SQ[KF_N_STATE][KF_N_STATE] = 
 {
     // #include "kf_SQ.def"
-    #include "kf_SQnew.def"
+    // #include "kf_SQnew.def"
     // #include "kf_SQtotal.def"
 
-    // {0.0f, 0.0f, 0.0f},
-    // {0.0f, 0.0f, 0.0f},
-    // {0.0f, 0.0f, 0.0f},
+    {0.0f, 0.0f, 0.0f},
+    {0.0f, 0.0f, 0.0f},
+    {0.0f, 0.0f, 0.0f},
 };
 
 static const float _kf_C[KF_N_OUTPUT][KF_N_STATE] = 
 {
     // #include "kf_C.def"
-    #include "kf_Cnew.def"
+    // #include "kf_Cnew.def"
     // #include "kf_Ctotal.def"
 
-    // {0.0f, 1.0f, 0.0f},
-    // {1.0f, 0.0f, 1.0f}
+    {0.0f, 1.0f, 0.0f},
+    {1.0f, 0.0f, 1.0f}
 };
 
 static const float _kf_D[KF_N_OUTPUT][KF_N_INPUT] = 
 {
     // #include "kf_D.def"
-    #include "kf_Dnew.def"
+    // #include "kf_Dnew.def"
     // #include "kf_dtotal.def"
 };
 
 static const float _kf_SR[KF_N_OUTPUT][KF_N_OUTPUT] = 
 {
     // #include "kf_SR.def"    
-    #include "kf_SRnew.def"  
+    // #include "kf_SRnew.def"  
     // #include "kf_SRtotal.def"  
-    // {0.0f, 0.0f},
-    // {0.0f, 0.14861f}
+    {0.0f, 0.0f},
+    {0.0f, 0.14861f}
 };
 
 void kf_init(void)

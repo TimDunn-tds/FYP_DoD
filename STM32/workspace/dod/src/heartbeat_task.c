@@ -112,6 +112,9 @@ void _heartbeat_update(void *arg)
             osDelay(1);
         }
         osDelay(256);
+
+        
+        // printf("11\n");
     }
 }
 
