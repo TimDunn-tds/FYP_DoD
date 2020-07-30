@@ -12,10 +12,19 @@ try
     fopen(stm32); % open serial connection
     
     for k = 1:10
-        fprintf(stm32,'motor %f\n', k);
+        fprintf(stm32,'motor %f\n', k*0.5);
         rxStr = fgets(stm32);
-        data = sscanf(rxStr,'%f\n');
-        disp(data);
+%         data = sscanf(rxStr,'%f\n');
+        fprintf(rxStr);
+        pause(0.5);
+    end
+    
+    for k = 10:-1:1
+        fprintf(stm32,'motor %f\n', k*0.5);
+        rxStr = fgets(stm32);
+%         data = sscanf(rxStr,'%f\n');
+        fprintf(rxStr);
+        pause(0.5);
     end
     
     fclose(stm32); delete(stm32); clear stm32   % Close serial connection and clean up
