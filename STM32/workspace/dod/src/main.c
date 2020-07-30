@@ -4,21 +4,27 @@
 #include "stm32f4xx_hal_pwr_ex.h"
 
 #include "uart.h"
-#include "button.h"
-#include "led_rgb.h"
-#include "light.h"
-#include "potentiometer.h"
+// #include "button.h"
+// #include "led_rgb.h"
+// #include "light.h"
+// #include "potentiometer.h"
 #include "encoder.h"
-#include "motor.h"
-#include "kalman.h"
+// #include "motor.h"
+// #include "mpu6050.h"
+// #include "kalman.h"
 
 #include "heartbeat_task.h"
-#include "dimmer_task.h"
+// #include "dimmer_task.h"
 #include "cmd_task.h"
-#include "controller_task.h"
-#include "MPC_task.h"
-#include "sysID_task.h"
+// #include "controller_task.h"
+// #include "MPC_task.h"
+// #include "sysID_task.h"
 
+// #include "stepper_motor.h"
+// #include "bluetooth.h"
+
+
+#include "dc_motor.h"
 
 static void SystemClock_Config(void);
 static void Error_Handler(void);
@@ -32,14 +38,20 @@ int main(void)
     osKernelInitialize();
 
 
+
     // Initialise hardware modules
     uart_init();
     // led_rgb_init();
     // button_init(); // this also starts the button task
-    // encoder_init(); 
+    encoder_init(); 
     // pot_init();
     // motor_init();
     // MPU6050_init();
+
+    dc_motor_init();
+    dc_motor_set(0);
+
+    dc_adc_init();
 
 
     

@@ -14,8 +14,7 @@ void motor_cmd(int argc, char *argv[])
     {
         float U = atof(argv[1]);
         motor_set(U);
-        // printf("Motor voltage set to %.2fV\n", motor_get());
-        printf("%.4f\n",motor_get());
+        printf("Motor voltage set to %.2fV\n", motor_get());
     }
     else
     {

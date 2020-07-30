@@ -71,48 +71,30 @@ SRC_COMMON = \
 	$(SRCDIR)/dimmer_cmd.c \
 	$(SRCDIR)/light_cmd.c \
 	$(SRCDIR)/sin_table.c \
+	$(SRCDIR)/log_data.c \
+	$(SRCDIR)/controller.c \
+	$(SRCDIR)/controller_task.c \
+	$(SRCDIR)/reference.c \
 	$(SRCDIR)/motor_cmd.c \
+	$(SRCDIR)/controller_cmd.c \
 	$(SRCDIR)/qpas_sub_noblas.c \
+	$(SRCDIR)/MPC.c \
+	$(SRCDIR)/MPC_task.c \
+	$(SRCDIR)/MPC_cmd.c \
+	$(SRCDIR)/observer.c \
+	$(SRCDIR)/sysID_cmd.c \
+	$(SRCDIR)/sysID_task.c \
 	$(SRCDIR)/givensQR.c \
-
-# # Source to compile for both target processor & under test
-# SRC_COMMON = \
-# 	$(SRCDIR)/light.c \
-# 	$(SRCDIR)/potentiometer.c \
-# 	$(SRCDIR)/led_rgb.c \
-# 	$(SRCDIR)/button.c \
-# 	$(SRCDIR)/encoder.c \
-# 	$(SRCDIR)/dimmer_task.c \
-# 	$(SRCDIR)/heartbeat_task.c \
-# 	$(SRCDIR)/cmd_line_buffer.c \
-# 	$(SRCDIR)/cmd_parser.c \
-# 	$(SRCDIR)/potentiometer_cmd.c \
-# 	$(SRCDIR)/encoder_cmd.c \
-# 	$(SRCDIR)/heartbeat_cmd.c \
-# 	$(SRCDIR)/dimmer_cmd.c \
-# 	$(SRCDIR)/light_cmd.c \
-# 	$(SRCDIR)/sin_table.c \
-# 	$(SRCDIR)/log_data.c \
-# 	$(SRCDIR)/controller.c \
-# 	$(SRCDIR)/controller_task.c \
-# 	$(SRCDIR)/reference.c \
-# 	$(SRCDIR)/motor_cmd.c \
-# 	$(SRCDIR)/controller_cmd.c \
-# 	$(SRCDIR)/qpas_sub_noblas.c \
-# 	$(SRCDIR)/MPC.c \
-# 	$(SRCDIR)/MPC_task.c \
-# 	$(SRCDIR)/MPC_cmd.c \
-# 	$(SRCDIR)/observer.c \
-# 	$(SRCDIR)/sysID_cmd.c \
-# 	$(SRCDIR)/sysID_task.c \
-# 	$(SRCDIR)/givensQR.c \
-# 	$(SRCDIR)/mpu6050_cmd.c \
-# 	$(SRCDIR)/mpu6050.c \
-# 	$(SRCDIR)/kalman.c \
-# 	$(SRCDIR)/kalman_cmd.c \
-# 	$(SRCDIR)/stepper_test.c \
-# 	$(SRCDIR)/stepper_motor.c \
-# 	$(SRCDIR)/reference_cmd.c \
+	$(SRCDIR)/mpu6050_cmd.c \
+	$(SRCDIR)/mpu6050.c \
+	$(SRCDIR)/kalman.c \
+	$(SRCDIR)/kalman_cmd.c \
+	$(SRCDIR)/stepper_test.c \
+	$(SRCDIR)/stepper_motor.c \
+	$(SRCDIR)/dc_motor.c \
+	$(SRCDIR)/reference_cmd.c \
+	$(SRCDIR)/dc_motor_cmd.c \
+	$(SRCDIR)/adc_cmd.c
 
 # Source to compile only for target processor
 SRC_STM = \

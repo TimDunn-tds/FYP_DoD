@@ -1,0 +1,19 @@
+# In Use #
+PB7  PWM 4/2 Motor controller PWM pin
+PC9  PWM 3/4 Motor ENA (no timer required)
+PB8  PWM 4/3 Motor ENB (no timer required)
+PA5  PWM 2/1 HEARTBEAT
+
+
+PA13 IS COOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOKED
+
+
+
+
+TX HC05 <---> PA1
+RX HC05 <---> PA0
+
+
+
+
+Radc = 6kOHM

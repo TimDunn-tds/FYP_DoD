@@ -8,7 +8,7 @@
 #define     MOTOR_DIR_BCK   2
 
 DAC_HandleTypeDef _dacHandle;
-float _voltage = 0.0f;
+float _Voltage = 0.0f;
 
 static void _motor_dac_init(void);
 static void _motor_gpio_init(void);
@@ -88,7 +88,7 @@ void motor_set(float U)
 {
     U = U <= -UMAX ? -UMAX : U >= UMAX ? UMAX : U;
 
-    _voltage = U;
+    _Voltage = U;
 
     if (U > 0.0f)
     {
@@ -113,7 +113,7 @@ void motor_set(float U)
 
 float motor_get(void)
 {
-    return _voltage;
+    return _Voltage;
 }
 
 void _motor_set_direction(uint8_t dir)
