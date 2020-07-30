@@ -6,6 +6,7 @@
 #include <math.h>
 #include "cmd_line_buffer.h"
 #include "cmd_parser.h"
+#include "adc_cmd.h"
 
 
 // Type for each command table entry
@@ -27,32 +28,39 @@ static void _help(int, char *[]);
 #include "dimmer_cmd.h"
 #include "light_cmd.h"
 #include "sin_table.h"
-// #include "log_data.h"
+#include "log_data.h"
 #include "motor_cmd.h"
 #include "controller_cmd.h"
-// #include "MPC_cmd.h"
-// #include "sysID_cmd.h"
-// #include "mpu6050_cmd.h"
-// #include "kalman_cmd.h"
-// #include "stepper_motor.h"
-// #include "reference_cmd.h"
+#include "MPC_cmd.h"
+#include "sysID_cmd.h"
+#include "mpu6050_cmd.h"
+#include "kalman_cmd.h"
+#include "stepper_motor.h"
+#include "reference_cmd.h"
+#include "dc_motor_cmd.h"
 
 // Command table
 static CMD_T cmd_table[] =
 {
     {_help,             "help",         "",                                     "Displays this help message"},
-    {pot_cmd,           "pot",          "",                                     "Get potentiometer ADC value"},
+    // {stepper_set_speed, "step_speed",   "[<rad/s>]",                            "Attemps to step at [rad/s]"},
+    // {stepper_set_dir,   "step_dir",     "[<dir1> <dir2>]",                      "Change direction (0 or 1)"},
+    // {stepper_turn_on,   "stepper_on",   "",                                     "Enables stepper PWM generation"},
+    // {stepper_turn_off,  "stepper_off",  "",                                     "Disables stepper PWM generatrion"},
+    // {pot_cmd,           "pot",          "",                                     "Get potentiometer ADC value"},
     {enc_cmd,           "enc",          "[reset]",                              "Get or reset encoder count"},
+    {adc_cmd,           "adc",          "",                                     "Poll ADC for motor voltage"},
     {heartbeat_cmd,     "heartbeat",    "[start|stop]",                         "Get status or start/stop heartbeat task"},
-    {dimmer_cmd,        "dimmer",       "[start|stop]",                         "Get status or start/stop dimmer task"},
-    {light_cmd,         "light",        "[<H> <S> <V>]",                        "Get or set light HSV values"},
-    {sin_table_cmd,     "sin",          "[<samples> <amplitude> <frequency>]",  "Remember to match the definition"},
-    // {log_data_cmd,      "log",          "[pot|enc|mpu] <samples>",                  "Otherwise memory mad."},
+    // {dimmer_cmd,        "dimmer",       "[start|stop]",                         "Get status or start/stop dimmer task"},
+    // {light_cmd,         "light",        "[<H> <S> <V>]",                        "Get or set light HSV values"},
+    {sin_table_cmd,     "sin",          "[<#> <amp> <freq>]",                   "Remember to match the definition"},
+    {log_data_cmd,      "log",          "[pot|enc|mpu] <#>",                  "Otherwise memory mad."},
     // {manual_reference_cmd,  "ref",          "[<m/s>]",                               "Set manual reference"},
     // {controller_cmd,    "ctrl",         "[start|stop]",      "Get status or start/stop controller task"},
-    {motor_cmd,         "motor",        "[<value>]",         "Get or set motor voltage"},
+    {dc_motor_cmd,      "motor",        "[<value>]",                            "Get or set motor voltage"},
     // {MPC_cmd,           "MPC",          "[start|stop]",      "Start or stop MPC controller"},
     // {sysID_cmd,         "sysID",        "[cart|pend|stop] [<samples> [<amplitude> <frequency>]]", "Perform experiment/collect sysID data"},
+    // {MPU6050_cmd,       "MPU",          "",                                       "Retrieve a single measurement from IMU"},
     // {kf_cmd,            "kf",           "run                  Run KF measurement and time update\n        kf reset                Reset KF to initial conditions\n        kf update meas|time     Run KF measurement or time update\n        kf get mean             Print KF mean estimate\n        kf set at|ar|gyro|u <value> Set KF measurement data", ""},
 };
 enum {CMD_TABLE_SIZE = sizeof(cmd_table)/sizeof(CMD_T)};

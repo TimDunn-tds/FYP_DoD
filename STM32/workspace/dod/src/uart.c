@@ -53,8 +53,8 @@
 // #define APB_Div 2
 
 // #define UART_BAUD_RATE 115200
-// #define UART_BAUD_RATE 921600
-// #define UART_BAUD_RATE 9600
+// // #define UART_BAUD_RATE 921600
+// // #define UART_BAUD_RATE 9600
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

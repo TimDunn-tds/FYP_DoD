@@ -15,6 +15,8 @@ void encoder_init(void)
 
     if (!_is_init)  // Guards against multiple initialisations
     {
+        // PC0 ENCA
+        // PC1 ENCB
         /* DONE:    Configure and initialise PC0 and PC1 with
                     - External interrupts on the rising and falling edges
                     - Pullup resistors enabled                  */

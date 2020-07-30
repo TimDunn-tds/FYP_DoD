@@ -95,7 +95,7 @@ void dc_adc_init(void)
     _hadc1.Init.NbrOfConversion = 1;
 
     /* Configure the ADC to:
-            use channel 0,
+            use channel 15 because thats what PC5 is on,
             sequence rank of 1,
             480 cycle sample time,
             offset of 0.                            */
