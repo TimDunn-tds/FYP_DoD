@@ -44,25 +44,25 @@ static float _output[KF_N_OUTPUT];
 
 static int count = 0;
 
-static const float _Kc1 = 
-{
-    #include "Kc1.def"
-};
+// static const float _Kc1 = 
+// {
+//     #include "Kc1.def"
+// };
 
-static const float _Kc2 = 
-{
-    #include "Kc2.def"
-};
+// static const float _Kc2 = 
+// {
+//     #include "Kc2.def"
+// };
 
-static const float _Kc3 = 
-{
-    #include "Kc3.def"
-};
+// static const float _Kc3 = 
+// {
+//     #include "Kc3.def"
+// };
 
-static const float _N = 
-{
-    #include "N.def"
-};
+// static const float _N = 
+// {
+//     #include "N.def"
+// };
 
 void controller_task_init(void)
 {
