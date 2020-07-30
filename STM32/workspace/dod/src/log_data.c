@@ -13,18 +13,28 @@
 #include "mpu6050.h"
 #include "log_data.h"
 #include "kalman.h"
+#include "dc_motor.h"
+
+#define COUNT_PER_REV 4741.44f
+#define PI 3.141592653589793f
+#define TIMER_TICKS 10
 
 
 
 static float _input[KF_N_INPUT];
 static float _meas[3];
 static float _output[KF_N_OUTPUT];
-
+static int32_t _count = 0;
+static float _voltage = 0.0f;
+static float _position = 0.0f;
+static float _last_position = 0.0f;
+static float _speed = 0.0f;
 
 typedef enum {
     LOG_POT,
     LOG_ENC,
-    LOG_IMU_RAW
+    LOG_IMU_RAW,
+    LOG_DC
 } LOG_DEVICE_T;
 
 static uint32_t _n_samples;
@@ -85,6 +95,17 @@ void log_data_cmd(int argc, char *argv[])
         // printf("Time [sec],ax [-],ay [-],az [-],gx [-],gy [-],gz [-]\n");
         kf_init();
     }
+    else if (!strcmp(argv[1],"DC"))
+    {
+        _device = LOG_DC;
+        if (dimmer_task_is_running())
+        {
+            dimmer_task_stop();
+            printf("Dimmer has stopped\n");
+        }
+        encoder_init();
+        printf("Time [sec], Encoder [-], Position [rad], Speed [rad/s], Voltage [V]\n");
+    }
     else
     {
         printf("%s: unknown device \"%s\", syntax is: %s [pot|enc] <samples>\n", argv[0], argv[1], argv[0]);
@@ -102,7 +123,7 @@ void log_data_cmd(int argc, char *argv[])
     // DONE: If the timer isn't running, start the timer.
     if (osTimerIsRunning(timer_id) == 0)
     {
-        status = osTimerStart(timer_id,10);
+        status = osTimerStart(timer_id,TIMER_TICKS);
         if (status != osOK)
         {
             printf("Timer could not be started.\n");
@@ -137,21 +158,24 @@ void log_data_task(void *arg)
         kf_time_update(_input);
         float* out = kf_get_mean();
         printf("%.5g, %.5g, %.5g\n", out[0],out[1],out[2]);
+        break;
+    case LOG_DC:
 
+    // Get encoder count
+    _count = encoder_get_count();
+    // position = (count/steps_per_rev) * 2pi
+    _position = ((float)_count/COUNT_PER_REV)*2.0f*PI;
+    // remember to conver timer ticks to seconds
+    _speed = (_position-_last_position)/(TIMER_TICKS/1000.0f);
+    // _voltage = POLL ADC and convert;
 
-
-        // MPU6050_read();
-        // printf("%.2f, ", _time);
-        // printf("%6f, ", MPU6050_get_ax());
-        // printf("%6f, ", MPU6050_get_ay());
-        // printf("%6f, ", MPU6050_get_az());
-        // printf("%6f, ", MPU6050_get_gx());
-        // printf("%6f, ", MPU6050_get_gy());
-        // printf("%6f, ", MPU6050_get_gz());
-        // printf("%" PRId32 "\n", encoder_get_count());   
-
+    printf("%10.2f,%12i,%15.2f,%14.3f,\n", _time, _count, _position, _speed);
+    _last_position = _position;
 
         break;
+
+
+
     default:
         printf("Invalid device\n");
         // DONE: stop the timer
