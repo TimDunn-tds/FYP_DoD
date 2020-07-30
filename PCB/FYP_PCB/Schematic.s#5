@@ -12077,11 +12077,11 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </net>
 <net name="N$4" class="0">
 <segment>
-<pinref part="U$1" gate="CN7" pin="25_PC14"/>
-<wire x1="-12.7" y1="35.56" x2="-30.48" y2="35.56" width="0.1524" layer="91"/>
-<wire x1="-30.48" y1="35.56" x2="-30.48" y2="45.72" width="0.1524" layer="91"/>
 <pinref part="U$2" gate="G$1" pin="INB"/>
 <wire x1="-30.48" y1="45.72" x2="-58.42" y2="45.72" width="0.1524" layer="91"/>
+<pinref part="U$1" gate="CN7" pin="3_PC12"/>
+<wire x1="-30.48" y1="45.72" x2="-30.48" y2="63.5" width="0.1524" layer="91"/>
+<wire x1="-30.48" y1="63.5" x2="-12.7" y2="63.5" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$5" class="0">

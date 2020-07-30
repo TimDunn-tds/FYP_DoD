@@ -2150,10 +2150,10 @@ design rules under a new name.</description>
 <signal name="N$8">
 <contactref element="U$3" pad="1"/>
 <contactref element="12VR" pad="2"/>
-<wire x1="5.08" y1="68.2" x2="5.9026" y2="69.0226" width="0.8128" layer="1"/>
-<wire x1="5.9026" y1="69.0226" x2="7.632325" y2="69.0226" width="0.8128" layer="1"/>
-<wire x1="7.632325" y1="69.0226" x2="10.12" y2="71.510275" width="0.8128" layer="1"/>
-<wire x1="10.12" y1="71.510275" x2="10.12" y2="80.01" width="0.8128" layer="1"/>
+<wire x1="5.08" y1="68.2" x2="5.5274" y2="67.7526" width="0.8128" layer="1"/>
+<wire x1="8.902325" y1="67.7526" x2="5.5274" y2="67.7526" width="0.8128" layer="1"/>
+<wire x1="10.12" y1="68.970275" x2="8.902325" y2="67.7526" width="0.8128" layer="1"/>
+<wire x1="10.12" y1="68.970275" x2="10.12" y2="80.01" width="0.8128" layer="1"/>
 </signal>
 </signals>
 <mfgpreviewcolors>
