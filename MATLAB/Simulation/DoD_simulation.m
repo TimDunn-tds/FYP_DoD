@@ -26,7 +26,9 @@ mo = pi*(ro^2)*thick*p;
 mh = pi*(rh^2)*thick*p;
 
 Jo = 0.5*mo*(ro^2);
-Jh = 0.5*mh*(rh^2);
+% Jh = 0.5*mh*(rh^2);
+%    Jdisk      + Jcoupling + Jshaft
+Jh = 3.908e-3   + 1.103e-6  + 2.38e-6;
 
 g = 9.82;                   % m/s^2
 
