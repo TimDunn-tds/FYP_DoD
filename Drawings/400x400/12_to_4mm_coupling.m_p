@@ -1,0 +1,38 @@
+﻿                 MASS PROPERTIES OF THE PART 12_TO_4MM_COUPLING
+
+                         VOLUME =  3.5367470e+03 MM^3
+                   SURFACE AREA =  2.5015688e+03 MM^2
+                        DENSITY =  7.8500000e-06 KILOGRAM / MM^3
+                           MASS =  2.7763464e-02 KILOGRAM 
+
+        CENTER OF GRAVITY with respect to DEFAULT_CSYS coordinate frame:
+X   Y   Z           0.0000000e+00 -1.0640782e-01 -2.4910532e+00  MM
+
+    INERTIA with respect to DEFAULT_CSYS coordinate frame:  (KILOGRAM * MM^2)
+
+INERTIA TENSOR:
+Ixx Ixy Ixz         2.2835783e+00  0.0000000e+00  0.0000000e+00
+Iyx Iyy Iyz         0.0000000e+00  2.3009166e+00 -9.1311402e-03
+Izx Izy Izz         0.0000000e+00 -9.1311402e-03  1.1039008e+00
+
+   INERTIA at CENTER OF GRAVITY with respect to DEFAULT_CSYS coordinate frame:
+                                                            (KILOGRAM * MM^2)   
+INERTIA TENSOR:
+Ixx Ixy Ixz         2.1109821e+00  0.0000000e+00  0.0000000e+00
+Iyx Iyy Iyz         0.0000000e+00  2.1286347e+00 -1.7719474e-03
+Izx Izy Izz         0.0000000e+00 -1.7719474e-03  1.1035864e+00
+
+                PRINCIPAL MOMENTS OF INERTIA:  (KILOGRAM * MM^2)
+I1  I2  I3          1.1035834e+00  2.1109821e+00  2.1286378e+00
+
+        ROTATION MATRIX from DEFAULT_CSYS orientation to PRINCIPAL AXES:
+                       0.00000        1.00000        0.00017
+                       0.00173       -0.00017        1.00000
+                       1.00000        0.00000       -0.00173
+
+   ROTATION ANGLES from DEFAULT_CSYS orientation to PRINCIPAL AXES (degrees):
+angles about x  y  z  -90.099          0.000        -90.000 
+
+                RADII OF GYRATION with respect to PRINCIPAL AXES:
+R1  R2  R3          6.3047191e+00  8.7197784e+00  8.7561675e+00  MM
+
