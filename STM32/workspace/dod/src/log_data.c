@@ -95,7 +95,7 @@ void log_data_cmd(int argc, char *argv[])
         // printf("Time [sec],ax [-],ay [-],az [-],gx [-],gy [-],gz [-]\n");
         kf_init();
     }
-    else if (!strcmp(argv[1],"DC"))
+    else if (!strcmp(argv[1],"DC")||!strcmp(argv[1],"dc"))
     {
         _device = LOG_DC;
         if (dimmer_task_is_running())
@@ -167,9 +167,10 @@ void log_data_task(void *arg)
     _position = ((float)_count/COUNT_PER_REV)*2.0f*PI;
     // remember to conver timer ticks to seconds
     _speed = (_position-_last_position)/(TIMER_TICKS/1000.0f);
-    // _voltage = POLL ADC and convert;
+    float duty = dc_motor_get_duty();
+    _voltage = duty*dc_adc_get_value();
 
-    printf("%10.2f,%12i,%15.2f,%14.3f,\n", _time, _count, _position, _speed);
+    printf("%10.2f,%12i,%15.2f,%14.3f,%12.2f\n", _time, _count, _position, _speed, _voltage);
     _last_position = _position;
 
         break;

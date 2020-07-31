@@ -10,7 +10,7 @@ void adc_cmd(int argc, char *argv[])
 {
 	if (argc <= 1)
 	{
-        printf("ADC value is %" PRIu16 "\n", dc_adc_get_value());
+        printf("Source voltage is %.2f[V]\n", dc_adc_get_value());
 	}
 	else
 	{

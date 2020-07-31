@@ -54,7 +54,7 @@ static CMD_T cmd_table[] =
     // {dimmer_cmd,        "dimmer",       "[start|stop]",                         "Get status or start/stop dimmer task"},
     // {light_cmd,         "light",        "[<H> <S> <V>]",                        "Get or set light HSV values"},
     {sin_table_cmd,     "sin",          "[<#> <amp> <freq>]",                   "Remember to match the definition"},
-    {log_data_cmd,      "log",          "[pot|enc|mpu|DC] <#>",                  "Otherwise memory mad."},
+    {log_data_cmd,      "log",          "[pot|enc|mpu|dc] <#>",                  "Otherwise memory mad."},
     // {manual_reference_cmd,  "ref",          "[<m/s>]",                               "Set manual reference"},
     // {controller_cmd,    "ctrl",         "[start|stop]",      "Get status or start/stop controller task"},
     {dc_motor_cmd,      "motor",        "[<value>]",                            "Get or set motor voltage"},

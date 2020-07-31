@@ -9,16 +9,22 @@
 #define     MOTOR_DIR_FWD   1
 #define     MOTOR_DIR_BCK   2
 #define     MOTOR_DIR_OFF   3
+#define     VDIV_GAIN       6.972f
+#define     ADC_MAX_VOLTAGE 3.3f
+#define     ADC_MAX_VALUE   0xFFF0
 
 ADC_HandleTypeDef _hadc1;
 
 static TIM_HandleTypeDef   _htim4;
+static float _duty = 0.0f;
+
 
 float UMAX = 12.0f;
 int PERIOD = 65535;
 float _voltage = 0.0f;
 int pulseWidth = 0;
-float ADC_MAX = 0xFFF0;
+// float ADC_MAX_VALUE = 0xFFF0;
+// float ADC_MAX_VOLTAGE = 3.3f;
 
 void dc_motor_init(void)
 {
@@ -132,11 +138,11 @@ void dc_adc_init(void)
     }
 }
 
-uint16_t dc_adc_get_value(void)
+float dc_adc_get_value(void)
 {
     /* Poll the ADC conversion */
     uint16_t reading = 0;
-    uint16_t result = 0;
+    float result = 0;
     if(HAL_ADC_PollForConversion(&_hadc1, 0xFF) != HAL_OK)
     {
         printf("Error polling for ADC conversion! \n");
@@ -145,9 +151,10 @@ uint16_t dc_adc_get_value(void)
     {
         /* Get the 12-bit reading */
         reading = HAL_ADC_GetValue(&_hadc1);
-        // result = int()(reading/ADC_MAX)
+        result = (ADC_MAX_VOLTAGE*(float)reading)/ADC_MAX_VALUE;
+        // 5.938
     }
-    return reading;
+    return result * VDIV_GAIN;
 }
 
 
@@ -171,8 +178,8 @@ void dc_motor_set(float U)
 
     U = fabsf(U);
 
-    float duty = U/UMAX;
-    pulseWidth = (int)floor(PERIOD*duty);
+    _duty = U/UMAX;
+    pulseWidth = (int)floor(PERIOD*_duty);
     HAL_TIM_PWM_Stop(&_htim4, TIM_CHANNEL_2);
     // __HAL_TIM_SET_AUTORELOAD(&_htim4, CC);
     __HAL_TIM_SET_COMPARE(&_htim4, TIM_CHANNEL_2, pulseWidth);
@@ -183,6 +190,12 @@ void dc_motor_set(float U)
 float dc_motor_get(void)
 {
     return _voltage;
+    // return _voltage/UMAX;
+}
+
+float dc_motor_get_duty(void)
+{
+    return _duty;
 }
 
 void _dc_motor_set_direction(uint8_t dir)
