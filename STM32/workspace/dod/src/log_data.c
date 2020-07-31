@@ -18,6 +18,7 @@
 #define COUNT_PER_REV 4741.44f
 #define PI 3.141592653589793f
 #define TIMER_TICKS 10
+#define MVPA 0.142f
 
 
 
@@ -29,6 +30,8 @@ static float _voltage = 0.0f;
 static float _position = 0.0f;
 static float _last_position = 0.0f;
 static float _speed = 0.0f;
+static float _current = 0.0f;
+
 
 typedef enum {
     LOG_POT,
@@ -104,7 +107,8 @@ void log_data_cmd(int argc, char *argv[])
             printf("Dimmer has stopped\n");
         }
         encoder_init();
-        printf("Time [sec], Encoder [-], Position [rad], Speed [rad/s], Voltage [V]\n");
+        _last_position = 0.0f;
+        printf("Time [sec], Encoder [-], Position [rad], Speed [rad/s], Voltage [V], Current [A]\n");
     }
     else
     {
@@ -163,14 +167,19 @@ void log_data_task(void *arg)
 
     // Get encoder count
     _count = encoder_get_count();
+
     // position = (count/steps_per_rev) * 2pi
     _position = ((float)_count/COUNT_PER_REV)*2.0f*PI;
+
     // remember to conver timer ticks to seconds
     _speed = (_position-_last_position)/(TIMER_TICKS/1000.0f);
+
     float duty = dc_motor_get_duty();
     _voltage = duty*dc_adc_get_value();
 
-    printf("%10.2f,%12i,%15.2f,%14.3f,%12.2f\n", _time, _count, _position, _speed, _voltage);
+    _current = (float)dc_adc_get_cs_value()/MVPA;
+
+    printf("%10.2f,%12i,%15.2f,%14.3f,%12.2f,%12.2f\n", _time, _count, _position, _speed, _voltage, _current);
     _last_position = _position;
 
         break;

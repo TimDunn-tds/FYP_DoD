@@ -9,11 +9,12 @@
 #define     MOTOR_DIR_FWD   1
 #define     MOTOR_DIR_BCK   2
 #define     MOTOR_DIR_OFF   3
-#define     VDIV_GAIN       6.972f
+#define     VDIV_GAIN       6.96f
 #define     ADC_MAX_VOLTAGE 3.3f
 #define     ADC_MAX_VALUE   0xFFF0
 
 ADC_HandleTypeDef _hadc1;
+ADC_HandleTypeDef _hadc2;
 
 static TIM_HandleTypeDef   _htim4;
 static float _duty = 0.0f;
@@ -23,8 +24,7 @@ float UMAX = 12.0f;
 int PERIOD = 65535;
 float _voltage = 0.0f;
 int pulseWidth = 0;
-// float ADC_MAX_VALUE = 0xFFF0;
-// float ADC_MAX_VOLTAGE = 3.3f;
+
 
 void dc_motor_init(void)
 {
@@ -83,7 +83,7 @@ void dc_motor_init(void)
 void dc_adc_init(void)
 {
     // Initialise DC motor voltage in pin
-    // PC5 ADC IN 1
+    // PC5 ADC1 IN 15
     __HAL_RCC_GPIOC_CLK_ENABLE();
     __HAL_RCC_ADC1_CLK_ENABLE();
 
@@ -136,6 +136,63 @@ void dc_adc_init(void)
         printf("Error starting ADC! \n");
         return;
     }
+
+
+//////////////////////////////////////////////////
+    // Initialise DC motor voltage in pin
+    // PA4 ADC2 IN4
+    __HAL_RCC_GPIOA_CLK_ENABLE();
+    __HAL_RCC_ADC2_CLK_ENABLE();
+
+    /* Configure ADC2 instance to be initialised with:
+            div2 prescaler,
+            12-bit resolution, 
+            right data aligned, 
+            continuous conversion mode,
+            one conversion. */
+    _hadc2.Instance = ADC2;
+    _hadc2.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV2;
+    _hadc2.Init.Resolution = ADC_RESOLUTION_12B;
+    _hadc2.Init.DataAlign = ADC_DATAALIGN_LEFT;
+    _hadc2.Init.ContinuousConvMode = ENABLE;
+    _hadc2.Init.NbrOfConversion = 1;
+
+    /* Configure the ADC to:
+            use channel 4 because thats what PA4 is on,
+            sequence rank of 1,
+            480 cycle sample time,
+            offset of 0.                            */
+    sConfigADC.Channel = ADC_CHANNEL_4;
+    sConfigADC.Rank = 1;
+    sConfigADC.SamplingTime = ADC_SAMPLETIME_480CYCLES;
+    sConfigADC.Offset = 0;
+
+    /* Configure PC5 in analog mode, no pullup */
+    GPIO_InitStructure.Pin = GPIO_PIN_4;
+    GPIO_InitStructure.Mode = GPIO_MODE_ANALOG;
+    GPIO_InitStructure.Pull = GPIO_NOPULL;
+    HAL_GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+        /* Initialise the ADC */ 
+    if(HAL_ADC_Init(&_hadc2) != HAL_OK)
+    {
+        printf("Error initialising ADC! \n");
+        return;
+    }
+    /* Initialise the ADC channel config */
+    if(HAL_ADC_ConfigChannel(&_hadc2, &sConfigADC) != HAL_OK)
+    {
+        printf("Error configuring ADC channel!\n");
+        return;
+    }
+    /* Start the ADC */
+    if(HAL_ADC_Start(&_hadc2) != HAL_OK)
+    {
+        printf("Error starting ADC! \n");
+        return;
+    }
+
+
 }
 
 float dc_adc_get_value(void)
@@ -156,6 +213,27 @@ float dc_adc_get_value(void)
     }
     return result * VDIV_GAIN;
 }
+
+
+float dc_adc_get_cs_value(void)
+{
+    /* Poll the ADC conversion */
+    uint16_t reading2 = 0;
+    float result2 = 0;
+    if(HAL_ADC_PollForConversion(&_hadc2, 0xFF) != HAL_OK)
+    {
+        printf("Error polling for ADC conversion! \n");
+    }
+    else
+    {
+        /* Get the 12-bit reading */
+        reading2 = HAL_ADC_GetValue(&_hadc2);
+        result2 = (ADC_MAX_VOLTAGE*(float)reading2)/ADC_MAX_VALUE;
+        // 5.938
+    }
+    return result2;
+}
+
 
 
 void dc_motor_set(float U)

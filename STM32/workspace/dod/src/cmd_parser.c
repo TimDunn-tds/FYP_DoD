@@ -57,7 +57,7 @@ static CMD_T cmd_table[] =
     {log_data_cmd,      "log",          "[pot|enc|mpu|dc] <#>",                  "Otherwise memory mad."},
     // {manual_reference_cmd,  "ref",          "[<m/s>]",                               "Set manual reference"},
     // {controller_cmd,    "ctrl",         "[start|stop]",      "Get status or start/stop controller task"},
-    {dc_motor_cmd,      "motor",        "[<value>]",                            "Get or set motor voltage"},
+    {dc_motor_cmd,      "motor",        "[<value>] [supOut]",                            "Get or set motor voltage"},
     // {MPC_cmd,           "MPC",          "[start|stop]",      "Start or stop MPC controller"},
     // {sysID_cmd,         "sysID",        "[cart|pend|stop] [<samples> [<amplitude> <frequency>]]", "Perform experiment/collect sysID data"},
     // {MPU6050_cmd,       "MPU",          "",                                       "Retrieve a single measurement from IMU"},
