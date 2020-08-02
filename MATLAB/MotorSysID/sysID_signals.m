@@ -1,25 +1,26 @@
 clc; clear; close all;
 
 d = 0.01;
+maxV = 4;
 
 % Ramp up then down
 figure(1);
-rampUp = [0*ones(1,1/d),linspace(0,12,10/d),12*ones(1,1/d),linspace(12,0,10/d),0*ones(1,1/d)];
+rampUp = [0*ones(1,1/d),linspace(0,maxV,10/d),maxV*ones(1,1/d),linspace(maxV,0,10/d),0*ones(1,1/d)];
 plot(rampUp);
 
 % Ramp down then up
 figure(2);
-rampDown = [0*ones(1,1/d),linspace(0,-12,10/d),-12*ones(1,1/d),linspace(-12,0,10/d),0*ones(1,1/d)];
+rampDown = [0*ones(1,1/d),linspace(0,-maxV,10/d),-maxV*ones(1,1/d),linspace(-maxV,0,10/d),0*ones(1,1/d)];
 plot(rampDown);
 
 % Test for deadzone
 figure(3);
 deadUp = [];
 deadDown = [];
-maxV = 4;
-for k = 0:0.5:maxV
+deadV = 4;
+for k = 0:0.5:deadV
     deadUp = [deadUp, k*ones(1,0.5/d)];
-    deadDown = [deadDown, (maxV-k)*ones(1,0.5/d)];
+    deadDown = [deadDown, (deadV-k)*ones(1,0.5/d)];
 end
 deadZone = [deadUp,deadDown,-deadUp,-deadDown];
 plot(deadZone);
@@ -41,6 +42,14 @@ freq = 0.5; % Hz
 
 sinWave = [zeros(1,0.5/d), V*sin(2*pi*freq*linspace(0,10,10/d))];
 plot(sinWave);
+
+
+%% Save files
+save('deadZone.mat','deadZone');
+save('rampDown.mat','rampDown');
+save('rampUp.mat','rampUp');
+save('stepDown.mat','stepDown');
+save('stepUp.mat','stepUp');
 save('sinWave.mat','sinWave');
 
 
