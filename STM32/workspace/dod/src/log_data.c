@@ -175,11 +175,12 @@ void log_data_task(void *arg)
     _speed = (_position-_last_position)/(TIMER_TICKS/1000.0f);
 
     float duty = dc_motor_get_duty();
-    _voltage = duty*dc_adc_get_value();
+    int dir = dc_motor_get_dir();
+    _voltage = dir*duty*dc_adc_get_value();
 
     _current = (float)dc_adc_get_cs_value()/MVPA;
 
-    printf("%10.2f,%12i,%15.2f,%14.3f,%12.2f,%12.2f\n", _time, _count, _position, _speed, _voltage, _current);
+    printf("%10.2f,%12i,%15.2f,%14.3f,%10.4f,%12.2f\n", _time, _count, _position, _speed, _voltage, _current);
     _last_position = _position;
 
         break;

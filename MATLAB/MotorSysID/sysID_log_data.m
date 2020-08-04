@@ -5,10 +5,10 @@ TIMEOUT = 0.5; % Time to wait for data before aborting
 
 
 % Pick sysID input
-% type = "sinWave";
+type = "sinWave";
 % type = "deadZone";
 % type = "rampDown";
-type = "rampUp";
+% type = "rampUp";
 % type = "stepDown";
 % type = "stepUp";
 

@@ -40,7 +40,9 @@ figure(6);
 V = 4; % Volts
 freq = 0.5; % Hz
 
-sinWave = [zeros(1,0.5/d), V*sin(2*pi*freq*linspace(0,10,10/d))];
+% sinWave = [zeros(1,0.5/d), V*sin(2*pi*freq*linspace(0,10,10/d))];
+sinWave = [V*sin(2*pi*freq*linspace(0,10,10/d))];
+
 plot(sinWave);
 
 

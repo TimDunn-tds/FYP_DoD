@@ -7,8 +7,8 @@
 
 
 #define     MOTOR_DIR_FWD   1
-#define     MOTOR_DIR_BCK   2
-#define     MOTOR_DIR_OFF   3
+#define     MOTOR_DIR_BCK   -1
+#define     MOTOR_DIR_OFF   0
 #define     VDIV_GAIN       6.96f
 #define     ADC_MAX_VOLTAGE 3.3f
 #define     ADC_MAX_VALUE   0xFFF0
@@ -18,7 +18,7 @@ ADC_HandleTypeDef _hadc2;
 
 static TIM_HandleTypeDef   _htim4;
 static float _duty = 0.0f;
-
+static int8_t _dir = MOTOR_DIR_FWD;
 
 float UMAX = 12.0f;
 int PERIOD = 65535;
@@ -243,15 +243,18 @@ void dc_motor_set(float U)
 
     if (U > 0.0f)
     {
-        _dc_motor_set_direction(MOTOR_DIR_FWD);
+        _dir = MOTOR_DIR_FWD;
+        _dc_motor_set_direction(_dir);
     }
     else  if (U < 0.0f)
     {
-        _dc_motor_set_direction(MOTOR_DIR_BCK);
+        _dir = MOTOR_DIR_BCK;
+        _dc_motor_set_direction(_dir);
     }
     else
     {
-        _dc_motor_set_direction(MOTOR_DIR_OFF);
+        _dir - MOTOR_DIR_OFF;
+        _dc_motor_set_direction(_dir);
     }
 
     U = fabsf(U);
@@ -276,7 +279,12 @@ float dc_motor_get_duty(void)
     return _duty;
 }
 
-void _dc_motor_set_direction(uint8_t dir)
+int8_t dc_motor_get_dir(void)
+{
+    return _dir;
+}
+
+void _dc_motor_set_direction(int8_t dir)
 {
     if(dir == MOTOR_DIR_FWD)
     {
