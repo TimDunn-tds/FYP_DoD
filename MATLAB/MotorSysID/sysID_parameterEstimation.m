@@ -4,10 +4,10 @@ clear;
 
 %% Get data
 % Pick sysID input
-type = "sinWave";
+% type = "sinWave";
 % type = "deadZone";
 % type = "rampDown";
-% type = "rampUp";
+type = "rampUp";
 % type = "stepDown";
 % type = "stepUp";
 
@@ -26,11 +26,9 @@ current = data(:,6);
 % p = Ia
 q0 = vel(1);
 p0 = 0;
-x0 = [q0; p0];
+x0 = [q0; p0; V(1)];
 
 % Simulation time
-Nt = 300;
-% dt = time(2) - time(1);
 dt = 0.01;
 % t_sim = 0:dt:time(500);
 % y_true = vel(1:1/dt:500);
@@ -40,13 +38,16 @@ y_true = vel;
 %% Run system identification
 % Define initial parameter guess
 % Ra, La, kt, B, alpha1, kv, alpha2, alpha3
-% param_vec = [0.1; 0.5; 7.75; 6.875; 1e-8; 0.8; 1e-8; 1e-8; 1e-8; 1e-8; 1e-8];
-param_vec = [50; 0.5; 7.75; 6.875; 0; 0.8; 0; 0; 0; 0; 0];
+% param_vec = [0.2337; 8.0593e-4; 0.1874; 0.1215; 0; 0.3964; 0; 0]; %rampUp
+param_vec = [2.14; 0.8177; 0.3522; 0.0576; 4e-9; 0.1348; 1e-10; 0.8750];
+% 4.3421 0.0032 0.3522 0.0576 0.1308
 % param_vec = [0; 1e0; 1e-10; 1e-10; 1e-10; 1e-10; 1e-10; 1e-10];
 y_initial = runSim(param_vec,x0,t_sim,V);
 
 % Compute cost
 V_y = @(y) (y(:,1) - y_true(:,1)).'*(y(:,1) - y_true(:,1));
+% V_y = @(y) ((max(y)-y(:,1)) - (max(y_true) - y_true(:,1))).'*((max(y)-y(:,1)) - (max(y_true) - y_true(:,1)));
+
 V_theta = @(theta) V_y(runSim(theta,x0,t_sim,V));
 
 %% Run optimisation with fmincon
@@ -61,19 +62,11 @@ V_theta = @(theta) V_y(runSim(theta,x0,t_sim,V));
 %% Run optimisation with patternsearch
 A = -eye(length(param_vec));
 b = zeros(length(param_vec),1);
-lb = [0; 1e-4; 0; 0; 0; 0; 0; 0; 0; 0; 0];
-ub = [inf, 1e2, inf, inf, inf, inf, inf, inf, inf, inf, inf]';
-options = optimoptions('patternsearch','Display','iter','StepTolerance',1e-9,'UseCompletePoll',false);
+lb = [0; 1e-4; 0; 0; 0; 0; 0; 0];
+ub = [inf, 1e2, inf, inf, inf, inf, inf, inf]';
+options = optimoptions('patternsearch','Display','iter','StepTolerance',1e-10,'UseCompletePoll',false);
 param_opt = patternsearch(V_theta, param_vec, A, b, [], [], lb, [], [], options);
 final_cost = V_theta(param_opt)
-
-%% Run optimisation with ga
-% A = -eye(length(param_vec));
-% b = zeros(length(param_vec),1);
-% ub = [10, 1e5, 100, 10, 1e-8, 100, 1e-8, 1e-8]';
-% options = optimoptions('ga','Display','iter');
-% param_opt = ga(V_theta, 8, param_vec, A, b, [], [], [], ub, [], options);
-% final_cost = V_theta(param_opt)
 
 
 %% Plot results 
@@ -84,10 +77,11 @@ figure(1); clf;
 % xlabel('Time [s]');
 % ylabel('Armature Voltage [V]');
 % subplot(2,1,2);
-plot(time,y_true,'DisplayName','Measured'); hold on;
-plot(t_sim,y_cts,'DisplayName','Simulated');
+plot(t_sim,y_true,'DisplayName','Measured'); hold on;
+plot(t_sim,y_cts(:,1),'DisplayName','Simulated');
 ylabel('Velocity [rad/s]');
 xlabel('Time [s]');
+grid on;
 legend;
 
 
@@ -126,9 +120,6 @@ function y = runSim(param_vec, x0, t_sim, V)
     kv      = param_vec(6);
     alpha2  = param_vec(7);
     alpha3  = param_vec(8);
-    alpha4  = param_vec(9);
-    alpha5  = param_vec(10);
-    alpha6  = param_vec(11);
 
     N = 98.78;
     Jh = 0.0039;
@@ -137,20 +128,25 @@ function y = runSim(param_vec, x0, t_sim, V)
     % CCRs
     tauM    =@(p) kt*p;
     Vb      =@(q) kv*q;
-    tauF    =@(q) (alpha1 + alpha2*exp(-alpha3*abs(q)))*sign(q)...
-                    + (alpha4 + alpha5*exp(-alpha6*abs(q)))*sign(q);
+    % alpha1 = magnitude of deadzone (more +ve = bigger deadzone)
+    % alpha2 = magnitude of deadzone (more +ve = bigger deadzone)
+    % alpha3 = settling time after overshoot ( more +ve = faster settle)
+    tauF    =@(q) (alpha1 + alpha2*exp(-alpha3*abs(q)))*sign(q);
 %     tauF    =@(q) alpha1*sign(q);
     
     % SSRs
-%     dq =@(q,p) (tauM(p) - B*q)/J;
-    dq =@(q,p) (tauM(p) - B*q - tauF(q))/J;
-%     dp =@(q,p,Va) (Va - Ra*p - Vb(q))/La;
-    dp =@(q,p,Va) (Va - Ra*p - Vb(q));
+%     dq =@(q,p,Va) ((tauM(p) - B*q)/J)*double(~(abs(q)<2e-1 && abs(Va)<2.2) || ~(abs(q)>1 && abs(Va)<1.2));
+    dq =@(q,p,Va) ((tauM(p) - B*abs(q))/J)*double(~(abs(q)<2e-1 && abs(Va)<2.2));
 
-    dx =@(q,p,Va) [dq(q,p); dp(q,p,Va)];
+%     dq =@(q,p) (tauM(p) - B*q)/J;
+%     dq =@(q,p) (tauM(p) - B*q - tauF(q))/J;
+    dp =@(q,p,Va) (Va - Ra*p - Vb(q))/La;
+%     dp =@(q,p,Va) (Va - Ra*p - Vb(q));
+
+    dx =@(q,p,Va) [dq(q,p,Va); dp(q,p,Va); Va];
     
     % Define output
-    output = @(x) [x(1)];
+    output = @(x) [x(1);x(2);x(3)];
 
     % Inputs
     Va = @(t) interp1(t_sim,V,t);
@@ -159,10 +155,12 @@ function y = runSim(param_vec, x0, t_sim, V)
     dx_wrap = @(t,x) dx(x(1),x(2),Va(t));
 
     % Run simulation
+%     options = odeset('RelTol',1e-6);
+%     [res.t,res.x] = ode15s(dx_wrap, t_sim, x0, options);
     [res.t,res.x] = ode15s(dx_wrap, t_sim, x0);
-
+    
     % Generate output
-    y = zeros(length(res.t),1);
+    y = zeros(length(res.t),3);
     for i=1:length(res.t)
         y(i,:) = output(res.x(i,:)).';
     end
