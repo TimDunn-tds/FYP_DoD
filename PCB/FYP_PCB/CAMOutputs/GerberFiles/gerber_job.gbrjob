@@ -1,0 +1,24 @@
+{
+    "Header": {
+        "Comment": "All values are metric (mm)",
+        "CreationDate": "2020-08-11T05:45:11Z",
+        "GenerationSoftware": {
+            "Application": "EAGLE",
+            "Vendor": "Autodesk",
+            "Version": "9.5.0"
+        },
+        "Part": "Single"
+    },
+    "Overall": {
+        "BoardThickness": 1.57,
+        "LayerNumber": 2,
+        "Name": {
+            "ProjectId": "Schematic"
+        },
+        "Owner": "c3234207 c3234207 <c3234207@uon.edu.au>",
+        "Size": {
+            "X": 90,
+            "Y": 90
+        }
+    }
+}

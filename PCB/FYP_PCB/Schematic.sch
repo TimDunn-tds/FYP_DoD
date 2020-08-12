@@ -8,20 +8,20 @@
 </settings>
 <grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
-<layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
-<layer number="16" name="Bottom" color="1" fill="1" visible="no" active="no"/>
-<layer number="17" name="Pads" color="2" fill="1" visible="no" active="no"/>
-<layer number="18" name="Vias" color="2" fill="1" visible="no" active="no"/>
-<layer number="19" name="Unrouted" color="6" fill="1" visible="no" active="no"/>
-<layer number="20" name="Dimension" color="24" fill="1" visible="no" active="no"/>
-<layer number="21" name="tPlace" color="7" fill="1" visible="no" active="no"/>
-<layer number="22" name="bPlace" color="7" fill="1" visible="no" active="no"/>
-<layer number="23" name="tOrigins" color="15" fill="1" visible="no" active="no"/>
-<layer number="24" name="bOrigins" color="15" fill="1" visible="no" active="no"/>
-<layer number="25" name="tNames" color="7" fill="1" visible="no" active="no"/>
-<layer number="26" name="bNames" color="7" fill="1" visible="no" active="no"/>
-<layer number="27" name="tValues" color="7" fill="1" visible="no" active="no"/>
-<layer number="28" name="bValues" color="7" fill="1" visible="no" active="no"/>
+<layer number="1" name="Top" color="4" fill="1" visible="yes" active="no"/>
+<layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="no"/>
+<layer number="17" name="Pads" color="2" fill="1" visible="yes" active="no"/>
+<layer number="18" name="Vias" color="2" fill="1" visible="yes" active="no"/>
+<layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="no"/>
+<layer number="20" name="Dimension" color="24" fill="1" visible="yes" active="no"/>
+<layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="no"/>
+<layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="no"/>
+<layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="no"/>
+<layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="no"/>
+<layer number="25" name="tNames" color="7" fill="1" visible="yes" active="no"/>
+<layer number="26" name="bNames" color="7" fill="1" visible="yes" active="no"/>
+<layer number="27" name="tValues" color="7" fill="1" visible="yes" active="no"/>
+<layer number="28" name="bValues" color="7" fill="1" visible="yes" active="no"/>
 <layer number="29" name="tStop" color="7" fill="3" visible="no" active="no"/>
 <layer number="30" name="bStop" color="7" fill="6" visible="no" active="no"/>
 <layer number="31" name="tCream" color="7" fill="4" visible="no" active="no"/>
@@ -30,8 +30,8 @@
 <layer number="34" name="bFinish" color="6" fill="6" visible="no" active="no"/>
 <layer number="35" name="tGlue" color="7" fill="4" visible="no" active="no"/>
 <layer number="36" name="bGlue" color="7" fill="5" visible="no" active="no"/>
-<layer number="37" name="tTest" color="7" fill="1" visible="no" active="no"/>
-<layer number="38" name="bTest" color="7" fill="1" visible="no" active="no"/>
+<layer number="37" name="tTest" color="7" fill="1" visible="yes" active="no"/>
+<layer number="38" name="bTest" color="7" fill="1" visible="yes" active="no"/>
 <layer number="39" name="tKeepout" color="4" fill="11" visible="no" active="no"/>
 <layer number="40" name="bKeepout" color="1" fill="11" visible="no" active="no"/>
 <layer number="41" name="tRestrict" color="4" fill="10" visible="no" active="no"/>
@@ -39,20 +39,20 @@
 <layer number="43" name="vRestrict" color="2" fill="10" visible="no" active="no"/>
 <layer number="44" name="Drills" color="7" fill="1" visible="no" active="no"/>
 <layer number="45" name="Holes" color="7" fill="1" visible="no" active="no"/>
-<layer number="46" name="Milling" color="3" fill="1" visible="no" active="no"/>
-<layer number="47" name="Measures" color="7" fill="1" visible="no" active="no"/>
-<layer number="48" name="Document" color="7" fill="1" visible="no" active="no"/>
-<layer number="49" name="Reference" color="7" fill="1" visible="no" active="no"/>
-<layer number="50" name="dxf" color="7" fill="1" visible="no" active="no"/>
-<layer number="51" name="tDocu" color="7" fill="1" visible="no" active="no"/>
-<layer number="52" name="bDocu" color="7" fill="1" visible="no" active="no"/>
-<layer number="53" name="tGND_GNDA" color="7" fill="9" visible="no" active="no"/>
-<layer number="54" name="bGND_GNDA" color="1" fill="9" visible="no" active="no"/>
-<layer number="56" name="wert" color="7" fill="1" visible="no" active="no"/>
-<layer number="57" name="tCopper" color="7" fill="1" visible="no" active="no"/>
-<layer number="58" name="bCopper" color="7" fill="1" visible="no" active="no"/>
-<layer number="59" name="tCarbon" color="7" fill="1" visible="no" active="no"/>
-<layer number="60" name="bCarbon" color="7" fill="1" visible="no" active="no"/>
+<layer number="46" name="Milling" color="3" fill="1" visible="yes" active="no"/>
+<layer number="47" name="Measures" color="7" fill="1" visible="yes" active="no"/>
+<layer number="48" name="Document" color="7" fill="1" visible="yes" active="no"/>
+<layer number="49" name="Reference" color="7" fill="1" visible="yes" active="no"/>
+<layer number="50" name="dxf" color="7" fill="1" visible="yes" active="no"/>
+<layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="no"/>
+<layer number="52" name="bDocu" color="7" fill="1" visible="yes" active="no"/>
+<layer number="53" name="tGND_GNDA" color="7" fill="9" visible="yes" active="no"/>
+<layer number="54" name="bGND_GNDA" color="1" fill="9" visible="yes" active="no"/>
+<layer number="56" name="wert" color="7" fill="1" visible="yes" active="no"/>
+<layer number="57" name="tCopper" color="7" fill="1" visible="yes" active="no"/>
+<layer number="58" name="bCopper" color="7" fill="1" visible="yes" active="no"/>
+<layer number="59" name="tCarbon" color="7" fill="1" visible="yes" active="no"/>
+<layer number="60" name="bCarbon" color="7" fill="1" visible="yes" active="no"/>
 <layer number="88" name="SimResults" color="9" fill="1" visible="yes" active="yes"/>
 <layer number="89" name="SimProbes" color="9" fill="1" visible="yes" active="yes"/>
 <layer number="90" name="Modules" color="5" fill="1" visible="yes" active="yes"/>
@@ -971,91 +971,7 @@ This version of shield has no Arduino headers and it has 2*20 pin headers becaus
 <package name="MULTIPOWERSO-302">
 <description>&lt;b&gt;MultiPowerSO-30&lt;/b&gt;&lt;p&gt;
 Source: http://pdf1.alldatasheet.com/datasheet-pdf/view/84563/STMICROELECTRONICS/VNH3SP30.html</description>
-<circle x="-6" y="5.5" radius="0.4" width="0" layer="29"/>
-<circle x="-6" y="5.5" radius="0.3" width="0" layer="31"/>
-<circle x="-4" y="5.5" radius="0.4" width="0" layer="29"/>
-<circle x="-4" y="5.5" radius="0.3" width="0" layer="31"/>
-<circle x="-2" y="5.5" radius="0.4" width="0" layer="29"/>
-<circle x="-2" y="5.5" radius="0.3" width="0" layer="31"/>
-<circle x="2" y="5.5" radius="0.4" width="0" layer="29"/>
-<circle x="2" y="5.5" radius="0.3" width="0" layer="31"/>
-<circle x="4" y="5.5" radius="0.4" width="0" layer="29"/>
-<circle x="4" y="5.5" radius="0.3" width="0" layer="31"/>
-<circle x="6" y="5.5" radius="0.4" width="0" layer="29"/>
-<circle x="6" y="5.5" radius="0.3" width="0" layer="31"/>
-<circle x="-6" y="3.5" radius="0.4" width="0" layer="29"/>
-<circle x="-6" y="3.5" radius="0.3" width="0" layer="31"/>
-<circle x="-4" y="3.5" radius="0.4" width="0" layer="29"/>
-<circle x="-4" y="3.5" radius="0.3" width="0" layer="31"/>
-<circle x="-2" y="3.5" radius="0.4" width="0" layer="29"/>
-<circle x="-2" y="3.5" radius="0.3" width="0" layer="31"/>
-<circle x="2" y="3.5" radius="0.4" width="0" layer="29"/>
-<circle x="2" y="3.5" radius="0.3" width="0" layer="31"/>
-<circle x="4" y="3.5" radius="0.4" width="0" layer="29"/>
-<circle x="4" y="3.5" radius="0.3" width="0" layer="31"/>
-<circle x="6" y="3.5" radius="0.4" width="0" layer="29"/>
-<circle x="6" y="3.5" radius="0.3" width="0" layer="31"/>
-<circle x="-6" y="1.5" radius="0.4" width="0" layer="29"/>
-<circle x="-6" y="1.5" radius="0.3" width="0" layer="31"/>
-<circle x="-4" y="1.5" radius="0.4" width="0" layer="29"/>
-<circle x="-4" y="1.5" radius="0.3" width="0" layer="31"/>
-<circle x="-2" y="1.5" radius="0.4" width="0" layer="29"/>
-<circle x="-2" y="1.5" radius="0.3" width="0" layer="31"/>
-<circle x="2" y="1.5" radius="0.4" width="0" layer="29"/>
-<circle x="2" y="1.5" radius="0.3" width="0" layer="31"/>
-<circle x="4" y="1.5" radius="0.4" width="0" layer="29"/>
-<circle x="4" y="1.5" radius="0.3" width="0" layer="31"/>
-<circle x="6" y="1.5" radius="0.4" width="0" layer="29"/>
-<circle x="6" y="1.5" radius="0.3" width="0" layer="31"/>
-<circle x="-4" y="-1.5" radius="0.4" width="0" layer="29"/>
-<circle x="-4" y="-1.5" radius="0.3" width="0" layer="31"/>
-<circle x="-2" y="-1.5" radius="0.4" width="0" layer="29"/>
-<circle x="-2" y="-1.5" radius="0.3" width="0" layer="31"/>
-<circle x="0" y="-1.5" radius="0.4" width="0" layer="29"/>
-<circle x="0" y="-1.5" radius="0.3" width="0" layer="31"/>
-<circle x="2" y="-1.5" radius="0.4" width="0" layer="29"/>
-<circle x="2" y="-1.5" radius="0.3" width="0" layer="31"/>
-<circle x="4" y="-1.5" radius="0.4" width="0" layer="29"/>
-<circle x="4" y="-1.5" radius="0.3" width="0" layer="31"/>
-<circle x="-4" y="-3.5" radius="0.4" width="0" layer="29"/>
-<circle x="-4" y="-3.5" radius="0.3" width="0" layer="31"/>
-<circle x="-2" y="-3.5" radius="0.4" width="0" layer="29"/>
-<circle x="-2" y="-3.5" radius="0.3" width="0" layer="31"/>
-<circle x="0" y="-3.5" radius="0.4" width="0" layer="29"/>
-<circle x="0" y="-3.5" radius="0.3" width="0" layer="31"/>
-<circle x="2" y="-3.5" radius="0.4" width="0" layer="29"/>
-<circle x="2" y="-3.5" radius="0.3" width="0" layer="31"/>
-<circle x="4" y="-3.5" radius="0.4" width="0" layer="29"/>
-<circle x="4" y="-3.5" radius="0.3" width="0" layer="31"/>
-<circle x="-4" y="-5.5" radius="0.4" width="0" layer="29"/>
-<circle x="-4" y="-5.5" radius="0.3" width="0" layer="31"/>
-<circle x="-2" y="-5.5" radius="0.4" width="0" layer="29"/>
-<circle x="-2" y="-5.5" radius="0.3" width="0" layer="31"/>
-<circle x="0" y="-5.5" radius="0.4" width="0" layer="29"/>
-<circle x="0" y="-5.5" radius="0.3" width="0" layer="31"/>
-<circle x="2" y="-5.5" radius="0.4" width="0" layer="29"/>
-<circle x="2" y="-5.5" radius="0.3" width="0" layer="31"/>
-<circle x="4" y="-5.5" radius="0.4" width="0" layer="29"/>
-<circle x="4" y="-5.5" radius="0.3" width="0" layer="31"/>
 <text x="-13.97" y="-15.24" size="1.27" layer="25" rot="R90">&gt;NAME</text>
-<rectangle x1="-7.35" y1="7.895" x2="-6.65" y2="10.095" layer="29"/>
-<rectangle x1="-7.25" y1="7.995" x2="-6.75" y2="9.995" layer="31"/>
-<rectangle x1="-2.35" y1="7.895" x2="-1.65" y2="10.095" layer="29"/>
-<rectangle x1="-2.25" y1="7.995" x2="-1.75" y2="9.995" layer="31"/>
-<rectangle x1="-0.35" y1="7.895" x2="0.35" y2="10.095" layer="29"/>
-<rectangle x1="-0.25" y1="7.995" x2="0.25" y2="9.995" layer="31"/>
-<rectangle x1="1.65" y1="7.895" x2="2.35" y2="10.095" layer="29"/>
-<rectangle x1="1.75" y1="7.995" x2="2.25" y2="9.995" layer="31"/>
-<rectangle x1="6.65" y1="7.895" x2="7.35" y2="10.095" layer="29"/>
-<rectangle x1="6.75" y1="7.995" x2="7.25" y2="9.995" layer="31"/>
-<rectangle x1="-7.35" y1="-10.095" x2="-6.65" y2="-7.895" layer="29" rot="R180"/>
-<rectangle x1="-7.25" y1="-9.995" x2="-6.75" y2="-7.995" layer="31" rot="R180"/>
-<rectangle x1="-5.35" y1="-10.095" x2="-4.65" y2="-7.895" layer="29" rot="R180"/>
-<rectangle x1="-5.25" y1="-9.995" x2="-4.75" y2="-7.995" layer="31" rot="R180"/>
-<rectangle x1="4.65" y1="-10.095" x2="5.35" y2="-7.895" layer="29" rot="R180"/>
-<rectangle x1="4.75" y1="-9.995" x2="5.25" y2="-7.995" layer="31" rot="R180"/>
-<rectangle x1="6.65" y1="-10.095" x2="7.35" y2="-7.895" layer="29" rot="R180"/>
-<rectangle x1="6.75" y1="-9.995" x2="7.25" y2="-7.995" layer="31" rot="R180"/>
 <wire x1="-13.97" y1="17.78" x2="13.97" y2="17.78" width="0.127" layer="21"/>
 <hole x="-11.43" y="-17.78" drill="2.1844"/>
 <hole x="11.43" y="12.7" drill="2.1844"/>
@@ -1100,52 +1016,6 @@ Source: http://pdf1.alldatasheet.com/datasheet-pdf/view/84563/STMICROELECTRONICS
 <text x="-11.43" y="15.24" size="1.27" layer="21" rot="R270" align="center-left">GND</text>
 <text x="15.24" y="-14.605" size="1.27" layer="27" rot="R90">&gt;VALUE</text>
 </package>
-<package name="MA04-1" urn="urn:adsk.eagle:footprint:8285/1" locally_modified="yes">
-<description>&lt;b&gt;PIN HEADER&lt;/b&gt;</description>
-<wire x1="-4.445" y1="1.27" x2="-3.175" y2="1.27" width="0.1524" layer="21"/>
-<wire x1="-3.175" y1="1.27" x2="-2.54" y2="0.635" width="0.1524" layer="21"/>
-<wire x1="-2.54" y1="-0.635" x2="-3.175" y2="-1.27" width="0.1524" layer="21"/>
-<wire x1="-2.54" y1="0.635" x2="-1.905" y2="1.27" width="0.1524" layer="21"/>
-<wire x1="-1.905" y1="1.27" x2="-0.635" y2="1.27" width="0.1524" layer="21"/>
-<wire x1="-0.635" y1="1.27" x2="0" y2="0.635" width="0.1524" layer="21"/>
-<wire x1="0" y1="-0.635" x2="-0.635" y2="-1.27" width="0.1524" layer="21"/>
-<wire x1="-0.635" y1="-1.27" x2="-1.905" y2="-1.27" width="0.1524" layer="21"/>
-<wire x1="-1.905" y1="-1.27" x2="-2.54" y2="-0.635" width="0.1524" layer="21"/>
-<wire x1="-5.08" y1="0.635" x2="-5.08" y2="-0.635" width="0.1524" layer="21"/>
-<wire x1="-4.445" y1="1.27" x2="-5.08" y2="0.635" width="0.1524" layer="21"/>
-<wire x1="-5.08" y1="-0.635" x2="-4.445" y2="-1.27" width="0.1524" layer="21"/>
-<wire x1="-3.175" y1="-1.27" x2="-4.445" y2="-1.27" width="0.1524" layer="21"/>
-<wire x1="0" y1="0.635" x2="0.635" y2="1.27" width="0.1524" layer="21"/>
-<wire x1="0.635" y1="1.27" x2="1.905" y2="1.27" width="0.1524" layer="21"/>
-<wire x1="1.905" y1="1.27" x2="2.54" y2="0.635" width="0.1524" layer="21"/>
-<wire x1="2.54" y1="-0.635" x2="1.905" y2="-1.27" width="0.1524" layer="21"/>
-<wire x1="1.905" y1="-1.27" x2="0.635" y2="-1.27" width="0.1524" layer="21"/>
-<wire x1="0.635" y1="-1.27" x2="0" y2="-0.635" width="0.1524" layer="21"/>
-<wire x1="3.175" y1="1.27" x2="4.445" y2="1.27" width="0.1524" layer="21"/>
-<wire x1="4.445" y1="1.27" x2="5.08" y2="0.635" width="0.1524" layer="21"/>
-<wire x1="5.08" y1="0.635" x2="5.08" y2="-0.635" width="0.1524" layer="21"/>
-<wire x1="5.08" y1="-0.635" x2="4.445" y2="-1.27" width="0.1524" layer="21"/>
-<wire x1="3.175" y1="1.27" x2="2.54" y2="0.635" width="0.1524" layer="21"/>
-<wire x1="2.54" y1="-0.635" x2="3.175" y2="-1.27" width="0.1524" layer="21"/>
-<wire x1="4.445" y1="-1.27" x2="3.175" y2="-1.27" width="0.1524" layer="21"/>
-<pad name="GND" x="-3.81" y="0" drill="1.016" shape="long" rot="R90"/>
-<pad name="VCC" x="-1.27" y="0" drill="1.016" shape="long" rot="R90"/>
-<pad name="ENCA" x="1.27" y="0" drill="1.016" shape="long" rot="R90"/>
-<pad name="ENCB" x="3.81" y="0" drill="1.016" shape="long" rot="R90"/>
-<text x="-5.08" y="1.651" size="1.27" layer="25" ratio="10">&gt;NAME</text>
-<text x="0.635" y="1.651" size="1.27" layer="27" ratio="10">&gt;VALUE</text>
-<rectangle x1="-1.524" y1="-0.254" x2="-1.016" y2="0.254" layer="51"/>
-<rectangle x1="-4.064" y1="-0.254" x2="-3.556" y2="0.254" layer="51"/>
-<rectangle x1="1.016" y1="-0.254" x2="1.524" y2="0.254" layer="51"/>
-<rectangle x1="3.556" y1="-0.254" x2="4.064" y2="0.254" layer="51"/>
-<text x="-3.81" y="-1.905" size="1.27" layer="21" rot="R270" align="center-left">GND</text>
-<text x="-1.27" y="-1.905" size="1.27" layer="21" rot="R270" align="center-left">VCC</text>
-<text x="1.27" y="-1.905" size="1.27" layer="21" rot="R270" align="center-left">ENCA</text>
-<text x="3.81" y="-1.905" size="1.27" layer="21" rot="R270" align="center-left">ENCB</text>
-<text x="3.81" y="-1.905" size="1.27" layer="21" rot="R270" align="center-left">ENCB</text>
-<text x="-6.985" y="0" size="1.27" layer="21" align="center-left">G</text>
-<text x="5.715" y="0" size="1.27" layer="21" align="center-left">W</text>
-</package>
 <package name="TOGGLESWITCH">
 <pad name="2" x="0" y="0" drill="1.85"/>
 <pad name="3" x="0" y="4.7" drill="1.85"/>
@@ -1155,12 +1025,69 @@ Source: http://pdf1.alldatasheet.com/datasheet-pdf/view/84563/STMICROELECTRONICS
 <hole x="1.59" y="-7.87" drill="1.85"/>
 <hole x="-1.58" y="-7.87" drill="1.85"/>
 </package>
+<package name="MA06-1" urn="urn:adsk.eagle:footprint:8287/1" locally_modified="yes">
+<description>&lt;b&gt;PIN HEADER&lt;/b&gt;</description>
+<wire x1="-6.985" y1="1.27" x2="-5.715" y2="1.27" width="0.1524" layer="21"/>
+<wire x1="-5.715" y1="1.27" x2="-5.08" y2="0.635" width="0.1524" layer="21"/>
+<wire x1="-5.08" y1="-0.635" x2="-5.715" y2="-1.27" width="0.1524" layer="21"/>
+<wire x1="-5.08" y1="0.635" x2="-4.445" y2="1.27" width="0.1524" layer="21"/>
+<wire x1="-4.445" y1="1.27" x2="-3.175" y2="1.27" width="0.1524" layer="21"/>
+<wire x1="-3.175" y1="1.27" x2="-2.54" y2="0.635" width="0.1524" layer="21"/>
+<wire x1="-2.54" y1="-0.635" x2="-3.175" y2="-1.27" width="0.1524" layer="21"/>
+<wire x1="-3.175" y1="-1.27" x2="-4.445" y2="-1.27" width="0.1524" layer="21"/>
+<wire x1="-4.445" y1="-1.27" x2="-5.08" y2="-0.635" width="0.1524" layer="21"/>
+<wire x1="-7.62" y1="0.635" x2="-7.62" y2="-0.635" width="0.1524" layer="21"/>
+<wire x1="-6.985" y1="1.27" x2="-7.62" y2="0.635" width="0.1524" layer="21"/>
+<wire x1="-7.62" y1="-0.635" x2="-6.985" y2="-1.27" width="0.1524" layer="21"/>
+<wire x1="-5.715" y1="-1.27" x2="-6.985" y2="-1.27" width="0.1524" layer="21"/>
+<wire x1="-2.54" y1="0.635" x2="-1.905" y2="1.27" width="0.1524" layer="21"/>
+<wire x1="-1.905" y1="1.27" x2="-0.635" y2="1.27" width="0.1524" layer="21"/>
+<wire x1="-0.635" y1="1.27" x2="0" y2="0.635" width="0.1524" layer="21"/>
+<wire x1="0" y1="-0.635" x2="-0.635" y2="-1.27" width="0.1524" layer="21"/>
+<wire x1="-0.635" y1="-1.27" x2="-1.905" y2="-1.27" width="0.1524" layer="21"/>
+<wire x1="-1.905" y1="-1.27" x2="-2.54" y2="-0.635" width="0.1524" layer="21"/>
+<wire x1="0.635" y1="1.27" x2="1.905" y2="1.27" width="0.1524" layer="21"/>
+<wire x1="1.905" y1="1.27" x2="2.54" y2="0.635" width="0.1524" layer="21"/>
+<wire x1="2.54" y1="-0.635" x2="1.905" y2="-1.27" width="0.1524" layer="21"/>
+<wire x1="2.54" y1="0.635" x2="3.175" y2="1.27" width="0.1524" layer="21"/>
+<wire x1="3.175" y1="1.27" x2="4.445" y2="1.27" width="0.1524" layer="21"/>
+<wire x1="4.445" y1="1.27" x2="5.08" y2="0.635" width="0.1524" layer="21"/>
+<wire x1="5.08" y1="-0.635" x2="4.445" y2="-1.27" width="0.1524" layer="21"/>
+<wire x1="4.445" y1="-1.27" x2="3.175" y2="-1.27" width="0.1524" layer="21"/>
+<wire x1="3.175" y1="-1.27" x2="2.54" y2="-0.635" width="0.1524" layer="21"/>
+<wire x1="0.635" y1="1.27" x2="0" y2="0.635" width="0.1524" layer="21"/>
+<wire x1="0" y1="-0.635" x2="0.635" y2="-1.27" width="0.1524" layer="21"/>
+<wire x1="1.905" y1="-1.27" x2="0.635" y2="-1.27" width="0.1524" layer="21"/>
+<wire x1="5.08" y1="0.635" x2="5.715" y2="1.27" width="0.1524" layer="21"/>
+<wire x1="5.715" y1="1.27" x2="6.985" y2="1.27" width="0.1524" layer="21"/>
+<wire x1="6.985" y1="1.27" x2="7.62" y2="0.635" width="0.1524" layer="21"/>
+<wire x1="7.62" y1="-0.635" x2="6.985" y2="-1.27" width="0.1524" layer="21"/>
+<wire x1="6.985" y1="-1.27" x2="5.715" y2="-1.27" width="0.1524" layer="21"/>
+<wire x1="5.715" y1="-1.27" x2="5.08" y2="-0.635" width="0.1524" layer="21"/>
+<wire x1="7.62" y1="0.635" x2="7.62" y2="-0.635" width="0.1524" layer="21"/>
+<pad name="MTRPWR+" x="-6.35" y="0" drill="1.016" shape="long" rot="R90"/>
+<pad name="MTRPWR-" x="-3.81" y="0" drill="1.016" shape="long" rot="R90"/>
+<pad name="ENCGND" x="-1.27" y="0" drill="1.016" shape="long" rot="R90"/>
+<pad name="ENCVCC" x="1.27" y="0" drill="1.016" shape="long" rot="R90"/>
+<pad name="ENCA" x="3.81" y="0" drill="1.016" shape="long" rot="R90"/>
+<pad name="ENCB" x="6.35" y="0" drill="1.016" shape="long" rot="R90"/>
+<text x="-7.62" y="1.651" size="1.27" layer="25" ratio="10">&gt;NAME</text>
+<text x="-6.985" y="-2.921" size="1.27" layer="21" ratio="10">1</text>
+<text x="5.715" y="1.651" size="1.27" layer="21" ratio="10">6</text>
+<text x="-2.54" y="-2.921" size="1.27" layer="27" ratio="10">&gt;VALUE</text>
+<rectangle x1="-4.064" y1="-0.254" x2="-3.556" y2="0.254" layer="51"/>
+<rectangle x1="-6.604" y1="-0.254" x2="-6.096" y2="0.254" layer="51"/>
+<rectangle x1="-1.524" y1="-0.254" x2="-1.016" y2="0.254" layer="51"/>
+<rectangle x1="3.556" y1="-0.254" x2="4.064" y2="0.254" layer="51"/>
+<rectangle x1="1.016" y1="-0.254" x2="1.524" y2="0.254" layer="51"/>
+<rectangle x1="6.096" y1="-0.254" x2="6.604" y2="0.254" layer="51"/>
+</package>
 </packages>
 <packages3d>
-<package3d name="MA04-1" urn="urn:adsk.eagle:package:8337/1" type="box">
+<package3d name="MA06-1" urn="urn:adsk.eagle:package:8340/1" type="box">
 <description>PIN HEADER</description>
 <packageinstances>
-<packageinstance name="MA04-1"/>
+<packageinstance name="MA06-1"/>
 </packageinstances>
 </package3d>
 </packages3d>
@@ -1185,26 +1112,30 @@ Source: http://pdf1.alldatasheet.com/datasheet-pdf/view/84563/STMICROELECTRONICS
 <pin name="GND" x="30.48" y="0" length="middle" rot="R180"/>
 <pin name="VIN" x="30.48" y="-10.16" length="middle" rot="R180"/>
 </symbol>
-<symbol name="MA04-1">
-<wire x1="3.81" y1="-7.62" x2="-1.27" y2="-7.62" width="0.4064" layer="94"/>
-<wire x1="1.27" y1="0" x2="2.54" y2="0" width="0.6096" layer="94"/>
-<wire x1="1.27" y1="-2.54" x2="2.54" y2="-2.54" width="0.6096" layer="94"/>
-<wire x1="1.27" y1="-5.08" x2="2.54" y2="-5.08" width="0.6096" layer="94"/>
-<wire x1="-1.27" y1="5.08" x2="-1.27" y2="-7.62" width="0.4064" layer="94"/>
-<wire x1="3.81" y1="-7.62" x2="3.81" y2="5.08" width="0.4064" layer="94"/>
-<wire x1="-1.27" y1="5.08" x2="3.81" y2="5.08" width="0.4064" layer="94"/>
-<wire x1="1.27" y1="2.54" x2="2.54" y2="2.54" width="0.6096" layer="94"/>
-<text x="-1.27" y="-10.16" size="1.778" layer="96">&gt;VALUE</text>
-<text x="-1.27" y="5.842" size="1.778" layer="95">&gt;NAME</text>
-<pin name="1" x="7.62" y="-5.08" visible="pad" length="middle" direction="pas" swaplevel="1" rot="R180"/>
-<pin name="2" x="7.62" y="-2.54" visible="pad" length="middle" direction="pas" swaplevel="1" rot="R180"/>
-<pin name="3" x="7.62" y="0" visible="pad" length="middle" direction="pas" swaplevel="1" rot="R180"/>
-<pin name="4" x="7.62" y="2.54" visible="pad" length="middle" direction="pas" swaplevel="1" rot="R180"/>
-</symbol>
 <symbol name="TOGGLESWITCH">
 <pin name="1" x="-5.08" y="-2.54" length="middle" rot="R90"/>
 <pin name="2" x="0" y="2.54" length="middle" rot="R90"/>
 <pin name="3" x="5.08" y="-2.54" length="middle" rot="R90"/>
+</symbol>
+<symbol name="MA06-1">
+<wire x1="3.81" y1="-10.16" x2="-1.27" y2="-10.16" width="0.4064" layer="94"/>
+<wire x1="1.27" y1="-2.54" x2="2.54" y2="-2.54" width="0.6096" layer="94"/>
+<wire x1="1.27" y1="-5.08" x2="2.54" y2="-5.08" width="0.6096" layer="94"/>
+<wire x1="1.27" y1="-7.62" x2="2.54" y2="-7.62" width="0.6096" layer="94"/>
+<wire x1="1.27" y1="2.54" x2="2.54" y2="2.54" width="0.6096" layer="94"/>
+<wire x1="1.27" y1="0" x2="2.54" y2="0" width="0.6096" layer="94"/>
+<wire x1="1.27" y1="5.08" x2="2.54" y2="5.08" width="0.6096" layer="94"/>
+<wire x1="-1.27" y1="7.62" x2="-1.27" y2="-10.16" width="0.4064" layer="94"/>
+<wire x1="3.81" y1="-10.16" x2="3.81" y2="7.62" width="0.4064" layer="94"/>
+<wire x1="-1.27" y1="7.62" x2="3.81" y2="7.62" width="0.4064" layer="94"/>
+<text x="-1.27" y="-12.7" size="1.778" layer="96">&gt;VALUE</text>
+<text x="-1.27" y="8.382" size="1.778" layer="95">&gt;NAME</text>
+<pin name="ENCB" x="7.62" y="-7.62" visible="pad" length="middle" direction="pas" swaplevel="1" rot="R180"/>
+<pin name="ENCA" x="7.62" y="-5.08" visible="pad" length="middle" direction="pas" swaplevel="1" rot="R180"/>
+<pin name="ENCVCC" x="7.62" y="-2.54" visible="pad" length="middle" direction="pas" swaplevel="1" rot="R180"/>
+<pin name="ENCGND" x="7.62" y="0" visible="pad" length="middle" direction="pas" swaplevel="1" rot="R180"/>
+<pin name="MTRPWR-" x="7.62" y="2.54" visible="pad" length="middle" direction="pas" swaplevel="1" rot="R180"/>
+<pin name="MTRPWR" x="7.62" y="5.08" visible="pad" length="middle" direction="pas" swaplevel="1" rot="R180"/>
 </symbol>
 </symbols>
 <devicesets>
@@ -1236,34 +1167,6 @@ Source: http://pdf1.alldatasheet.com/datasheet-pdf/view/84563/STMICROELECTRONICS
 </device>
 </devices>
 </deviceset>
-<deviceset name="MA04-1" prefix="SV" uservalue="yes">
-<description>&lt;b&gt;PIN HEADER&lt;/b&gt;</description>
-<gates>
-<gate name="1" symbol="MA04-1" x="0" y="0"/>
-</gates>
-<devices>
-<device name="" package="MA04-1">
-<connects>
-<connect gate="1" pin="1" pad="GND"/>
-<connect gate="1" pin="2" pad="VCC"/>
-<connect gate="1" pin="3" pad="ENCA"/>
-<connect gate="1" pin="4" pad="ENCB"/>
-</connects>
-<package3dinstances>
-<package3dinstance package3d_urn="urn:adsk.eagle:package:8337/1"/>
-</package3dinstances>
-<technologies>
-<technology name="">
-<attribute name="MF" value="" constant="no"/>
-<attribute name="MPN" value="" constant="no"/>
-<attribute name="OC_FARNELL" value="unknown" constant="no"/>
-<attribute name="OC_NEWARK" value="unknown" constant="no"/>
-<attribute name="POPULARITY" value="41" constant="no"/>
-</technology>
-</technologies>
-</device>
-</devices>
-</deviceset>
 <deviceset name="TOGGLESWITCH">
 <gates>
 <gate name="G$1" symbol="TOGGLESWITCH" x="0" y="0"/>
@@ -1277,6 +1180,36 @@ Source: http://pdf1.alldatasheet.com/datasheet-pdf/view/84563/STMICROELECTRONICS
 </connects>
 <technologies>
 <technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="MA06-1" prefix="SV" uservalue="yes">
+<description>&lt;b&gt;PIN HEADER&lt;/b&gt;</description>
+<gates>
+<gate name="1" symbol="MA06-1" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="MA06-1">
+<connects>
+<connect gate="1" pin="ENCA" pad="ENCA"/>
+<connect gate="1" pin="ENCB" pad="ENCB"/>
+<connect gate="1" pin="ENCGND" pad="ENCGND"/>
+<connect gate="1" pin="ENCVCC" pad="ENCVCC"/>
+<connect gate="1" pin="MTRPWR" pad="MTRPWR+"/>
+<connect gate="1" pin="MTRPWR-" pad="MTRPWR-"/>
+</connects>
+<package3dinstances>
+<package3dinstance package3d_urn="urn:adsk.eagle:package:8340/1"/>
+</package3dinstances>
+<technologies>
+<technology name="">
+<attribute name="MF" value="" constant="no"/>
+<attribute name="MPN" value="" constant="no"/>
+<attribute name="OC_FARNELL" value="unknown" constant="no"/>
+<attribute name="OC_NEWARK" value="unknown" constant="no"/>
+<attribute name="POPULARITY" value="28" constant="no"/>
+</technology>
 </technologies>
 </device>
 </devices>
@@ -15508,7 +15441,6 @@ Source: http://www.murata.com .. GRM43DR72E224KW01.pdf</description>
 <part name="U$2" library="Custom" deviceset="VNH5019REAL" device=""/>
 <part name="P+1" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+12V" device=""/>
 <part name="GND1" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="ENCODER" library="Custom" deviceset="MA04-1" device="" package3d_urn="urn:adsk.eagle:package:8337/1"/>
 <part name="P+2" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+12V" device=""/>
 <part name="GND2" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="X1" library="con-wago-500" library_urn="urn:adsk.eagle:library:195" deviceset="W237-102" device="" package3d_urn="urn:adsk.eagle:package:10688/1"/>
@@ -15528,6 +15460,9 @@ Source: http://www.murata.com .. GRM43DR72E224KW01.pdf</description>
 <part name="P+3" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+12V" device=""/>
 <part name="GND3" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="C4" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="CPOL-EU" device="E2.5-5" package3d_urn="urn:adsk.eagle:package:23344/1" value="100nF"/>
+<part name="X2" library="con-wago-500" library_urn="urn:adsk.eagle:library:195" deviceset="W237-102" device="" package3d_urn="urn:adsk.eagle:package:10688/1"/>
+<part name="SV1" library="Custom" deviceset="MA06-1" device="" package3d_urn="urn:adsk.eagle:package:8340/1"/>
+<part name="GND4" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -15546,10 +15481,6 @@ Source: http://www.murata.com .. GRM43DR72E224KW01.pdf</description>
 </instance>
 <instance part="GND1" gate="1" x="78.74" y="-12.7" smashed="yes">
 <attribute name="VALUE" x="76.2" y="-15.24" size="1.778" layer="96"/>
-</instance>
-<instance part="ENCODER" gate="1" x="193.04" y="76.2" smashed="yes" rot="R180">
-<attribute name="VALUE" x="194.31" y="86.36" size="1.778" layer="96" rot="R180"/>
-<attribute name="NAME" x="194.31" y="70.358" size="1.778" layer="95" rot="R180"/>
 </instance>
 <instance part="P+2" gate="1" x="-142.24" y="53.34" smashed="yes" rot="R90">
 <attribute name="VALUE" x="-137.16" y="50.8" size="1.778" layer="96" rot="R180"/>
@@ -15626,6 +15557,20 @@ Source: http://www.murata.com .. GRM43DR72E224KW01.pdf</description>
 <attribute name="NAME" x="186.817" y="12.2174" size="1.778" layer="95" rot="R180"/>
 <attribute name="VALUE" x="186.817" y="17.2974" size="1.778" layer="96" rot="R180"/>
 </instance>
+<instance part="X2" gate="-1" x="-139.7" y="30.48" smashed="yes">
+<attribute name="NAME" x="-139.7" y="31.369" size="1.778" layer="95" rot="R180"/>
+</instance>
+<instance part="X2" gate="-2" x="-139.7" y="25.4" smashed="yes">
+<attribute name="VALUE" x="-142.24" y="21.717" size="1.778" layer="96"/>
+<attribute name="NAME" x="-139.7" y="26.289" size="1.778" layer="95" rot="R180"/>
+</instance>
+<instance part="SV1" gate="1" x="236.22" y="76.2" smashed="yes" rot="R180">
+<attribute name="VALUE" x="237.49" y="88.9" size="1.778" layer="96" rot="R180"/>
+<attribute name="NAME" x="237.49" y="67.818" size="1.778" layer="95" rot="R180"/>
+</instance>
+<instance part="GND4" gate="1" x="203.2" y="73.66" smashed="yes">
+<attribute name="VALUE" x="200.66" y="71.12" size="1.778" layer="96"/>
+</instance>
 </instances>
 <busses>
 </busses>
@@ -15666,7 +15611,6 @@ Source: http://www.murata.com .. GRM43DR72E224KW01.pdf</description>
 <wire x1="25.4" y1="76.2" x2="25.4" y2="45.72" width="0.1524" layer="91"/>
 <pinref part="U$1" gate="CN7" pin="5V_18"/>
 <wire x1="25.4" y1="45.72" x2="17.78" y2="45.72" width="0.1524" layer="91"/>
-<wire x1="185.42" y1="78.74" x2="35.56" y2="78.74" width="0.1524" layer="91"/>
 <wire x1="35.56" y1="78.74" x2="35.56" y2="45.72" width="0.1524" layer="91"/>
 <wire x1="35.56" y1="45.72" x2="25.4" y2="45.72" width="0.1524" layer="91"/>
 <junction x="25.4" y="45.72"/>
@@ -15675,7 +15619,12 @@ Source: http://www.murata.com .. GRM43DR72E224KW01.pdf</description>
 <wire x1="40.64" y1="40.64" x2="35.56" y2="40.64" width="0.1524" layer="91"/>
 <wire x1="35.56" y1="40.64" x2="35.56" y2="45.72" width="0.1524" layer="91"/>
 <junction x="35.56" y="45.72"/>
-<pinref part="ENCODER" gate="1" pin="2"/>
+<label x="25.4" y="48.26" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="SV1" gate="1" pin="ENCVCC"/>
+<wire x1="228.6" y1="78.74" x2="205.74" y2="78.74" width="0.1524" layer="91"/>
+<label x="200.66" y="78.74" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="+12V" class="0">
@@ -15744,8 +15693,6 @@ Source: http://www.murata.com .. GRM43DR72E224KW01.pdf</description>
 <wire x1="30.48" y1="58.42" x2="106.68" y2="58.42" width="0.1524" layer="91"/>
 <junction x="30.48" y="58.42"/>
 <wire x1="106.68" y1="58.42" x2="119.38" y2="58.42" width="0.1524" layer="91"/>
-<wire x1="185.42" y1="81.28" x2="106.68" y2="81.28" width="0.1524" layer="91"/>
-<wire x1="106.68" y1="81.28" x2="106.68" y2="58.42" width="0.1524" layer="91"/>
 <junction x="106.68" y="58.42"/>
 <wire x1="119.38" y1="58.42" x2="132.08" y2="58.42" width="0.1524" layer="91"/>
 <junction x="119.38" y="58.42"/>
@@ -15771,7 +15718,6 @@ Source: http://www.murata.com .. GRM43DR72E224KW01.pdf</description>
 <pinref part="U$4" gate="G$1" pin="GND(TXD)"/>
 <wire x1="38.1" y1="2.54" x2="38.1" y2="43.18" width="0.1524" layer="91"/>
 <junction x="38.1" y="43.18"/>
-<pinref part="ENCODER" gate="1" pin="1"/>
 </segment>
 <segment>
 <pinref part="GND3" gate="1" pin="GND"/>
@@ -15780,6 +15726,11 @@ Source: http://www.murata.com .. GRM43DR72E224KW01.pdf</description>
 <pinref part="C4" gate="G$1" pin="+"/>
 <wire x1="187.96" y1="10.16" x2="203.2" y2="10.16" width="0.1524" layer="91"/>
 <junction x="203.2" y="10.16"/>
+</segment>
+<segment>
+<pinref part="GND4" gate="1" pin="GND"/>
+<pinref part="SV1" gate="1" pin="ENCGND"/>
+<wire x1="203.2" y1="76.2" x2="228.6" y2="76.2" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$10" class="0">
@@ -15859,9 +15810,9 @@ Source: http://www.murata.com .. GRM43DR72E224KW01.pdf</description>
 <label x="25.4" y="12.7" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="ENCODER" gate="1" pin="4"/>
-<wire x1="185.42" y1="73.66" x2="172.72" y2="73.66" width="0.1524" layer="91"/>
-<label x="170.18" y="73.66" size="1.778" layer="95"/>
+<pinref part="SV1" gate="1" pin="ENCA"/>
+<wire x1="228.6" y1="81.28" x2="208.28" y2="81.28" width="0.1524" layer="91"/>
+<label x="205.74" y="81.28" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="N$7" class="0">
@@ -15872,9 +15823,9 @@ Source: http://www.murata.com .. GRM43DR72E224KW01.pdf</description>
 <label x="17.78" y="12.7" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="ENCODER" gate="1" pin="3"/>
-<wire x1="185.42" y1="76.2" x2="180.34" y2="76.2" width="0.1524" layer="91"/>
-<label x="177.8" y="76.2" size="1.778" layer="95"/>
+<pinref part="SV1" gate="1" pin="ENCB"/>
+<wire x1="228.6" y1="83.82" x2="208.28" y2="83.82" width="0.1524" layer="91"/>
+<label x="205.74" y="83.82" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="N$13" class="0">
@@ -15889,15 +15840,41 @@ Source: http://www.murata.com .. GRM43DR72E224KW01.pdf</description>
 <label x="20.32" y="27.94" size="1.778" layer="95"/>
 </segment>
 </net>
+<net name="N$3" class="0">
+<segment>
+<pinref part="SV1" gate="1" pin="MTRPWR-"/>
+<wire x1="228.6" y1="73.66" x2="218.44" y2="73.66" width="0.1524" layer="91"/>
+<label x="213.36" y="73.66" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="X2" gate="-1" pin="KL"/>
+<wire x1="-134.62" y1="30.48" x2="-132.08" y2="30.48" width="0.1524" layer="91"/>
+<label x="-132.08" y="33.02" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="N$14" class="0">
+<segment>
+<pinref part="SV1" gate="1" pin="MTRPWR"/>
+<wire x1="228.6" y1="71.12" x2="228.6" y2="68.58" width="0.1524" layer="91"/>
+<wire x1="228.6" y1="68.58" x2="226.06" y2="68.58" width="0.1524" layer="91"/>
+<label x="220.98" y="68.58" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="X2" gate="-2" pin="KL"/>
+<wire x1="-134.62" y1="25.4" x2="-132.08" y2="25.4" width="0.1524" layer="91"/>
+<label x="-132.08" y="22.86" size="1.778" layer="95"/>
+</segment>
+</net>
 </nets>
 </sheet>
 </sheets>
 <errors>
 <approved hash="204,1,43.18,2.54,U$4,EN(VCC),,,,"/>
 <approved hash="104,1,40.64,2.54,U$4,VCC(GND),N$5,,,"/>
-<approved hash="113,1,187.946,75.9104,ENCODER,,,,,"/>
 <approved hash="113,1,-131.252,48.26,X1,,,,,"/>
 <approved hash="113,1,126.917,-10.16,12VR,,,,,"/>
+<approved hash="113,1,-137.988,30.48,X2,,,,,"/>
+<approved hash="113,1,229.183,75.9104,SV1,,,,,"/>
 </errors>
 </schematic>
 </drawing>
