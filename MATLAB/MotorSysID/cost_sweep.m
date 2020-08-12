@@ -41,64 +41,26 @@ input = [V, vel, current];
 %% Run system identification
 % Define initial parameter guess
 % Ra, Kw, La, Kt, B, 
-param_vec = [2.5625; 0.0086; 0.0135];
-% param_vec = [0.0147];
+% param_vec = [2.5625; 0.0086; 0.1];
 
-% La = 0.0135 or 0.021615
-% Ra = 2.5625;
-% Kw = 0.0086;
-
-% Compute cost
-% V_y = @(y) (y(:,1) - y_true(:,1)).'*(y(:,1) - y_true(:,1));
-V_y = @(y) (y(:,2) - y_true(:,3)).'*(y(:,2) - y_true(:,3));
 
 V_theta = @(theta) V_y(runSim(theta,x0,t_sim,input));
 
-%% Run optimisation with fmincon
-A = -eye(length(param_vec));
-b = zeros(length(param_vec),1);
-lb = [0; 0; 1e-9];
-% ub = [inf inf inf inf inf 1 inf inf inf];
-options = optimoptions('fmincon','Display','iter','StepTolerance',1e-12);
-param_opt = fmincon(V_theta, param_vec, A, b, [], [], lb, [], [], options);
-final_cost = V_theta(param_opt)
+La = linspace(0.1,0.0001,200);
+V_y = @(y) (y(:,2) - y_true(:,3)).'*(y(:,2) - y_true(:,3));
+cost = zeros(length(La),1);
+for k = 1:length(La)
+    fprintf("%f\n",k);
+    cost(k) = V_y(runSim(La(k),x0,t_sim,input));
+end
 
-%% Plot results 
-y_cts = runSim(param_opt,x0,t_sim,input);
-figure(1); clf;
-ax1 = subplot(3,1,1);
-plot(t_sim,y_true(:,1),'DisplayName','Measured'); hold on;
-plot(t_sim,y_cts(:,1),'DisplayName','Simulated');
-xlabel('Time [s]');
-ylabel('Voltage [V]');
-grid on;
-legend('location','best');
 
-ax2 = subplot(3,1,2);
-plot(t_sim,y_true(:,2),'DisplayName','Measured'); hold on;
-% plot(t_sim,y_cts(:,2),'DisplayName','Simulated');
-ylabel('Velocity [rad/s]');
-xlabel('Time [s]');
-grid on;
-legend('location','best');
 
-ax3 = subplot(3,1,3);
-plot(t_sim,y_true(:,3),'DisplayName','Measured Current'); hold on;
-plot(t_sim,y_cts(:,2),'DisplayName','Simulated Current');
-ylabel('Current [A]');
-xlabel('Time [s]');
-grid on;
-title("Lol current sense doesnt even work when it's braking");
-legend;
-
-linkaxes([ax1,ax2,ax3],'x');
-
-%% Prompt for save of file
-% answer = questdlg("Save parameters?","Save prompt","Yes","No","No");
-% if answer == "Yes"
-%     saveFileName = sprintf("%s_params.mat", type);
-%     save(saveFileName, 'param_opt');
-% end
+%% Plot
+figure(2); clf;
+plot(La,cost);
+xlabel('Inductance [H]');
+ylabel('Cost []');
 
 
 %% Additional functions
@@ -106,13 +68,13 @@ function y = runSim(param_vec, x0, t_sim, input)
 
     % Unpack params
     % Ra, Kw, La, Kt, B
-    Ra      = param_vec(1);
-    Kw      = param_vec(2);
-    La      = param_vec(3);
+%     Ra      = param_vec(1);
+%     Kw      = param_vec(2);
+%     La      = param_vec(3);
 
-%     Ra = 2.5625;
-%     Kw = 0.0086;
-%     La = param_vec(1);
+    Ra = 2.5625;
+    Kw = 0.0086;
+    La = param_vec(1);
     
     % Fixed parameters
     N = 98.78;
@@ -135,7 +97,7 @@ function y = runSim(param_vec, x0, t_sim, input)
 %     dw_m =@(w_m,Ia,Va) (tauM(Ia) - B*w_m)/J; 
     dIa     =@(w_m,Ia,Va) (Va - Ra*Ia - eb(w_m))/La;
     
-    % Create ode function 
+    % Create ode function
     dx =@(w_m,Ia,Va) [dIa(w_m,Ia,Va)];
     
     % Create wrapper function
@@ -164,8 +126,6 @@ function y = runSim(param_vec, x0, t_sim, input)
     end
     
 end
-
-
 
 
 

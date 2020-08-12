@@ -1,16 +1,23 @@
 % Clea up
-clc; clear; close all
+clc; clear;
 
 TIMEOUT = 0.5; % Time to wait for data before aborting
 
 
 % Pick sysID input
-type = "sinWave";
+% type = "chirp_sig";
+% type = "sinWave_load_05hz";
+% type = "sinWave";
+% type = "sinWave1hz";
+% type = "sinWave2hz";
+% type = "sinWave3hz";
+% type = "sinWave4hz";
 % type = "deadZone";
 % type = "rampDown";
 % type = "rampUp";
 % type = "stepDown";
-% type = "stepUp";
+type = "stepUp";
+% type = "constant4V";
 
 % Get the signal desired
 filename = sprintf("%s.mat",type);

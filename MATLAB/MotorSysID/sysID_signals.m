@@ -45,6 +45,64 @@ sinWave = [V*sin(2*pi*freq*linspace(0,10,10/d))];
 
 plot(sinWave);
 
+% Sin
+figure(7);
+V = 4; % Volts
+freq = 1; % Hz
+
+% sinWave = [zeros(1,0.5/d), V*sin(2*pi*freq*linspace(0,10,10/d))];
+sinWave1hz = [V*sin(2*pi*freq*linspace(0,10,10/d))];
+
+plot(sinWave1hz);
+
+% Sin
+figure(9);
+V = 5; % Volts
+freq = 4; % Hz
+
+% sinWave = [zeros(1,0.5/d), V*sin(2*pi*freq*linspace(0,10,10/d))];
+sinWave4hz = [V*sin(2*pi*freq*linspace(0,10,10/d))];
+
+plot(sinWave4hz);
+
+
+% Constant
+figure(8);
+V = 4;
+constant4V = V*ones(1000,1);
+plot(constant4V);
+
+figure(10);
+V = 5; % Volts
+freq = 3; % Hz
+
+% sinWave = [zeros(1,0.5/d), V*sin(2*pi*freq*linspace(0,10,10/d))];
+sinWave3hz = [V*sin(2*pi*freq*linspace(0,10,10/d))];
+
+plot(sinWave3hz);
+
+
+% Sin Load
+figure(11);
+V = 4; % Volts
+freq = 0.5; % Hz
+
+% sinWave = [zeros(1,0.5/d), V*sin(2*pi*freq*linspace(0,10,10/d))];
+sinWave_load_05hz = [V*sin(2*pi*freq*linspace(0,30,30/d))];
+
+plot(sinWave_load_05hz);
+
+% Chirp
+figure(12);
+f0 = 0;
+f1 = 5;
+t = 0:0.01:10;
+chirp_sig = zeros(length(t)*2,1);
+chirp_sig(1:1001) = 6.*chirp(t,f0,10,f1,'linear');
+chirp_sig(1002:end) = 6.*chirp(t,f1,10,f0,'linear');
+
+plot(chirp_sig);
+
 
 %% Save files
 save('deadZone.mat','deadZone');
@@ -53,5 +111,10 @@ save('rampUp.mat','rampUp');
 save('stepDown.mat','stepDown');
 save('stepUp.mat','stepUp');
 save('sinWave.mat','sinWave');
-
+save('sinWave1hz.mat','sinWave1hz');
+save('constant4V.mat','constant4V');
+save('sinWave4hz.mat','sinWave4hz');
+save('sinWave3hz.mat','sinWave3hz');
+save('chirp_sig.mat','chirp_sig');
+save('sinWave_load_05hz.mat','sinWave_load_05hz');
 

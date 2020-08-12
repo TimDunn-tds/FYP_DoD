@@ -4,10 +4,10 @@ clear;
 
 %% Get data
 % Pick sysID input
-% type = "sinWave";
+type = "sinWave";
 % type = "deadZone";
 % type = "rampDown";
-type = "rampUp";
+% type = "rampUp";
 % type = "stepDown";
 % type = "stepUp";
 
@@ -26,14 +26,16 @@ current = data(:,6);
 % p = Ia
 q0 = vel(1);
 p0 = 0;
-x0 = [q0; p0; V(1)];
+% x0 = [q0; p0; V(1)];
+x0 = [q0; p0; V(1); 0];
 
 % Simulation time
 dt = 0.01;
 % t_sim = 0:dt:time(500);
 % y_true = vel(1:1/dt:500);
 t_sim = time;
-y_true = vel;
+% y_true = vel;
+y_true = [vel,pos];
 
 %% Run system identification
 % Define initial parameter guess
@@ -45,7 +47,9 @@ param_vec = [2.14; 0.8177; 0.3522; 0.0576; 4e-9; 0.1348; 1e-10; 0.8750];
 y_initial = runSim(param_vec,x0,t_sim,V);
 
 % Compute cost
-V_y = @(y) (y(:,1) - y_true(:,1)).'*(y(:,1) - y_true(:,1));
+% V_y = @(y) (y(:,1) - y_true(:,1)).'*(y(:,1) - y_true(:,1));
+V_y = @(y) (y(:,4) - y_true(:,2)).'*(y(:,4) - y_true(:,2));
+
 % V_y = @(y) ((max(y)-y(:,1)) - (max(y_true) - y_true(:,1))).'*((max(y)-y(:,1)) - (max(y_true) - y_true(:,1)));
 
 V_theta = @(theta) V_y(runSim(theta,x0,t_sim,V));
@@ -63,23 +67,24 @@ V_theta = @(theta) V_y(runSim(theta,x0,t_sim,V));
 A = -eye(length(param_vec));
 b = zeros(length(param_vec),1);
 lb = [0; 1e-4; 0; 0; 0; 0; 0; 0];
-ub = [inf, 1e2, inf, inf, inf, inf, inf, inf]';
-options = optimoptions('patternsearch','Display','iter','StepTolerance',1e-10,'UseCompletePoll',false);
-param_opt = patternsearch(V_theta, param_vec, A, b, [], [], lb, [], [], options);
+ub = [inf, 1e0, inf, inf, inf, inf, inf, inf]';
+options = optimoptions('patternsearch','Display','iter','StepTolerance',1e-10);
+param_opt = patternsearch(V_theta, param_vec, A, b, [], [], lb, ub, [], options);
 final_cost = V_theta(param_opt)
 
 
 %% Plot results 
 y_cts = runSim(param_opt,x0,t_sim,V);
 figure(1); clf;
-% subplot(2,1,1)
-% plot(time,V);
-% xlabel('Time [s]');
-% ylabel('Armature Voltage [V]');
-% subplot(2,1,2);
-plot(t_sim,y_true,'DisplayName','Measured'); hold on;
+subplot(2,1,1)
+plot(t_sim,y_true(:,1),'DisplayName','Measured'); hold on;
 plot(t_sim,y_cts(:,1),'DisplayName','Simulated');
+xlabel('Time [s]');
 ylabel('Velocity [rad/s]');
+subplot(2,1,2);
+plot(t_sim,y_true(:,2),'DisplayName','Measured'); hold on;
+plot(t_sim,y_cts(:,4),'DisplayName','Simulated');
+ylabel('Position [rad]');
 xlabel('Time [s]');
 grid on;
 legend;
@@ -131,22 +136,23 @@ function y = runSim(param_vec, x0, t_sim, V)
     % alpha1 = magnitude of deadzone (more +ve = bigger deadzone)
     % alpha2 = magnitude of deadzone (more +ve = bigger deadzone)
     % alpha3 = settling time after overshoot ( more +ve = faster settle)
-    tauF    =@(q) (alpha1 + alpha2*exp(-alpha3*abs(q)))*sign(q);
-%     tauF    =@(q) alpha1*sign(q);
+%     tauF    =@(q) (alpha1 + alpha2*exp(-alpha3*abs(q)))*sign(q);
+    tauF    =@(q) alpha1*sign(q);
     
     % SSRs
-%     dq =@(q,p,Va) ((tauM(p) - B*q)/J)*double(~(abs(q)<2e-1 && abs(Va)<2.2) || ~(abs(q)>1 && abs(Va)<1.2));
-    dq =@(q,p,Va) ((tauM(p) - B*abs(q))/J)*double(~(abs(q)<2e-1 && abs(Va)<2.2));
-
+%     dq =@(q,p,Va) ((tauM(p) - B*abs(q))/J)*double(~(abs(q)<2e-1 && abs(Va)<2.2));
 %     dq =@(q,p) (tauM(p) - B*q)/J;
-%     dq =@(q,p) (tauM(p) - B*q - tauF(q))/J;
+    dq =@(q,p,Va) N*((tauM(p) - B*q - tauF(q))/J); % w_motor is N*w_output 
     dp =@(q,p,Va) (Va - Ra*p - Vb(q))/La;
-%     dp =@(q,p,Va) (Va - Ra*p - Vb(q));
+    theta =@(q,p,Va) q;
 
-    dx =@(q,p,Va) [dq(q,p,Va); dp(q,p,Va); Va];
+
+
+    % omega_a, Ia, Va, theta_a
+    dx =@(q,p,Va) [dq(q,p,Va); dp(q,p,Va); Va; theta(q,p,Va)];
     
     % Define output
-    output = @(x) [x(1);x(2);x(3)];
+    output = @(x) [x(1); x(2); x(3); x(4)];
 
     % Inputs
     Va = @(t) interp1(t_sim,V,t);
@@ -155,12 +161,10 @@ function y = runSim(param_vec, x0, t_sim, V)
     dx_wrap = @(t,x) dx(x(1),x(2),Va(t));
 
     % Run simulation
-%     options = odeset('RelTol',1e-6);
-%     [res.t,res.x] = ode15s(dx_wrap, t_sim, x0, options);
     [res.t,res.x] = ode15s(dx_wrap, t_sim, x0);
     
     % Generate output
-    y = zeros(length(res.t),3);
+    y = zeros(length(res.t),4);
     for i=1:length(res.t)
         y(i,:) = output(res.x(i,:)).';
     end
