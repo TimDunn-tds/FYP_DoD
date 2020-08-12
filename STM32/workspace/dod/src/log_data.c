@@ -18,7 +18,7 @@
 #define COUNT_PER_REV 4741.44f
 #define PI 3.141592653589793f
 #define TIMER_TICKS 10
-#define MVPA 0.142f
+#define MVPA 0.14f
 
 
 
@@ -166,21 +166,19 @@ void log_data_task(void *arg)
     case LOG_DC:
 
     // Get encoder count
-    _count = encoder_get_count();
+    _count = dc_motor_get_count();
 
     // position = (count/steps_per_rev) * 2pi
-    _position = ((float)_count/COUNT_PER_REV)*2.0f*PI;
+    _position = dc_motor_get_position();
 
     // remember to conver timer ticks to seconds
     _speed = (_position-_last_position)/(TIMER_TICKS/1000.0f);
 
-    float duty = dc_motor_get_duty();
-    int dir = dc_motor_get_dir();
-    _voltage = dir*duty*dc_adc_get_value();
+    _voltage = dc_motor_get_voltage();
 
-    _current = (float)dc_adc_get_cs_value()/MVPA;
+    _current = dc_motor_get_current();
 
-    printf("%10.2f,%12i,%15.2f,%14.3f,%10.4f,%12.2f\n", _time, _count, _position, _speed, _voltage, _current);
+    printf("%10.2f,%12i,%15.2f,%14.2f,%10.4f,%12.2f\n", _time, _count, _position, _speed, _voltage, _current);
     _last_position = _position;
 
         break;

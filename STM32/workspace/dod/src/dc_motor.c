@@ -4,6 +4,7 @@
 #include "cmsis_os2.h"
 #include "dc_motor.h"
 #include "math.h"
+#include "encoder.h"
 
 
 #define     MOTOR_DIR_FWD   1
@@ -12,17 +13,28 @@
 #define     VDIV_GAIN       6.96f
 #define     ADC_MAX_VOLTAGE 3.3f
 #define     ADC_MAX_VALUE   0xFFF0
+#define     COUNT_PER_REV   4741.44f
+#define     PI              3.141592653589793f
+#define     TIMER_TICKS     10
+#define     MVPA            0.14f
+#define     UMAX            12.0f
+// #define     PERIOD          10000
+#define     PERIOD          5556
 
 ADC_HandleTypeDef _hadc1;
 ADC_HandleTypeDef _hadc2;
 
-static TIM_HandleTypeDef   _htim4;
-static float _duty = 0.0f;
-static int8_t _dir = MOTOR_DIR_FWD;
 
-float UMAX = 12.0f;
-int PERIOD = 65535;
-float _voltage = 0.0f;
+static TIM_HandleTypeDef   _htim4;
+static int8_t _dir = MOTOR_DIR_FWD;
+static float _count = 0.0f;
+static float _duty = 0.0f;
+static float _current = 0.0f;
+static float _voltage_applied = 0.0f;
+static float _position = 0.0f;
+static float _voltage = 0.0f;
+
+
 int pulseWidth = 0;
 
 
@@ -229,11 +241,40 @@ float dc_adc_get_cs_value(void)
         /* Get the 12-bit reading */
         reading2 = HAL_ADC_GetValue(&_hadc2);
         result2 = (ADC_MAX_VOLTAGE*(float)reading2)/ADC_MAX_VALUE;
-        // 5.938
     }
-    return result2;
+    if(!MOTOR_DIR_OFF)
+    {
+        return result2;
+    }
+    else
+    {
+        return 0.0f;
+    }
 }
 
+float dc_motor_get_current(void)
+{
+    _current = dc_adc_get_cs_value()/MVPA;
+    return _current;
+}
+
+float dc_motor_get_voltage(void)
+{
+    _voltage_applied = (float)_dir*_duty*dc_adc_get_value();
+    return _voltage_applied;
+}
+
+float dc_motor_get_position(void)
+{
+    _position = ((float)_count/COUNT_PER_REV)*2.0f*PI;
+    return _position;
+}
+
+float dc_motor_get_count(void)
+{
+    _count = (float)encoder_get_count();
+    return _count;
+}
 
 
 void dc_motor_set(float U)

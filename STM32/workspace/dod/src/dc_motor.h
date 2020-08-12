@@ -12,6 +12,10 @@ float dc_adc_get_value(void);
 float dc_motor_get_duty(void);
 float dc_adc_get_cs_value(void);
 int8_t dc_motor_get_dir(void);
+float dc_motor_get_current(void);
+float dc_motor_get_voltage(void);
+float dc_motor_get_position(void);
+float dc_motor_get_count(void);
 
 
 
