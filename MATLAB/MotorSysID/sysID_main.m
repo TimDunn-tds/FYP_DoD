@@ -2,9 +2,9 @@
 clc; clear;
 
 % Pick sysID input
-type = "chirp_sig";
+% type = "chirp_sig";
 % type = "sinWave_load_05hz";
-% type = "sinWave";
+type = "sinWave";
 % type = "sinWave3hz";
 % type = "sinWave4hz";
 % type = "sinWave1hz";

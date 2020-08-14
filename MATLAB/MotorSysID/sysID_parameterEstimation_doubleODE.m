@@ -1,5 +1,5 @@
 % Clean up
-clc;
+% clc;
 clear;
 
 %% Get data
@@ -35,24 +35,31 @@ x0 = [Ia0; w_a0];
 % Simulation time
 dt = 0.01;
 t_sim = time;
-y_true = [V, current, vel];
 input = [V, vel, current];
+
 
 %% Run system identification
 % Define initial parameter guess
+%             Kt,  B,   a1,   b1,    a2,    w_c
+% param_vec = [0.1; 0.01; 0.01; 0.01; 0.001; 0.001];
+
 % Kt, B, 
-param_vec = [1; 0.1; 0.1; 1];
+param_vec = [0.01; 4; 0.01];
+
+% param_vec = [0.1; 0.1];
 
 % La = 0.0135 or 0.021615
 % Ra = 2.5625;
 % Kw = 0.0086;
 
 % Compute cost
+y_true = [V, current, vel];
+
 % V_y = @(y) (y(:,1) - y_true(:,1)).'*(y(:,1) - y_true(:,1));
 % V_y = @(y) (y(:,2) - y_true(:,2)).'*(y(:,2) - y_true(:,2));
 V_y = @(y) (y(:,3) - y_true(:,3)).'*(y(:,3) - y_true(:,3));
-% V_y =@(y) 0.5*((y(:,2) - y_true(:,3)).'*(y(:,2) - y_true(:,3)))...
-%             + 0.5*((y(:,3) - y_true(:,2)).'*(y(:,3) - y_true(:,2)));
+% V_y =@(y) 0.5*((y(:,3) - y_true(:,3)).'*(y(:,3) - y_true(:,3)))...
+%             + 0.5*((y(:,2) - y_true(:,2)).'*(y(:,2) - y_true(:,2)));
 
 V_theta = @(theta) V_y(runSim(theta,x0,t_sim,input));
 
@@ -105,33 +112,58 @@ linkaxes([ax1,ax2,ax3],'x');
 function y = runSim(param_vec, x0, t_sim, input)
 
     % Unpack params
-    % Kt, B
+    % Kt, B, a1, a2, a3, VaC
     Kt      = param_vec(1);
-    B       = param_vec(2);
-    a1      = param_vec(3);
-    b1      = param_vec(4);
+    B1      = param_vec(2);
+    B2      = param_vec(3);
+%     a1      = param_vec(3);
+%     a2      = param_vec(4);
+%     a3      = param_vec(5);
+%     VaC     = param_vec(6);
+    Va_a1 = 0.01;
+    Va_cutoff = 2/2; % cutoff input/2
+    wm_a1 = 0.01;
+    wm_cutoff = 0.2/2;
         
     % Fixed parameters
     Ra = 2.5625;
     Kw = 0.0086;
     La = 0.0135;
-    N = 98.78;
+    N  = 98.78;
     Jh = 0.0039;
-    J = Jh/(N^2); % Inertia at the motor (low torque/High speed) side of gearbox
+    J  = Jh/(N^2); % Inertia at the motor (low torque/High speed) side of gearbox
     
     % Unpack input
     V = input(:,1);
     % Interpolation function
     Va  =@(t) interp1(t_sim,V,t);
     
+    % Useful functions
+    signX =@(x,a1) x./sqrt(a1 + x.^2);
+    stri =@(x,xc) exp(-((x./xc).^2));
+%     invStri =@(x,xc) exp(-((xc./x).^2));
+    
     % CCRs
     tauM    =@(Ia) Kt.*Ia;
-    tauF    =@(w_m) (b1*w_m)/(sqrt(a1 + w_m^2));
     eb      =@(w_m) Kw.*w_m;
+%     tauF    =@(w_m,Ia,Va) B1.*w_m + tauM(Ia).*signX(Va,Va_a1).*stri(Va,Va_cutoff);
+    tauF    =@(w_m,Ia,Va) B1.*w_m + tauM(Ia).*signX(w_m,wm_cutoff).*stri(Va,Va_cutoff);
+
+%     signX   =@(x) x./(sqrt(0.01 + x.^2));              % sign of x (smooth)
+%     Fkitc   =@(w_m) B.*w_m;
+%     Fstri   =@(Va) exp(-((Va./VaC).^2)).*signX(Va);    % stribeck friction
+%     signFt  =@(Va) Fstri(Va)./sqrt(a3 + Fstri(Va).^2);  % Sign of combined
+%     smth    =@(w_m,Ia,Va) signX(Fstri(Va)).*(1-sqrt(signX(w_m).^2));
+%     tauF    =@(w_m,Ia,Va) B2.*w_m+ B1.*tauM(Ia).*signX(smth(w_m,Ia,Va));
+%     tauF    =@(w_m,Ia,Va) B2.*w_m;
+%     tauF    =@(w_m,Ia,Va) B.*w_m + sqrt(signFt(Va).^2).*tauM(Ia);    % Total friction force
+%     tauF    =@(w_m) Fstri(w_m) + Fcoul(w_m);            % total friction
+%     tauF    =@(w_m) Fstri(w_m) + Fcoul(w_m) + Fkitc(w_m);
+%     tauF    =@(w_m) Fstri(w_m);            % total friction
     
     % SSRs
-    dw_m =@(w_m,Ia,Va) (tauM(Ia) - B*w_m - tauF(w_m))/J; % w_m (not speed of hand)
-%     dw_m =@(w_m,Ia,Va) (tauM(Ia) - B*w_m)/J; 
+    dw_m =@(w_m,Ia,Va) (tauM(Ia) - tauF(w_m,Ia,Va))/J; % w_m (not speed of hand)
+% %     dw_m =@(w_m,Ia,Va) (tauM(Ia) - B*w_m)/J; 
     dIa     =@(w_m,Ia,Va) (Va - Ra*Ia - eb(w_m))/La;
     
     % Create ode function

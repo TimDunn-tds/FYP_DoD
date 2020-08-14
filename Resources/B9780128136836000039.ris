@@ -1,0 +1,23 @@
+TY  - CHAP
+T1  - Chapter 1 - Friction Dynamics and Modeling
+AU  - Na, Jing
+AU  - Chen, Qiang
+AU  - Ren, Xuemei
+A2  - Na, Jing
+A2  - Chen, Qiang
+A2  - Ren, Xuemei
+BT  - Adaptive Identification and Control of Uncertain Systems with Non-smooth Dynamics
+PB  - Academic Press
+SP  - 11
+EP  - 18
+PY  - 2018
+DA  - 2018/01/01/
+T2  - Emerging Methodologies and Applications in Modelling
+SN  - 978-0-12-813683-6
+DO  - https://doi.org/10.1016/B978-0-12-813683-6.00003-9
+UR  - http://www.sciencedirect.com/science/article/pii/B9780128136836000039
+KW  - friction dynamics
+KW  - friction modeling
+KW  - LuGre model
+AB  - In Chapter 1, the friction dynamics are discussed and several classical friction models (e.g., LuGre model, Dahl model) are reviewed. Moreover, two recently proposed piecewise continuous friction models used in the control designs in this book are also presented.
+ER  - 
