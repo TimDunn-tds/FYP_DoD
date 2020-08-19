@@ -172,13 +172,13 @@ void log_data_task(void *arg)
     _position = dc_motor_get_position();
 
     // remember to conver timer ticks to seconds
-    _speed = (_position-_last_position)/(TIMER_TICKS/1000.0f);
+    _speed = (_position-_last_position)/((float)TIMER_TICKS/1000.0f);
 
     _voltage = dc_motor_get_voltage();
 
     _current = dc_motor_get_current();
 
-    printf("%10.2f,%12i,%15.2f,%14.2f,%10.4f,%12.2f\n", _time, _count, _position, _speed, _voltage, _current);
+    printf("%10.2f,%12i,%15.4f,%14.6f,%12.4f,%12.2f\n", _time, _count, _position, _speed, _voltage, _current);
     _last_position = _position;
 
         break;

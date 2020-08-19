@@ -33,6 +33,7 @@ static float _current = 0.0f;
 static float _voltage_applied = 0.0f;
 static float _position = 0.0f;
 static float _voltage = 0.0f;
+static float _desired_current = 0.0f;
 
 
 int pulseWidth = 0;
@@ -234,7 +235,7 @@ float dc_adc_get_cs_value(void)
     float result2 = 0;
     if(HAL_ADC_PollForConversion(&_hadc2, 0xFF) != HAL_OK)
     {
-        printf("Error polling for ADC conversion! \n");
+        printf("Error polling for ADC conversion!\n");
     }
     else
     {
@@ -255,7 +256,7 @@ float dc_adc_get_cs_value(void)
 float dc_motor_get_current(void)
 {
     _current = dc_adc_get_cs_value()/MVPA;
-    return _current;
+    return _current*(float)_dir;
 }
 
 float dc_motor_get_voltage(void)
@@ -294,7 +295,7 @@ void dc_motor_set(float U)
     }
     else
     {
-        _dir - MOTOR_DIR_OFF;
+        _dir = MOTOR_DIR_OFF;
         _dc_motor_set_direction(_dir);
     }
 
@@ -329,17 +330,28 @@ void _dc_motor_set_direction(int8_t dir)
 {
     if(dir == MOTOR_DIR_FWD)
     {
-        HAL_GPIO_WritePin(GPIOC,GPIO_PIN_10,GPIO_PIN_RESET);
-        HAL_GPIO_WritePin(GPIOC,GPIO_PIN_12,GPIO_PIN_SET);
+        HAL_GPIO_WritePin(GPIOC,GPIO_PIN_10,GPIO_PIN_SET);
+        HAL_GPIO_WritePin(GPIOC,GPIO_PIN_12,GPIO_PIN_RESET);
     }
     else if (dir == MOTOR_DIR_BCK)
     {
-        HAL_GPIO_WritePin(GPIOC,GPIO_PIN_10,GPIO_PIN_SET);
-        HAL_GPIO_WritePin(GPIOC,GPIO_PIN_12,GPIO_PIN_RESET);
+        HAL_GPIO_WritePin(GPIOC,GPIO_PIN_10,GPIO_PIN_RESET);
+        HAL_GPIO_WritePin(GPIOC,GPIO_PIN_12,GPIO_PIN_SET);
     }
     else
     {
         HAL_GPIO_WritePin(GPIOC,GPIO_PIN_10,GPIO_PIN_RESET);
         HAL_GPIO_WritePin(GPIOC,GPIO_PIN_12,GPIO_PIN_RESET);
     }
+}
+
+void dc_motor_set_desired_current(float in)
+{
+    _desired_current = in;
+    return;
+}
+
+float dc_motor_get_desired_current(void)
+{
+    return _desired_current;
 }

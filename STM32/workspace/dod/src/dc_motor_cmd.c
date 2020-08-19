@@ -3,6 +3,7 @@
 #include <string.h>
 #include "dc_motor.h"
 #include "dc_motor_cmd.h"
+#include "dc_motor_task.h"
 
 void dc_motor_cmd(int argc, char *argv[])
 {
@@ -12,15 +13,31 @@ void dc_motor_cmd(int argc, char *argv[])
 	}
 	else if (argc == 2)
 	{
-		float U = atof(argv[1]);
-		dc_motor_set(U);
-		printf("Motor voltage is set to %.2fV\n", dc_motor_get());
+		if (dc_motor_current_task_is_running())
+		{
+			printf("Current control task is running. Voltage cannot be set\n");
+			return;
+		}
+		else
+		{
+			float U = atof(argv[1]);
+			dc_motor_set(U);
+			printf("Motor voltage is set to %.3fV\n", dc_motor_get());
+		}
 	}
 		else if (argc == 3)
 	{
-		float U = atof(argv[1]);
-		dc_motor_set(U);
-		// printf("Motor voltage is set to %.2fV\n", dc_motor_get());
+		if (dc_motor_current_task_is_running())
+		{
+			printf("Current control task is running. Voltage cannot be set\n");
+			return;
+		}
+		else
+		{
+			float U = atof(argv[1]);
+			dc_motor_set(U);
+			// printf("Motor voltage is set to %.2fV\n", dc_motor_get());
+		}
 	}
 	else
 	{

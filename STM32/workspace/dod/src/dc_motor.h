@@ -16,7 +16,8 @@ float dc_motor_get_current(void);
 float dc_motor_get_voltage(void);
 float dc_motor_get_position(void);
 float dc_motor_get_count(void);
-
+float dc_motor_get_desired_current(void);
+void dc_motor_set_desired_current(float in);
 
 
 #endif

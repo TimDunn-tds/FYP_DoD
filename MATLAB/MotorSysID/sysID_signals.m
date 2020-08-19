@@ -104,6 +104,33 @@ chirp_sig(1002:end) = 6.*chirp(t,f1,10,f0,'linear');
 plot(chirp_sig);
 
 
+% Positive sin wave
+figure(13);
+V = 3; % Volts
+freq = 1; % Hz
+
+sinWave1hzPos = 3 + [V*cos(pi + 2*pi*freq*linspace(0,10,10/d))];
+
+plot(sinWave1hzPos);
+
+% Negative sin wave
+figure(14);
+V = -3; % Volts
+freq = 1; % Hz
+
+sinWave1hzNeg = -3 - [V*cos(2*pi*freq*linspace(0,10,10/d))];
+
+plot(sinWave1hzNeg);
+
+
+% Constant
+figure(15);
+V = 6;
+constant6V = V*ones(1000,1);
+plot(constant6V);
+
+
+close all;
 %% Save files
 save('deadZone.mat','deadZone');
 save('rampDown.mat','rampDown');
@@ -117,4 +144,8 @@ save('sinWave4hz.mat','sinWave4hz');
 save('sinWave3hz.mat','sinWave3hz');
 save('chirp_sig.mat','chirp_sig');
 save('sinWave_load_05hz.mat','sinWave_load_05hz');
+save('sinWave1hzPos.mat','sinWave1hzPos');
+save('sinWave1hzNeg.mat','sinWave1hzNeg');
+save('constant6V.mat','constant6V');
+
 

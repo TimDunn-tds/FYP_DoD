@@ -4,14 +4,22 @@ clear;
 
 %% Get data
 % Pick sysID input
+type = "chirp_sig";
 % type = "sinWave_load_05hz";
 % type = "sinWave";
 % type = "sinWave1hz";
+% type = "sinWave2hz";
+% type = "sinWave3hz";
+% type = "sinWave4hz";
 % type = "deadZone";
 % type = "rampDown";
 % type = "rampUp";
 % type = "stepDown";
-type = "stepUp";
+% type = "stepUp";
+% type = "constant4V";
+% type = "sinWave1hzPos";
+% type = "sinWave1hzNeg";
+% type = "constant6V";
 
 filename = sprintf("%s_data.mat",type);
 data = importdata(filename);
@@ -35,7 +43,7 @@ input = [V, vel, current];
 
 %% Run system identification
 % R1, Kw1, La, Kt, B,
-param_vec = [1; 1; 0.1; 1; 1];
+param_vec = [1; 0.01; 0.00011; 0.001];
 
 % Compute cost
 V_y = @(y) (y(:,1) - y_true(:,1)).'*(y(:,1) - y_true(:,1));
@@ -89,9 +97,8 @@ function y = runSim(param_vec, t_sim, x0, input)
     % R1, R2, R3, R4, R5, La, Kt, B, Kw, 
     R1      = param_vec(1);
     Kw      = param_vec(2);
-    La      = param_vec(3);
-    Kt      = param_vec(4);
-    B       = param_vec(5);
+%     K1      = param_vec(3);
+%     K2      = param_vec(4);
     
 
     % Fixed parameters
@@ -109,10 +116,10 @@ function y = runSim(param_vec, t_sim, x0, input)
     
     % CCR's
     Ra      =@(Ia) R1;
-%     eb      =@(w_m) Kw*w_m;
+    eb      =@(w_m) Kw.*w_m;
     
     % Define output
-    V_sim   =@(w_m,Ia) Ra(Ia).*Ia + Kw.*w_m;
+    V_sim   =@(w_m,Ia) Ra(Ia).*Ia + eb(w_m);
 %     Ia_sim  =@(Va, w_m) (Va - Kw.*w_m)/Ra(Ia)
 %     output  =@(x) [V_sim(w_m,x(1)); x(1)];
     

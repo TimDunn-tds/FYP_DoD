@@ -23,6 +23,8 @@
 // #include "stepper_motor.h"
 // #include "bluetooth.h"
 
+#include "dc_motor_task.h"
+
 
 #include "dc_motor.h"
 
@@ -52,6 +54,8 @@ int main(void)
     dc_motor_set(0);
 
     dc_adc_init();
+
+    dc_motor_current_task_init();
 
 
     

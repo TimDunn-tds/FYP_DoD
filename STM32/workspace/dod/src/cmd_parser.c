@@ -38,6 +38,8 @@ static void _help(int, char *[]);
 #include "stepper_motor.h"
 #include "reference_cmd.h"
 #include "dc_motor_cmd.h"
+#include "dc_motor_task_cmd.h"
+#include "cc_cmd.h"
 
 // Command table
 static CMD_T cmd_table[] =
@@ -51,6 +53,7 @@ static CMD_T cmd_table[] =
     {enc_cmd,           "enc",          "[reset]",                              "Get or reset encoder count"},
     {adc_cmd,           "adc",          "",                                     "Poll ADC for motor voltage"},
     {heartbeat_cmd,     "heartbeat",    "[start|stop]",                         "Get status or start/stop heartbeat task"},
+    {dc_motor_task_cmd, "cc_task",      "[start|stop]",                         "Get status or start/stop current control task"},
     // {dimmer_cmd,        "dimmer",       "[start|stop]",                         "Get status or start/stop dimmer task"},
     // {light_cmd,         "light",        "[<H> <S> <V>]",                        "Get or set light HSV values"},
     {sin_table_cmd,     "sin",          "[<#> <amp> <freq>]",                   "Remember to match the definition"},
@@ -58,6 +61,7 @@ static CMD_T cmd_table[] =
     // {manual_reference_cmd,  "ref",          "[<m/s>]",                               "Set manual reference"},
     // {controller_cmd,    "ctrl",         "[start|stop]",      "Get status or start/stop controller task"},
     {dc_motor_cmd,      "motor",        "[<value>] [supOut]",                            "Get or set motor voltage"},
+    {cc_cmd,            "current",      "[<value>] [supOut]",                       "Get or set motor current"},
     // {MPC_cmd,           "MPC",          "[start|stop]",      "Start or stop MPC controller"},
     // {sysID_cmd,         "sysID",        "[cart|pend|stop] [<samples> [<amplitude> <frequency>]]", "Perform experiment/collect sysID data"},
     // {MPU6050_cmd,       "MPU",          "",                                       "Retrieve a single measurement from IMU"},

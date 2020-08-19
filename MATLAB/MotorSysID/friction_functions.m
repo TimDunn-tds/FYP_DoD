@@ -106,6 +106,23 @@ plot(time,signMe,'DisplayName','look at me','linewidth',2);
 % plot(time,Fn,'DisplayName','Fn');
 legend;
 
+%%
+Ia = linspace(-2,2,2000);
+Ia_cut = 0.5;
+a1 = 0.5; % magnitude of breakaway peak
+a2 = 0.1; % roughly ss value
+a3 = 0.1; % slope after peak
+B1 = 100; % also not sure
+B2 = 10; % not sure. 
+B3 = 100; % sharpness of peak
+
+
+Tf = a1.*(tanh(B1.*Ia) - tanh(B2.*Ia)) + a2.*tanh(B3.*Ia) + a3.*Ia;
+
+Fs = exp(-((Ia./Ia_cut).^2));
+
+figure(9); clf; grid on; hold on;
+plot(Ia,Tf);
 
 
 

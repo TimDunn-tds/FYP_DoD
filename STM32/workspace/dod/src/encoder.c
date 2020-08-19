@@ -43,9 +43,9 @@ void encoder_init(void)
     }
 }
 
-void encoder_edge_A_isr(void)
+void encoder_edge_B_isr(void)
 {
-    // DONE: Implement A edge logic to increment or decrement _count
+    // DONE: Implement B edge logic to increment or decrement _count
     if(HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_0) == HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_1)) {
         _count++;
     }
@@ -56,9 +56,9 @@ void encoder_edge_A_isr(void)
 
 }
 
-void encoder_edge_B_isr(void)
+void encoder_edge_A_isr(void)
 {
-    // DONE: Implement B edge logic to increment or decrement _count
+    // DONE: Implement A edge logic to increment or decrement _count
     if(HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_0) == HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_1)) {
         _count--;
     }
@@ -80,7 +80,7 @@ int32_t encoder_get_count(void)
 {
     // Atomically read _count
     _encoder_disable_interrupts();
-    uint32_t count = _count;
+    int32_t count = _count;
     _encoder_enable_interrupts();
     return count;
 }

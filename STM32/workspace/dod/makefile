@@ -94,7 +94,10 @@ SRC_COMMON = \
 	$(SRCDIR)/dc_motor.c \
 	$(SRCDIR)/reference_cmd.c \
 	$(SRCDIR)/dc_motor_cmd.c \
-	$(SRCDIR)/adc_cmd.c
+	$(SRCDIR)/adc_cmd.c \
+	$(SRCDIR)/dc_motor_task.c \
+	$(SRCDIR)/dc_motor_task_cmd.c \
+	$(SRCDIR)/cc_cmd.c 
 
 # Source to compile only for target processor
 SRC_STM = \

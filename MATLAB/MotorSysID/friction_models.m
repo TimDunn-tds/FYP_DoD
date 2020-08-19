@@ -43,6 +43,7 @@ signStriV = signX(striV,V_a1);
 signInvStriV = signX(invStriV,V_a1);
 signVxstriV = signV.*striV;
 
+
 signIa = signX(Ia,I_a1);
 stri_Ia = stri(Ia,Ia_cutoff);
 
@@ -52,12 +53,12 @@ clf;
 % subplot(2,1,1); 
 hold on; grid on;
 plot(time,V,'DisplayName','Voltage');
-plot(time,signV,'DisplayName','signV');
+% plot(time,signV,'DisplayName','signV');
 plot(time,striV,'DisplayName','striV');
 % plot(time,invStriV,'DisplayName','invStriV');
 % plot(time,signInvStriV,'DisplayName','signInvStriV');
 % plot(time,signStriV,'DisplayName','signStriV');
-plot(time,signVxstriV,'DisplayName','signVxstriV');
+% plot(time,signVxstriV,'DisplayName','signVxstriV');
 
 
 legend;

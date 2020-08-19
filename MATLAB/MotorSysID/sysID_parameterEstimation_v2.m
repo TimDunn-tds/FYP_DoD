@@ -42,9 +42,9 @@ input = [V, vel, current];
 % Define initial parameter guess
 % Ra, Kw, La, Kt, B, 
 % param_vec = [2.5625; 0.0086; 0.1];
-param_vec = [0.0147];
+param_vec = [0.1];
 
-% La = 0.0135 or 0.021615
+% La = 0.0135 or 0.021615 || 0.0281
 % Ra = 2.5625;
 % Kw = 0.0086;
 
@@ -53,15 +53,22 @@ param_vec = [0.0147];
 V_y = @(y) (y(:,2) - y_true(:,3)).'*(y(:,2) - y_true(:,3));
 
 V_theta = @(theta) V_y(runSim(theta,x0,t_sim,input));
-
-%% Run optimisation with fmincon
+%% Pattern search
 A = -eye(length(param_vec));
 b = zeros(length(param_vec),1);
-lb = [0; 0; 1e-9];
-% ub = [inf inf inf inf inf 1 inf inf inf];
-options = optimoptions('fmincon','Display','iter','StepTolerance',1e-12);
-param_opt = fmincon(V_theta, param_vec, A, b, [], [], lb, [], [], options);
+lb = [0];
+options = optimoptions('patternsearch','Display','iter','StepTolerance',1e-10);
+param_opt = patternsearch(V_theta, param_vec, A, b, [], [], lb, [], [], options);
 final_cost = V_theta(param_opt)
+
+%% Run optimisation with fmincon
+% A = -eye(length(param_vec));
+% b = zeros(length(param_vec),1);
+% lb = [0];
+% % ub = [inf inf inf inf inf 1 inf inf inf];
+% options = optimoptions('fmincon','Display','iter','StepTolerance',1e-12);
+% param_opt = fmincon(V_theta, param_vec, A, b, [], [], lb, [], [], options);
+% final_cost = V_theta(param_opt)
 
 %% Plot results 
 y_cts = runSim(param_opt,x0,t_sim,input);
@@ -110,8 +117,10 @@ function y = runSim(param_vec, x0, t_sim, input)
 %     Kw      = param_vec(2);
 %     La      = param_vec(3);
 
-    Ra = 2.5625;
-    Kw = 0.0086;
+%     Ra = 2.5625;
+%     Kw = 0.0086;
+    Ra = 2.2886;
+    Kw = 0.0085;
     La = param_vec(1);
     
     % Fixed parameters
