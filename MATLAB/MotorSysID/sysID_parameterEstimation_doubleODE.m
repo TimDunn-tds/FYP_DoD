@@ -6,12 +6,12 @@ clear;
 % Pick sysID input
 % type = "chirp_sig";
 % type = "sinWave_load_05hz";
-% type = "sinWave";
+type = "sinWave";
 % type = "sinWave1hz";
 % type = "sinWave2hz";
 % type = "sinWave3hz";
 % type = "sinWave4hz";
-type = "deadZone";
+% type = "deadZone";
 % type = "rampDown";
 % type = "rampUp";
 % type = "stepDown";
@@ -51,7 +51,8 @@ input = [V, vel, current];
 
 % a1 a2 a3 b1 b2 b3
 % 1.9477 1e-3 0.0012 99.1563 2.0073 107.1265
-param_vec = [1; 0.001; 0.001; 1000; 1; 100];
+Jh = 0.0039;
+param_vec = [1; 0.001; 0.001; 1000; 1; 100; Jh];
 
 % La = 0.0135 or 0.021615
 % Ra = 2.5625;
@@ -136,13 +137,20 @@ function y = runSim(param_vec, x0, t_sim, input)
     B1      = param_vec(4);
     B2      = param_vec(5);
     B3      = param_vec(6);
-        
+    Jh      = param_vec(7);
+    a4      = param_vec(8);
+    a5      = param_vec(9);
+    a6      = param_vec(10);
+    B4      = param_vec(11);
+    B5      = param_vec(12);
+    B6      = param_vec(13);
+    
+    
     % Fixed parameters
     Ra = 2.5625;
     Kw = 0.0086;
     La = 0.0135;
     N  = 98.78;
-    Jh = 0.0039;
     J  = Jh/(N^2); % Inertia at the motor (low torque/High speed) side of gearbox
 
     % Unpack input
@@ -151,6 +159,8 @@ function y = runSim(param_vec, x0, t_sim, input)
     Va  =@(t) interp1(t_sim,V,t);
     
     % Useful functions
+    heavi_p =@(x) 1./(1 + exp(-2.*100.*x));
+    heavi_m =@(x) 1./(1 + exp(-2.*100.*-x));
 %     signX =@(x,a1) x./sqrt(a1 + x.^2);
 %     signX =@(x) x./sqrt(0.01 + x.^2);
 %     stri =@(x,xc) exp(-((x./xc).^2));
@@ -179,7 +189,9 @@ function y = runSim(param_vec, x0, t_sim, input)
 %                             + (a3 + a4.*exp(-a5.*abs(w_m))).*sign2(w_m);
 %     tauF    =@(w_m,Ia,Va) (a0 + a1.*exp(-a2.*sqrt(w_m.*w_m))).*signX(w_m);
 %     tauF    =@(w_m,Ia,Va) (a0 + a1.*exp(-a2.*abs(w_m))).*sign(w_m);
-    tauF =@(w_m) a1.*(tanh(B1.*w_m) - tanh(B2.*w_m)) + a2.*tanh(B3.*w_m) + a3.*w_m;
+    tauF =@(w_m) (a1.*(tanh(B1.*w_m) - tanh(B2.*w_m)) + a2.*tanh(B3.*w_m) + a3.*w_m).*heavi_p(w_m)...
+                + (a4.*(tanh(B4.*w_m) - tanh(B5.*w_m)) + a5.*tanh(B6.*w_m) + a6.*w_m).*heavi_m(w_m);
+%     tauF =@(w_m) (a1.*(tanh(B1.*w_m) - tanh(B2.*w_m)) + a2.*tanh(B3.*w_m) + a3.*w_m);
 
     % SSRs
 %     dw_m =@(w_m,Ia,Va) (tauM(Ia) - tauF(w_m,Ia,Va))/J; % w_m (not speed of hand)

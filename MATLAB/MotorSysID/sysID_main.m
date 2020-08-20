@@ -4,14 +4,14 @@ clc; clear;
 % Pick sysID input
 % type = "chirp_sig";
 % type = "sinWave_load_05hz";
-type = "sinWave";
+% type = "sinWave";
 % type = "sinWave1hz";
 % type = "sinWave2hz";
 % type = "sinWave3hz";
 % type = "sinWave4hz";
 % type = "deadZone";
 % type = "rampDown";
-% type = "rampUp";
+type = "rampUp";
 % type = "stepDown";
 % type = "stepUp";
 % type = "constant4V";
