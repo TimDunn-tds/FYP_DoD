@@ -4,9 +4,9 @@ clear;
 
 %% Get data
 % Pick sysID input
-type = "chirp_sig";
+% type = "chirp_sig";
 % type = "sinWave";
-% type = "sinWave1hz";
+type = "sinWave1hz";
 % type = "sinWave3hz";
 % type = "deadZone";
 % type = "rampDown";

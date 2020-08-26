@@ -1,16 +1,16 @@
 clc; clear; close all;
 
 d = 0.01;
-maxV = 4;
+maxV = 5;
 
 % Ramp up then down
 figure(1);
-rampUp = [0*ones(1,1/d),linspace(0,maxV,10/d),maxV*ones(1,1/d),linspace(maxV,0,10/d),0*ones(1,1/d)];
+rampUp = [0*ones(1,1/d),linspace(0,maxV,20/d),maxV*ones(1,1/d),linspace(maxV,0,20/d),0*ones(1,1/d)];
 plot(rampUp);
 
 % Ramp down then up
 figure(2);
-rampDown = [0*ones(1,1/d),linspace(0,-maxV,10/d),-maxV*ones(1,1/d),linspace(-maxV,0,10/d),0*ones(1,1/d)];
+rampDown = [0*ones(1,1/d),linspace(0,-maxV,20/d),-maxV*ones(1,1/d),linspace(-maxV,0,20/d),0*ones(1,1/d)];
 plot(rampDown);
 
 % Test for deadzone
@@ -18,9 +18,9 @@ figure(3);
 deadUp = [];
 deadDown = [];
 deadV = 4;
-for k = 0:0.5:deadV
-    deadUp = [deadUp, k*ones(1,0.5/d)];
-    deadDown = [deadDown, (deadV-k)*ones(1,0.5/d)];
+for k = 0:0.25:deadV
+    deadUp = [deadUp, k*ones(1,1/d)];
+    deadDown = [deadDown, (deadV-k)*ones(1,1/d)];
 end
 deadZone = [deadUp,deadDown,-deadUp,-deadDown];
 plot(deadZone);

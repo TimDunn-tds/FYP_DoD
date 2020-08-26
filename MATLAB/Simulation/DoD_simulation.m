@@ -27,7 +27,7 @@ Jh = 3.908e-3   + 1.103e-6  + 2.38e-6;
 g = 9.82;                   % m/s^2
 
 theta0 = 0*(pi/180);        % rad
-phi0 = -1*(pi/180);          % rad
+phi0 = -8*(pi/180);          % rad
 
 
 %% Motor parameters
@@ -272,7 +272,7 @@ linkaxes([ax1 ax2 ax3 ax4],'x');
 
 %% Visulisation?
 
-% F = runVis(rh, ro, phi, theta, dphi, dtheta, tout);
+F = runVis(rh, ro, phi, theta, dphi, dtheta, tout);
 
 %% Save video
 % writerObj = VideoWriter('DoD_vid.avi');

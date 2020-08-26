@@ -256,7 +256,8 @@ float dc_adc_get_cs_value(void)
 float dc_motor_get_current(void)
 {
     _current = dc_adc_get_cs_value()/MVPA;
-    return _current*(float)_dir;
+    // return _current*(float)_dir;
+    return _current; // correct direciton in matlab if doing sysID?
 }
 
 float dc_motor_get_voltage(void)

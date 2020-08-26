@@ -115,9 +115,9 @@ a3 = 0.1; % slope after peak
 B1 = 100; % also not sure
 B2 = 10; % not sure. 
 B3 = 100; % sharpness of peak
-signX = Ia./sqrt(0.01 + Ia.^2);
-heavi_plus = 1./(1 + exp(-2.*100.*Ia));
-heavi_mins = 1./(1+ exp(-2.*100.*-Ia));
+signX = Ia./sqrt(0.1 + Ia.^2);
+heavi_plus = 1./(1 + exp(-2.*25.*Ia));
+heavi_mins = 1./(1+ exp(-2.*10.*-Ia));
 Tf = a1.*(tanh(B1.*Ia) - tanh(B2.*Ia)) + a2.*tanh(B3.*Ia) + a3.*Ia;
 
 Fs = exp(-((Ia./Ia_cut).^2));

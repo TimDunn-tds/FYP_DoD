@@ -13,7 +13,7 @@ TIMEOUT = 0.5; % Time to wait for data before aborting
 % type = "sinWave3hz";
 % type = "sinWave4hz";
 % type = "deadZone";
-% type = "rampDown";
+type = "rampDown";
 % type = "rampUp";
 % type = "stepDown";
 % type = "stepUp";
@@ -21,7 +21,7 @@ TIMEOUT = 0.5; % Time to wait for data before aborting
 % type = "sinWave1hzPos";
 % type = "sinWave1hzNeg";
 % type = "constant6V";
-type = "oneV_torque";
+% type = "oneV_torque";
 
 % Get the signal desired
 filename = sprintf("%s.mat",type);
@@ -87,14 +87,6 @@ catch
 end
 
 
-% % Prompt for save of file
-% answer = questdlg("Save file?","Save prompt","Yes","No","No");
-% if answer == "Yes"
-%     saveFileName = sprintf("%s_data.mat", type);
-%     save(saveFileName, 'data');
-% end
-
-
 %% Plot
 time    = data(:,1);
 enc     = data(:,2);
@@ -103,6 +95,9 @@ vel     = data(:,4);
 V       = data(:,5);
 current = data(:,6);
 
+k = find(V<0);
+current(k) = -1.*current(k);
+
 figure(10); clf; hold on;
 subplot(2,1,1);
 plot(time,V,'DisplayName','Voltage [V]','linewidth',2); hold on;
@@ -110,9 +105,16 @@ plot(time,vel,'DisplayName','Velocity [rad/s]','linewidth',2);
 grid on;
 legend('location','best');
 subplot(2,1,2);
-plot(time,current,'-.','DisplayName','Current [A]','linewidth',2); hold on;
+plot(time,current,'DisplayName','Current [A]','linewidth',2); hold on;
 grid on;
 legend('location','best');
 
+
+%% Prompt for save of file
+answer = questdlg("Save file?","Save prompt","Yes","No","No");
+if answer == "Yes"
+    saveFileName = sprintf("%s_data.mat", type);
+    save(saveFileName, 'data');
+end
 
     

@@ -1,4 +1,4 @@
-function Tm = motorTorque(Ia,~)
+function Tm = motorTorque(Ia)
 
 % tauM_p =@(Ia) (-0.4482 + sqrt(4.816.*Ia - 0.034860))./2.408;
 % tauM_n =@(Ia) -(-1.353 + sqrt(-1.322.*Ia + 1.8276))./0.661;

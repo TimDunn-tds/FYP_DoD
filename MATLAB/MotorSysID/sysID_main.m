@@ -1,5 +1,5 @@
 % Clean up
-clc; clear;
+% clc; clear;
 
 % Pick sysID input
 % type = "chirp_sig";
@@ -11,7 +11,8 @@ clc; clear;
 % type = "sinWave4hz";
 % type = "deadZone";
 % type = "rampDown";
-type = "rampUp";
+type = "rampUpDown";
+% type = "rampUp";
 % type = "stepDown";
 % type = "stepUp";
 % type = "constant4V";
@@ -29,7 +30,7 @@ pos     = data(:,3);
 vel     = data(:,4);
 V       = data(:,5);
 current = data(:,6);
-
+% 
 k = find(V<0);
 current(k) = -1.*current(k);
 

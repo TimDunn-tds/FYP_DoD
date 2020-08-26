@@ -6,7 +6,7 @@ clear;
 % Pick sysID input
 % type = "chirp_sig";
 % type = "sinWave_load_05hz";
-type = "sinWave";
+% type = "sinWave";
 % type = "sinWave1hz";
 % type = "sinWave2hz";
 % type = "sinWave3hz";
@@ -14,12 +14,14 @@ type = "sinWave";
 % type = "deadZone";
 % type = "rampDown";
 % type = "rampUp";
+type = "rampUpDown";
 % type = "stepDown";
 % type = "stepUp";
 % type = "constant4V";
 % type = "sinWave1hzPos";
 % type = "sinWave1hzNeg";
 % type = "constant6V";
+
 
 filename = sprintf("%s_data.mat",type);
 data = importdata(filename);
@@ -29,9 +31,10 @@ pos     = data(:,3);
 vel     = data(:,4);
 V       = data(:,5);
 current = data(:,6);
-% Correct current
-k       = find(V<0);
-current(k) = current(k)*-1;
+
+k = find(V<0);
+current(k) = -1.*current(k);
+
 % Define intial conditions
 w_a0 = 0;
 Ia0 = 0;
@@ -49,10 +52,20 @@ input = [V, vel, current];
 %             Kt,  B,   a1,   b1,    a2,    w_c
 % param_vec = [0.1; 0.01; 0.01; 0.01; 0.001; 0.001];
 
-% a1 a2 a3 b1 b2 b3
-% 1.9477 1e-3 0.0012 99.1563 2.0073 107.1265
 Jh = 0.0039;
-param_vec = [1; 0.001; 0.001; 1000; 1; 100; Jh];
+% 2.2256 0.0047 6.3369e-4 1.9722e3 464.6250 4.5630 3.6914 1.0414 0.2510
+% 1e-3 991 0.5 212.1250
+% param_vec = [2; 0.1; 0.00001; 1000; 1000; 10000; 1.5; 1; 0.1; 0.0001; 1000; 1; 10000];
+param_vec = [4.2005e3; 0.0872; 6.0509e-4; 1.0011e3; 1.0023e3; 7.9317e4; 3.6622; 1.8451; 0.3583; 2.8311e-4; 2.2251e5; 1.5441e4; 3.2077e4];
+
+% param_vec = [2; 0.1; 1e-3; 3e4; 2e5; 2e4; 1.5; 1; 0.1; 1e-3; 2e4; 1e3; 1e4];
+% param_vec = [2; 0.1; 1e-4; 3e3; 1e3; 2.1e5; 1.5; 1; 0.1; 1e-3; 2e4; 3.5e4; 2e4];
+
+
+% %%%%%%%%%%%%%%%
+% 4.2005e3  0.0872  6.0509e-4   1.0011e3    1.0023e3    7.9317e4    3.6622
+% 1.8451    0.3583  2.8311e-4   2.2251e5    1.5441e4    3.2077e4 
+% %%%%%%%%%%%%%%
 
 % La = 0.0135 or 0.021615
 % Ra = 2.5625;
@@ -64,8 +77,8 @@ y_true = [V, current, vel];
 % V_y = @(y) (y(:,1) - y_true(:,1)).'*(y(:,1) - y_true(:,1));
 % V_y = @(y) (y(:,2) - y_true(:,2)).'*(y(:,2) - y_true(:,2));
 % V_y = @(y) (y(:,3) - y_true(:,3)).'*(y(:,3) - y_true(:,3));
-V_y =@(y) 0.1*((y(:,3) - y_true(:,3)).'*(y(:,3) - y_true(:,3)))...
-            + 0.9*((y(:,2) - y_true(:,2)).'*(y(:,2) - y_true(:,2)));
+V_y =@(y) 0.3*((y(:,3) - y_true(:,3)).'*(y(:,3) - y_true(:,3)))...
+            + 0.7*((y(:,2) - y_true(:,2)).'*(y(:,2) - y_true(:,2)));
 
 V_theta = @(theta) V_y(runSim(theta,x0,t_sim,input));
 
@@ -80,15 +93,15 @@ V_theta = @(theta) V_y(runSim(theta,x0,t_sim,input));
 %% Run optimisation with patternsearch
 A = -eye(length(param_vec));
 b = zeros(length(param_vec),1);
-lb = 1e-10.*ones(length(param_vec),1);
-% ub = [0.02; inf];
-options = optimoptions('patternsearch','Display','iter','StepTolerance',1e-10);
+lb = 1e-8.*ones(length(param_vec),1);
+% ub = 2.1e5.*ones(length(param_vec),1);
+options = optimoptions('patternsearch','Display','iter','StepTolerance',1e-10, 'MaxFunctionEvaluations', 5000);
 param_opt = patternsearch(V_theta, param_vec, A, b, [], [], lb, [], [], options);
 final_cost = V_theta(param_opt)
 
 %% Plot results 
-% y_cts = runSim(param_opt,x0,t_sim,input);
 y_cts = runSim(param_opt,x0,t_sim,input);
+% y_cts = runSim(param_vec,x0,t_sim,input);
 
 figure(1); clf;
 ax1 = subplot(3,1,1);
@@ -130,7 +143,6 @@ function y = runSim(param_vec, x0, t_sim, input)
 
     % Unpack params
     % Kt, B, a1, a2, a3, VaC
-%     Kt      = param_vec(1);
     a1      = param_vec(1);
     a2      = param_vec(2);
     a3      = param_vec(3);
@@ -145,11 +157,11 @@ function y = runSim(param_vec, x0, t_sim, input)
     B5      = param_vec(12);
     B6      = param_vec(13);
     
-    
     % Fixed parameters
     Ra = 2.5625;
     Kw = 0.0086;
-    La = 0.0135;
+%     La = 0.0135;
+    La = 0.0233;
     N  = 98.78;
     J  = Jh/(N^2); % Inertia at the motor (low torque/High speed) side of gearbox
 
@@ -159,46 +171,26 @@ function y = runSim(param_vec, x0, t_sim, input)
     Va  =@(t) interp1(t_sim,V,t);
     
     % Useful functions
-    heavi_p =@(x) 1./(1 + exp(-2.*100.*x));
-    heavi_m =@(x) 1./(1 + exp(-2.*100.*-x));
-%     signX =@(x,a1) x./sqrt(a1 + x.^2);
-%     signX =@(x) x./sqrt(0.01 + x.^2);
-%     stri =@(x,xc) exp(-((x./xc).^2));
-%     invStri =@(x,xc) exp(-((xc./x).^2));
+    heavi_p =@(x) 1./(1 + exp(-2.*50.*x));
+    heavi_m =@(x) 1./(1 + exp(-2.*50.*-x));
     
     % CCRs
-%     tauM    =@(Ia) Kt.*Ia;
     eb      =@(w_m) Kw.*w_m;
-%     tauF    =@(w_m,Ia,Va) B1.*w_m + tauM(Ia).*signX(Va,Va_a1).*stri(Va,Va_cutoff);
-%     tauF    =@(w_m,Ia,Va) B1.*w_m + tauM(Ia).*signX(w_m,wm_cutoff).*stri(Va,Va_cutoff);
-
-%     signX   =@(x) x./(sqrt(0.01 + x.^2));              % sign of x (smooth)
-%     Fkitc   =@(w_m) B.*w_m;
-%     Fstri   =@(Va) exp(-((Va./VaC).^2)).*signX(Va);    % stribeck friction
-%     signFt  =@(Va) Fstri(Va)./sqrt(a3 + Fstri(Va).^2);  % Sign of combined
-%     smth    =@(w_m,Ia,Va) signX(Fstri(Va)).*(1-sqrt(signX(w_m).^2));
-%     tauF    =@(w_m,Ia,Va) B2.*w_m+ B1.*tauM(Ia).*signX(smth(w_m,Ia,Va));
-%     tauF    =@(w_m,Ia,Va) B2.*w_m;
-%     tauF    =@(w_m,Ia,Va) B.*w_m + sqrt(signFt(Va).^2).*tauM(Ia);    % Total friction force
-%     tauF    =@(w_m) Fstri(w_m) + Fcoul(w_m);            % total friction
-%     tauF    =@(w_m) Fstri(w_m) + Fcoul(w_m) + Fkitc(w_m);
-%     tauF    =@(w_m) Fstri(w_m);            % total friction
-
-%     tauF    =@(w_m,Ia,Va) a0.*(w_m) + tauM(Ia).*double(abs(Ia<0.8) && abs(w_m<0.13));
-%     tauF    =@(w_m,Ia,Va) (a0 + a1.*exp(-a2.*abs(w_m))).*sign1(w_m) ...
-%                             + (a3 + a4.*exp(-a5.*abs(w_m))).*sign2(w_m);
-%     tauF    =@(w_m,Ia,Va) (a0 + a1.*exp(-a2.*sqrt(w_m.*w_m))).*signX(w_m);
-%     tauF    =@(w_m,Ia,Va) (a0 + a1.*exp(-a2.*abs(w_m))).*sign(w_m);
-    tauF =@(w_m) (a1.*(tanh(B1.*w_m) - tanh(B2.*w_m)) + a2.*tanh(B3.*w_m) + a3.*w_m).*heavi_p(w_m)...
-                + (a4.*(tanh(B4.*w_m) - tanh(B5.*w_m)) + a5.*tanh(B6.*w_m) + a6.*w_m).*heavi_m(w_m);
+    tauF    =@(w_m) (a1.*(tanh(B1.*w_m) - tanh(B2.*w_m)) + a2.*tanh(B3.*w_m) + a3.*w_m).*heavi_p(w_m)...
+                    + (a4.*(tanh(B4.*w_m) - tanh(B5.*w_m)) + a5.*tanh(B6.*w_m) + a6.*w_m).*heavi_m(w_m);
+%      tauF =@(w_m) (a1.*(tanh(B1.*w_m) - tanh(B2.*w_m)) + a2.*tanh(B3.*w_m)).*heavi_p(w_m)...
+%                 + (a4.*(tanh(B4.*w_m) - tanh(B5.*w_m)) + a5.*tanh(B6.*w_m)).*heavi_m(w_m);       
+            
+            
 %     tauF =@(w_m) (a1.*(tanh(B1.*w_m) - tanh(B2.*w_m)) + a2.*tanh(B3.*w_m) + a3.*w_m);
 
-    % SSRs
-%     dw_m =@(w_m,Ia,Va) (tauM(Ia) - tauF(w_m,Ia,Va))/J; % w_m (not speed of hand)
-    dw_m =@(w_m,Ia,Va) (motorTorque(Ia,Va) - tauF(w_m))./J; 
-%     dw_m =@(w_m,Ia,Va) (tauM(Ia) - (B + B1.*exp(-B2*abs(w_m))).*w_m)/J; 
+%     tauM=@(Ia) (0.06085.*Ia.^2 + 0.6843.*Ia).*heavi_m(Ia) + (0.5702.*exp(0.3512.*Ia) - 0.5703.*exp(-1.82.*Ia)).*heavi_p(Ia);
+    tauM =@(Ia) 0.06761.*Ia.^4 + 0.2721.*Ia.^3 - 0.02975.*Ia.^2 + 1.417.*Ia;
 
-%     dw_m    =@(w_m,Ia,Va) motorTorque(w_m,Ia,Va,Kt,B,Tf)./J;
+
+    % SSRs
+%     dw_m    =@(w_m,Ia,Va) (motorTorque(Ia) - tauF(w_m))./J; 
+    dw_m    =@(w_m,Ia,Va) (tauM(Ia) - tauF(w_m))./J; 
     dIa     =@(w_m,Ia,Va) (Va - Ra*Ia - eb(w_m))/La;
     
     % Create ode function
@@ -208,16 +200,22 @@ function y = runSim(param_vec, x0, t_sim, input)
     dx_wrap = @(t,x) dx(x(2),x(1),Va(t));
 
     % Run simulation
-    [res.t,res.x] = ode15s(dx_wrap, t_sim, x0);
-    
+%     options = odeset("OutputFcn",@odeplot);
+%     [res.t,res.x] = ode15s(dx_wrap, t_sim, x0);
+    [res.t,res.x] = ode23s(dx_wrap, t_sim, x0);
+
     % Calculate dIa
     w_sim = res.x(:,2);
     Ia_sim = res.x(:,1);
-    dIa_eq = (Va(t_sim) - Ra.*Ia_sim - eb(w_sim))./La;
-    
+    try
+        dIa_eq = (Va(t_sim) - Ra.*Ia_sim - eb(w_sim))./La;
+    catch
+       pause; 
+    end
     % Simulated Voltage function
-    V_hat =@(Ia,w_m) Ra.*Ia + Kw.*w_m + La.*dIa_eq;
-    
+%     V_hat =@(Ia,w_m) Ra.*Ia + Kw.*w_m + La.*dIa_eq;
+    V_hat =@(Ia,w_m) Ra.*Ia + Kw.*w_m;
+
     % Define output
     % V_hat, Ia, w_m
     res.x(:,1) = V_hat(Ia_sim,w_sim);
