@@ -58,10 +58,10 @@ p3 = 1.121;
 
 %% Plant Model (linearised about upright balancing position???)
 % State variables:
-% x(1) = hand angular velocity [rad/s]
-% x(2) = object angular velocity about hand CoM [rad/s]
-% x(3) = hand angle [rad]
-% x(4) = object CoM angle relative to hand CoM [rad]
+% x(1) = hand angular velocity [rad/s]                  dtheta
+% x(2) = object angular velocity about hand CoM [rad/s] dphi
+% x(3) = hand angle [rad]                               theta
+% x(4) = object CoM angle relative to hand CoM [rad]    phi
 
 MM = [
     Jh + Jo*(rh^2/ro^2), 2*Jo*(rh^2/ro^2);
@@ -80,11 +80,14 @@ A = [MM\-DD, MM\-KK; eye(2,2), zeros(2,2)];
 B = [MM\e; zeros(2,1)];
 
 Cr = [1, 0, 0, 0]; % Regulate hand velocity
-Dr = 0; % No feedthrough?
+Dr = 0; % No feedthrough
 
+% Cm = [0, 0, 1, 0;
+%       0, 0, 0, 1]; % Measure hand and object positions
 Cm = [0, 0, 1, 0;
-      0, 0, 0, 1]; % Measure hand and object positions
-Dm = [0;0];
+      0, 0, 0, 1;
+      1, 0, 0, 0]; % Measure hand and object positions
+Dm = [0;0;0];
 
 % Reduced-state continuous-time model for control design
 idx = [1 2 4];                % Only include these states
@@ -102,7 +105,7 @@ Qc = [
     0, 1, 0;
     0, 0, 1];           % penalise state
 % Qc = eye(4);
-Rc = 10;                 % penalise actuator 
+Rc = 1e5;                 % penalise actuator 
 
 Kc = zeros(1,length(idx));
 Kc(:,idx)   = lqrd(Ac, Bc, Qc, Rc, T);	% Feedback gain matrix
@@ -114,21 +117,23 @@ Nx          = zeros(length(Cr),1);
 Nx(idx,:)   = NN(1:length(idx));
 Nu          = NN(end);
 
-% Design Observer
+%% Design Observer
 % initial uncertainty and intial state
 mup_init = [0; 0; theta0; phi0];
-Pp_init = diag([0.1, 0.1, 0.1, 0.1]);
-
+% Pp_init = diag([1, 1, 1, 1]);
+Pp_init = 1e-1*eye(4);
 % mup_init = [theta0; phi0];
 % Pp_init = diag([0.01, 0.01]);
 
 
 [Aod, Bod] = c2d(A, B, T);
 
-Qo = 0.001*eye(size(A,1));
-Ro = 0.001*eye(size(Cm,1));
+Qo = 1*eye(size(A,1));
+% Ro = 2.5e-07*eye(size(Cm,1));
+Ro = 2.5e-07*eye(size(Cm,1));
 
 % [~,Lo] = kalmd(ss(Aod, [Bod eye(length(B))], Cm, [Dm zeros(size(Dm,1),length(B))]), Qo, Ro, T);
+%    2.1695e-07
 
 
 %% Old MPC
@@ -233,12 +238,13 @@ Ro = 0.001*eye(size(Cm,1));
 %% Run simulation
 sim('DoD_simulink_model');
 
+
 %% Plot
 figure(1);  clf;
 
 ax1 = subplot(2,2,1);
 plot(tout,phi.signals.values.*180/pi,'DisplayName','phi','LineWidth',2); hold on;
-% plot(tout,mup.signals.values(:,4).*180/pi,'DisplayName','kf phi');
+plot(tout,mup.signals.values(:,4).*180/pi,'DisplayName','kf phi','LineWidth',2);
 % plot(tout, theta.signals.values.*180/pi);
 legend;
 grid on;
@@ -248,18 +254,18 @@ title('Object Angle');
 
 ax2 = subplot(2,2,2);
 plot(tout,dphi.signals.values.*180/pi,'DisplayName','dphi','LineWidth',2); hold on;
-% plot(tout, mup.signals.values(:,2).*180/pi,'DisplayName','kf dphi');
+plot(tout, mup.signals.values(:,2).*180/pi,'DisplayName','kf dphi','LineWidth',2);
 % yyaxis right;
 % plot(tout,phi.signals.values.*180/pi);
 legend;
 grid on;
-ylabel('Angle [\circ/s]');
+ylabel('Angular Velocity [\circ/s]');
 xlabel('Time [s]');
 title('Object Angular Velocity');
 
 ax3 = subplot(2,2,3); hold on;
 plot(tout,dtheta.signals.values,'DisplayName','dtheta','LineWidth',2);
-% plot(tout,mup.signals.values(:,1).*(60/(2*pi)),'DisplayName','kf dtheta');
+plot(tout,mup.signals.values(:,1),'DisplayName','kf dtheta','LineWidth',2);
 plot(tout,ref.signals.values,'r','DisplayName','ref','LineWidth',2);
 ylabel('Velocity [rad/s]');
 xlabel('Time [s]');
