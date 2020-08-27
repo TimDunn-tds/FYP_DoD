@@ -62,6 +62,9 @@ tau = tauM(Ia);
 figure;
 plot(Ia,tau);
 
+%%
+Ia =@(Tm) 0.7427.*Tm.^3 - 0.2106.*Tm.^2 + 1.121.*Tm;
+
 
 
 

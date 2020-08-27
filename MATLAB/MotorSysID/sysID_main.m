@@ -7,11 +7,11 @@
 % type = "sinWave";
 % type = "sinWave1hz";
 % type = "sinWave2hz";
-% type = "sinWave3hz";
+type = "sinWave3hz";
 % type = "sinWave4hz";
 % type = "deadZone";
 % type = "rampDown";
-type = "rampUpDown";
+% type = "rampUpDown";
 % type = "rampUp";
 % type = "stepDown";
 % type = "stepUp";

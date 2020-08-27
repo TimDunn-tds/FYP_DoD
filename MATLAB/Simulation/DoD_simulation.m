@@ -1,5 +1,5 @@
 %% Clear parameters
-clc; clear all; 
+clc; clear; 
 
 T = 0.01;
 tsim = 10;
@@ -23,17 +23,38 @@ Jo = 0.5*mo*(ro^2);
 % Jh = 0.5*mh*(rh^2);
 %    Jdisk      + Jcoupling + Jshaft
 Jh = 3.908e-3   + 1.103e-6  + 2.38e-6;
+% Jh = 3.661;
 
 g = 9.82;                   % m/s^2
 
 theta0 = 0*(pi/180);        % rad
-phi0 = -8*(pi/180);          % rad
+phi0 = -0*(pi/180);          % rad
 
+% SysID parameters
+Ra  = 2.5625;
+Kw  = 0.0086;
+N   = 98.78;
+
+%% Friction Parameters
+a1 = 4.2005e3;
+a2 = 0.0872;
+a3 = 6.0509e-4;
+B1 = 1.0011e3;
+B2 = 1.0023e3;
+B3 = 7.9317e4;
+a4 = 1.8451;
+a5 = 0.3583;
+a6 = 2.8311e-4;
+B4 = 2.2251e5;
+B5 = 1.5441e4;
+B6 = 3.2077e4;
 
 %% Motor parameters
 tau_max = 1;              % Nm
 tau_min = -1;             % Nm
-
+p1 = 0.7427;
+p2 = -0.2106;
+p3 = 1.121;
 
 %% Plant Model (linearised about upright balancing position???)
 % State variables:
@@ -237,24 +258,37 @@ xlabel('Time [s]');
 title('Object Angular Velocity');
 
 ax3 = subplot(2,2,3); hold on;
-plot(tout,dtheta.signals.values.*(60/(2*pi)),'DisplayName','dtheta','LineWidth',2);
+plot(tout,dtheta.signals.values,'DisplayName','dtheta','LineWidth',2);
 % plot(tout,mup.signals.values(:,1).*(60/(2*pi)),'DisplayName','kf dtheta');
-plot(tout,ref.signals.values.*(60/(2*pi)),'r','DisplayName','ref','LineWidth',2);
-ylabel('RPM');
+plot(tout,ref.signals.values,'r','DisplayName','ref','LineWidth',2);
+ylabel('Velocity [rad/s]');
 xlabel('Time [s]');
 legend('location','best')
 grid on;
 title('Hand Angular Velocity');
 
-ax4 = subplot(2,2,4);
-plot(tau.time,tau.signals.values,'LineWidth',2);
-legend('tau','location','best');
-grid on;
-title('Demanded Torque');
+ax4 = subplot(2,2,4); hold on;
+plot(tau.time,tau.signals.values,'LineWidth',2,'DisplayName','Required Torque');
 ylabel('Torque [Nm]');
+yyaxis right
+plot(tout, Va.signals.values,'LineWidth',2,'DisplayName','Demanded Voltage')
+ylabel('Voltage [V]')
+legend('location','best');
+grid on;
+% title('Demanded Torque');
 xlabel('Time [s]');
 
 linkaxes([ax1 ax2 ax3 ax4],'x');
+
+
+% figure(2); clf; hold on; grid on;
+% plot(tout,Va.signals.values,'DisplayName','Demanded Armature Voltage','LineWidth',2);
+% plot(tout,
+% ylabel('Voltage [V]')
+% xlabel('Time [s]')
+% title('Demanded voltage');
+
+
 % figure(3); clf; hold on;
 % alph = (rh/ro).*(phi.signals.values - theta.signals.values);
 % plot(theta.time, abs(alph), 'DisplayName', 'alpha');
@@ -272,7 +306,7 @@ linkaxes([ax1 ax2 ax3 ax4],'x');
 
 %% Visulisation?
 
-F = runVis(rh, ro, phi, theta, dphi, dtheta, tout);
+% F = runVis(rh, ro, phi, theta, dphi, dtheta, tout);
 
 %% Save video
 % writerObj = VideoWriter('DoD_vid.avi');
