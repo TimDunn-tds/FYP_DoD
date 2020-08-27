@@ -18,6 +18,7 @@
 #define     TIMER_TICKS     10
 #define     MVPA            0.14f
 #define     UMAX            12.0f
+#define     UMAX_SOFT       6.0f
 // #define     PERIOD          10000
 #define     PERIOD          5556
 
@@ -281,7 +282,16 @@ float dc_motor_get_count(void)
 
 void dc_motor_set(float U)
 {
-    U = U <= -UMAX ? -UMAX : U >= UMAX ? UMAX : U;
+    // U = U <= -UMAX ? -UMAX : U >= UMAX ? UMAX : U;
+    if (U>UMAX_SOFT)
+    {
+        U = UMAX_SOFT;
+    }
+    else if (U<-UMAX_SOFT)
+    {
+        U = -UMAX_SOFT;
+    }
+
     _voltage = U;
 
     if (U > 0.0f)

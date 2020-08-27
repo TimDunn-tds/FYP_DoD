@@ -17,7 +17,9 @@
 
 #define COUNT_PER_REV 4741.44f
 #define PI 3.141592653589793f
+// #define TIMER_TICKS 25
 #define TIMER_TICKS 10
+
 #define MVPA 0.14f
 
 
@@ -193,7 +195,7 @@ void log_data_task(void *arg)
         return;
     }
 
-    _time += 0.01f;
+    _time += TIMER_TICKS/1000.0f;
 
     if (--_n_samples == 0)
     {
