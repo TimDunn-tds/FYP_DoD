@@ -1,11 +1,11 @@
 close all; clear;
 %% Prepare calibration images
-numImages = 15;
+numImages = 47;
 files = cell(1, numImages);
 
 for i = 1:numImages
 %     files{i} = fullfile('checkerboardTest', sprintf('img_%d.jpg', i));
-    files{i} = fullfile('apparatusImages', sprintf('img_%d.jpg', i));
+    files{i} = fullfile('experimentCalibration', sprintf('img_%d.jpg', i));
 
 end
 
@@ -34,7 +34,7 @@ end
 % Generate world coordinates of the board corners in the pattern-centric
 % coordinate system, with the upper-left corner at 0,0
 % squareSize = 24; % [mm]
-squareSize = 11; % [mm]
+squareSize = 5.6; % [mm]
 worldPoints = generateCheckerboardPoints(boardSize, squareSize);
 
 % Calibrate the camera
@@ -49,19 +49,19 @@ title('Reprojection Errors');
 
 
 %% Pick the image to be used for measuring
-imOrig = imread(fullfile('apparatusImages','img_15.jpg'));
+imOrig = imread(fullfile('experimentCalibration','img_21.jpg'));
 figure(4);
 imshow(imOrig, 'InitialMagnification', magnification);
 title('Input Image');
 
 %% Undistort the circle image
-[im, ~] = undistortImage(imOrig, cameraParams, 'OutputView', 'full');
+[im, ~] = undistortImage(imOrig, cameraParams, 'OutputView', 'same');
 figure(5); 
 imshow(im, 'InitialMagnification', magnification);
 title('Undistorted Image');
 
 %% Undistort the circle image
-[IBase, newOrigin] = undistortImage(I, cameraParams, 'OutputView', 'full');
+[IBase, newOrigin] = undistortImage(I, cameraParams, 'OutputView', 'same');
 % figure(5); 
 % imshow(im, 'InitialMagnification', magnification);
 % title('Undistorted Image');
@@ -83,7 +83,7 @@ t = graythresh(sat);
 imCoin = (sat > t);
 
 figure(7); 
-imshow(imCoin(1:460,138:555), 'InitialMagnification', magnification);
+imshow(imCoin, 'InitialMagnification', magnification);
 title('Segmented Circles');
 
 % % Attempt levels of thresholding
@@ -113,14 +113,14 @@ title('Segmented Circles');
 
 %% Detect circles
 % Find connected components.
-blobAnalysis = vision.BlobAnalysis('AreaOutputPort', true,...
+    blobAnalysis = vision.BlobAnalysis('AreaOutputPort', true,...
     'CentroidOutputPort', true,...
     'BoundingBoxOutputPort', true,...
-    'MinimumBlobArea', 1000, ...
-    'MaximumBlobArea', 10000,...
-    'ExcludeBorderBlobs', false,...
+    'MaximumBlobArea', 4500,...
+    'MinimumBlobArea', 2500,...
+    'ExcludeBorderBlobs', true,...
     'MaximumCount', 2);
-[areas, centroid, boxes] = blobAnalysis(imCoin(1:460,138:555));
+[areas, centroid, boxes] = blobAnalysis(imCoin);
 
 % Sort connected components in descending order by area
 [~, idx] = sort(areas, 'Descend');
@@ -138,7 +138,7 @@ imDetectedCoins = imresize(im, scale);
 % Insert labels for the coins.
 % imDetectedCoins = insertObjectAnnotation(imDetectedCoins, 'rectangle', ...
 %     scale * boxes, 'blue circle');
-imDetectedCoins = insertObjectAnnotation(imDetectedCoins(1:460,138:555), 'circle', ...
+imDetectedCoins = insertObjectAnnotation(imDetectedCoins, 'circle', ...
     scale * circles, 'blue circle');
 figure; imshow(imDetectedCoins);
 title('Detected Circles');

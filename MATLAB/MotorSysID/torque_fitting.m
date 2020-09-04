@@ -57,14 +57,17 @@ fity = [Ia_neg(tauVec_n), Ia_pos(tauVec_p)];
 heavi_p =@(x) 1./(1 + exp(-2.*25.*x));
 heavi_m =@(x) 1./(1 + exp(-2.*25.*-x));
 tauM=@(Ia) (0.06085.*Ia.^2 + 0.6843.*Ia).*heavi_m(Ia) + (0.5702.*exp(0.3412.*Ia) - 0.5703.*exp(-1.82.*Ia)).*heavi_p(Ia);
-Ia = linspace(-3,3,20000);
+Ia_vec = linspace(-3,3,20000);
 tau = tauM(Ia);
 figure;
 plot(Ia,tau);
 
 %%
 Ia =@(Tm) 0.7427.*Tm.^3 - 0.2106.*Tm.^2 + 1.121.*Tm;
+Ia_vec = linspace(-1,1,20000);
 
 
-
+tauM =@(Ia) 0.06761.*Ia.^4 + 0.2721.*Ia.^3 - 0.02975.*Ia.^2 + 1.417.*Ia;
+figure;
+plot(Ia_vec, Ia(Ia_vec));
 

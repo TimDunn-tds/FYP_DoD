@@ -12,3 +12,5 @@ params.Jo   = 0.5*params.mo*(params.ro^2);  % kg*m2
 params.Jh   = 3.911e-3;                     % kg*m2
 
 params.g    = 9.8;  % m/s^2
+
+params.Jm   = 5.61245997629224;

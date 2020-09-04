@@ -4,7 +4,7 @@ clear;
 
 %% Get data
 % Pick sysID input
-% type = "chirp_sig";
+type = "chirp_sig";
 % type = "sinWave_load_05hz";
 % type = "sinWave";
 % type = "sinWave1hz";
@@ -14,7 +14,7 @@ clear;
 % type = "deadZone";
 % type = "rampDown";
 % type = "rampUp";
-type = "rampUpDown";
+% type = "rampUpDown";
 % type = "stepDown";
 % type = "stepUp";
 % type = "constant4V";
@@ -49,27 +49,15 @@ input = [V, vel, current];
 
 %% Run system identification
 % Define initial parameter guess
-%             Kt,  B,   a1,   b1,    a2,    w_c
-% param_vec = [0.1; 0.01; 0.01; 0.01; 0.001; 0.001];
-
 Jh = 0.0039;
 % 2.2256 0.0047 6.3369e-4 1.9722e3 464.6250 4.5630 3.6914 1.0414 0.2510
 % 1e-3 991 0.5 212.1250
 % param_vec = [2; 0.1; 0.00001; 1000; 1000; 10000; 1.5; 1; 0.1; 0.0001; 1000; 1; 10000];
-param_vec = [4.2005e3; 0.0872; 6.0509e-4; 1.0011e3; 1.0023e3; 7.9317e4; 3.6622; 1.8451; 0.3583; 2.8311e-4; 2.2251e5; 1.5441e4; 3.2077e4];
+% param_vec = [4.2005e3; 0.0872; 6.0509e-4; 1.0011e3; 1.0023e3; 7.9317e4; 3.6622; 1.8451; 0.3583; 2.8311e-4; 2.2251e5; 1.5441e4; 3.2077e4];
 
 % param_vec = [2; 0.1; 1e-3; 3e4; 2e5; 2e4; 1.5; 1; 0.1; 1e-3; 2e4; 1e3; 1e4];
-% param_vec = [2; 0.1; 1e-4; 3e3; 1e3; 2.1e5; 1.5; 1; 0.1; 1e-3; 2e4; 3.5e4; 2e4];
-
-
-% %%%%%%%%%%%%%%%
-% 4.2005e3  0.0872  6.0509e-4   1.0011e3    1.0023e3    7.9317e4    3.6622
-% 1.8451    0.3583  2.8311e-4   2.2251e5    1.5441e4    3.2077e4 
-% %%%%%%%%%%%%%%
-
-% La = 0.0135 or 0.021615
-% Ra = 2.5625;
-% Kw = 0.0086;
+% param_vec = [2; 0.1; 1e-3; 3e3; 1e3; 2.1e5; 1.5; 1; 0.1; 1e-3; 2e4; 3.5e4; 2e4];
+param_vec = [6.5035; 6.3853e-4; 0.0011; 3.0021e3; 986.7121; 2.1e5; 5.6125; 0.0250; 0.1042; 0.0012; 1.9998e4; 3.5e4; 1.9998e4];
 
 % Compute cost
 y_true = [V, current, vel];
@@ -91,15 +79,29 @@ V_theta = @(theta) V_y(runSim(theta,x0,t_sim,input));
 % final_cost = V_theta(param_opt)
 
 %% Run optimisation with patternsearch
-A = -eye(length(param_vec));
-b = zeros(length(param_vec),1);
-lb = 1e-8.*ones(length(param_vec),1);
+% A = -eye(length(param_vec));
+% b = zeros(length(param_vec),1);
+% lb = 1e-8.*ones(length(param_vec),1);
+% % ub = 2.1e5.*ones(length(param_vec),1);
+% options = optimoptions('patternsearch','Display','iter','StepTolerance',1e-10,...
+%     'MaxFunctionEvaluations', 5000, ...
+%     'MaxMeshSize', 1024);
+% param_opt = patternsearch(V_theta, param_vec, A, b, [], [], lb, [], [], options);
+% final_cost = V_theta(param_opt)
+
+%% Run optimisation with global search
+% gs = GlobalSearch;
+% A = -eye(length(param_vec));
+% b = zeros(length(param_vec),1);
+% lb = 1e-8.*ones(length(param_vec),1);
 % ub = 2.1e5.*ones(length(param_vec),1);
-options = optimoptions('patternsearch','Display','iter','StepTolerance',1e-10, 'MaxFunctionEvaluations', 5000);
-param_opt = patternsearch(V_theta, param_vec, A, b, [], [], lb, [], [], options);
-final_cost = V_theta(param_opt)
+% options = optimoptions('fmincon','Display','iter');
+% problem = createOptimProblem('fmincon','x0',param_vec,'objective',V_theta,'lb',lb,'ub',ub,'options',options);
+% param_opt = run(gs,problem);
+% final_cost = V_theta(param_opt)
 
 %% Plot results 
+load('sinWave_params.mat')
 y_cts = runSim(param_opt,x0,t_sim,input);
 % y_cts = runSim(param_vec,x0,t_sim,input);
 
@@ -132,11 +134,11 @@ legend;
 linkaxes([ax1,ax2,ax3],'x');
 
 %% Prompt for save of file
-answer = questdlg("Save parameters?","Save prompt","Yes","No","No");
-if answer == "Yes"
-    saveFileName = sprintf("%s_params.mat", type);
-    save(saveFileName, 'param_opt');
-end
+% answer = questdlg("Save parameters?","Save prompt","Yes","No","No");
+% if answer == "Yes"
+%     saveFileName = sprintf("%s_params.mat", type);
+%     save(saveFileName, 'param_opt');
+% end
 
 %% Additional functions
 function y = runSim(param_vec, x0, t_sim, input)
@@ -156,12 +158,13 @@ function y = runSim(param_vec, x0, t_sim, input)
     B4      = param_vec(11);
     B5      = param_vec(12);
     B6      = param_vec(13);
-    
+%     disp(param_vec)
     % Fixed parameters
-    Ra = 2.5625;
-    Kw = 0.0086;
+    Ra = 2.5019;
+    Kw = 0.0089;
 %     La = 0.0135;
-    La = 0.0233;
+%     La = 0.0233;
+    La = 0.0046;
     N  = 98.78;
     J  = Jh/(N^2); % Inertia at the motor (low torque/High speed) side of gearbox
 
@@ -169,6 +172,7 @@ function y = runSim(param_vec, x0, t_sim, input)
     V = input(:,1);
     % Interpolation function
     Va  =@(t) interp1(t_sim,V,t);
+%     Va  =@(t) 3.947.*sin(2*pi*1*t);
     
     % Useful functions
     heavi_p =@(x) 1./(1 + exp(-2.*50.*x));

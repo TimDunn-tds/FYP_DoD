@@ -269,6 +269,7 @@ float dc_motor_get_voltage(void)
 
 float dc_motor_get_position(void)
 {
+    _count = (float)encoder_get_count();
     _position = ((float)_count/COUNT_PER_REV)*2.0f*PI;
     return _position;
 }

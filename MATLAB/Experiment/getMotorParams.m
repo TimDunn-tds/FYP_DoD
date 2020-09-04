@@ -1,6 +1,6 @@
 function params = getMotorParams()
-params.Ra   = 2.5625;   % Ohms
-params.Kw   = 0.0086;   % Something
+params.Ra   = 2.5019;   % Ohms
+params.Kw   = 0.0089;   % Something
 params.N    = 98.78;    % Unitless
 
 params.p1   = 0.7427;   % Unitless

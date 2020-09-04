@@ -1,7 +1,7 @@
 %% Clear parameters
-clc; clear; 
+% clc; clear; 
 
-T = 0.01;
+T = 0.04;
 tsim = 10;
 
 %% Parameters
@@ -23,12 +23,13 @@ Jo = 0.5*mo*(ro^2);
 % Jh = 0.5*mh*(rh^2);
 %    Jdisk      + Jcoupling + Jshaft
 Jh = 3.908e-3   + 1.103e-6  + 2.38e-6;
-% Jh = 3.661;
+
+Jh = 5.61245997629224;
 
 g = 9.82;                   % m/s^2
 
 theta0 = 0*(pi/180);        % rad
-phi0 = -0*(pi/180);          % rad
+phi0 = 7.9*(pi/180);          % rad
 
 % SysID parameters
 Ra  = 2.5625;
@@ -36,18 +37,18 @@ Kw  = 0.0086;
 N   = 98.78;
 
 %% Friction Parameters
-a1 = 4.2005e3;
-a2 = 0.0872;
-a3 = 6.0509e-4;
-B1 = 1.0011e3;
-B2 = 1.0023e3;
-B3 = 7.9317e4;
-a4 = 1.8451;
-a5 = 0.3583;
-a6 = 2.8311e-4;
-B4 = 2.2251e5;
-B5 = 1.5441e4;
-B6 = 3.2077e4;
+a1 = 6.5035;
+a2 = 6.3853e-4;
+a3 = 0.0011;
+B1 = 3.0021e3;
+B2 = 986.7121;
+B3 = 210000;
+a4 = 0.0250;
+a5 = 0.1042;
+a6 = 0.0012;
+B4 = 19998;
+B5 = 35000;
+B6 = 19998;
 
 %% Motor parameters
 tau_max = 1;              % Nm
@@ -121,18 +122,26 @@ Nu          = NN(end);
 % initial uncertainty and intial state
 mup_init = [0; 0; theta0; phi0];
 % Pp_init = diag([1, 1, 1, 1]);
-Pp_init = 1e-1*eye(4);
+Pp_init = 1e2*eye(4);
 % mup_init = [theta0; phi0];
 % Pp_init = diag([0.01, 0.01]);
 
+% State variables:
+% x(1) = hand angular velocity [rad/s]                  dtheta
+% x(2) = object angular velocity about hand CoM [rad/s] dphi
+% x(4) = object CoM angle relative to hand CoM [rad]    phi
 
 [Aod, Bod] = c2d(A, B, T);
 
-Qo = 1*eye(size(A,1));
+Qo = diag([1e-2, 1e-2, 1e-5, 1e-5]);
 % Ro = 2.5e-07*eye(size(Cm,1));
-Ro = 2.5e-07*eye(size(Cm,1));
-
-% [~,Lo] = kalmd(ss(Aod, [Bod eye(length(B))], Cm, [Dm zeros(size(Dm,1),length(B))]), Qo, Ro, T);
+% Ro = 2.5e-07*eye(size(Cm,1));
+Ro = diag([1e-6, 1e-6, 9.0851e-04]);
+% Ro = 1e0*eye(3);
+Lo = dlqr(Aod.',Cm.',Qo,Ro).';
+sys = ss(Aod, [Bod eye(length(B))], Cm, [Dm zeros(size(Dm,1),length(B))], -1);
+% [~,Lo] = kalman(sys, Qo, Ro);
+% [~,Lo] = kalmd(ss(Aod, [Bod eye(length(B))], Cm, [Dm zeros(size(Dm,1),length(B))]), Qo, Ro, T)
 %    2.1695e-07
 
 
@@ -245,6 +254,7 @@ figure(1);  clf;
 ax1 = subplot(2,2,1);
 plot(tout,phi.signals.values.*180/pi,'DisplayName','phi','LineWidth',2); hold on;
 plot(tout,mup.signals.values(:,4).*180/pi,'DisplayName','kf phi','LineWidth',2);
+plot(tout,mup_L.signals.values(:,4).*180/pi,'DisplayName','L phi','LineWidth',2);
 % plot(tout, theta.signals.values.*180/pi);
 legend;
 grid on;
@@ -255,6 +265,7 @@ title('Object Angle');
 ax2 = subplot(2,2,2);
 plot(tout,dphi.signals.values.*180/pi,'DisplayName','dphi','LineWidth',2); hold on;
 plot(tout, mup.signals.values(:,2).*180/pi,'DisplayName','kf dphi','LineWidth',2);
+plot(tout, mup_L.signals.values(:,2).*180/pi,'DisplayName','L dphi','LineWidth',2);
 % yyaxis right;
 % plot(tout,phi.signals.values.*180/pi);
 legend;
@@ -266,6 +277,7 @@ title('Object Angular Velocity');
 ax3 = subplot(2,2,3); hold on;
 plot(tout,dtheta.signals.values,'DisplayName','dtheta','LineWidth',2);
 plot(tout,mup.signals.values(:,1),'DisplayName','kf dtheta','LineWidth',2);
+plot(tout,mup_L.signals.values(:,1),'DisplayName','L dtheta','LineWidth',2);
 plot(tout,ref.signals.values,'r','DisplayName','ref','LineWidth',2);
 ylabel('Velocity [rad/s]');
 xlabel('Time [s]');
@@ -293,7 +305,7 @@ linkaxes([ax1 ax2 ax3 ax4],'x');
 % ylabel('Voltage [V]')
 % xlabel('Time [s]')
 % title('Demanded voltage');
-
+   
 
 % figure(3); clf; hold on;
 % alph = (rh/ro).*(phi.signals.values - theta.signals.values);

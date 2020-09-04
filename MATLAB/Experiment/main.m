@@ -1,7 +1,9 @@
 %% Clean up
-clc; clear;
+clc; 
 
 tsim    = 100;
+loopRate = 20; % Hz
+T = 1/loopRate; % seconds
 
 %% Load parameters
 plantParams     = getPlantParams();
@@ -11,9 +13,9 @@ cameraParams    = getCameraParams();
 
 
 %% Load Plant Model, LQG and Kalman Filter
-plantModel  = getPlantModel();
-LQG         = getLQG();
-KF          = getKalmanFilter();
+plantModel  = getPlantModel(T);
+LQG         = getLQG(T);
+KF          = getKalmanFilter(T);
 
 % Initialise Kalman Filter
 x0          = getInitialPosition();
@@ -24,8 +26,12 @@ Pp(:,:,1)   = KF.Pp_init;
 % muf         = zeros(size(plantModel.A,1), tsim);
 % Pf          = zeros(size(Pp));
 
+% Get observer gain Lo
+obs = getObserver(T);
+
 
 %% Make serial connection
+% flush(serialport("COM3",921600));
 stm32 = openSerial();
 
 
@@ -33,76 +39,110 @@ stm32 = openSerial();
 vid = webcam(1);
 vid.Resolution = '640x480';
 preview(vid);
-pause(3);
+pause(5);
 
 
 %% Control Loop
 % Make space
-data    = zeros(tsim,6);
+data    = zeros(tsim,5);
 theta   = zeros(tsim,1);
 phi     = zeros(tsim,1);
 dtheta  = zeros(tsim,1);
-tauHat  = zeros(tsim,1);
+dphi    = zeros(tsim,1);
+tauHat  = zeros(tsim,1); 
 Vd      = zeros(tsim,1);
-
+Va      = zeros(tsim,1);
+Ia      = zeros(tsim,1);
+phi_m   = zeros(tsim,1);
+theta_m = zeros(tsim,1);
+dtheta_m = zeros(tsim,1);
 frames  = uint8(zeros(480,640,3,tsim));
-tic
+
 % Set reference
 ref = 0;
 
 % Start measurement logging
-fprintf(stm32, 'log dc %f\n', tsim);
-% Get first row and discard (title row)
-rxStr = fgets(stm32);
+fprintf(stm32, 'log reset 1\n');
 
 % Start control loop
+r = robotics.Rate(loopRate);
+fprintf(stm32, 'ctrl start\n');
+rxStr = fgets(stm32);
+
+% if ~strcmp(fgets(stm32), 'controller started')
+%     fprintf("Issue starting controller.\n");
+%     pause
+% end
+
 for k = 1:tsim
     % Get measurements from STM32
-    data(k,:)   = getMeasurements(stm32);
-    theta_m     = data(k,3);
-    dtheta_m    = data(k,4);
-
+    try
+        data(k,:)   = getMeasurements(stm32);
+        theta_m(k)  = data(k,2);
+        dtheta_m(k) = data(k,3);
+        Va(k)       = data(k,4);
+        Ia(k)       = data(k,4);
+    catch
+        data(k,:)   = data(k-1,:);
+        theta_m(k)  = data(k,2);
+        dtheta_m(k) = data(k,3);
+        Va(k)       = data(k,4);
+        Ia(k)       = data(k,4);
+        fprintf("Measurement timed out %f\n", k);
+    end
     % Get measurements from CV
-    [phi_m, frames(:,:,:,k)] = getCV(vid, cameraParams, phi(k));
-
+    [phi_m(k), frames(:,:,:,k)] = getCV(vid, cameraParams, phi(k));
     % Run kalman filter
-    y = [theta_m; phi_m; dtheta_m];
+    y = [theta_m(k); phi_m(k); dtheta_m(k)];
+%     u = (tauHat(k)*plantParams.Jh)/plantParams.Jm;
     u = tauHat(k);
+
     [mup(:,k+1),Pp(:,:,k+1)] = runKF(mup(:,k), u, y, Pp(:,:,k), KF, plantModel);
-
-%     theta(k)    = mup(3,k);
-%     phi(k)      = mup(4,k);
-%     dtheta(k)   = mup(1,k);
-
-    theta(k)    = theta_m;
-    phi(k)      = phi_m;
-    dtheta(k)   = dtheta_m;
-
+%     mup(:,k+1) = runObserver(mup(:,k), u, y, plantModel, obs);
+    
+    % Store estimated states
+    theta(k)    = mup(3,k+1);
+    phi(k)      = mup(4,k+1);
+    dtheta(k)   = mup(1,k+1);
+    dphi(k)     = mup(2,k+1);
 
     % Run controller
-%     tauHat(k+1) = runController(mup(:,k+1), ref, LQG);
-    in = [dtheta_m; mup(2,k+1); theta_m; phi_m];
-    tauHat(k+1) = runController(in, ref, LQG);
+    tauHat(k+1) = runController(mup(:,k+1), ref, LQG);
 
+    % Command torque
+%     fprintf(stm32, 'ctrl set %f\n', tauHat(k+1));
+    
     % Control allocation
-    Vd(k+1) = controlAllocation(tauHat(k+1), dtheta(k), frictParams, motorParams);
+%     Vd(k+1) = controlAllocation(tauHat(k+1), dtheta(k), frictParams, motorParams);
 
     % Command voltage 
-    fprintf(stm32, 'motor %f supOut\n',Vd(k+1));
-%     pause(0.05);
+%     fprintf(stm32, 'motor %f supOut\n',Vd(k+1));
+
+    % Stop if it get stupid
+    if abs(phi(k))>pi/6
+        fprintf(stm32, 'motor 0\n');
+        fprintf(stm32, 'ctrl stop\n');
+        break
+    end
+%     fprintf('dtheta: %2.2f, dphi: %2.2f, theta: %2.2f, phi: %2.2f\n', mup(1,k), mup(2,k), mup(3,k), mup(4,k));
+    waitfor(r);
 end
-elapsed_time = toc;   
 
 %% Close serial connection
-fprintf(stm32, 'motor %f supOut\n',0);
-
+fprintf(stm32, 'motor 0\n');
+fprintf(stm32, 'ctrl stop\n');
+pause(2);
 fclose(stm32); delete(stm32); clear stm32;   % Close serial connection and clean up
 fprintf('Serial connection terminated\n');
+
+%% Close video
+delete(vid); clear vid;   % Close video connection
+fprintf('Video connection terminated\n');
 
 
 %% Plotting
 figure(2); clf; grid on; hold on;
-tplot = 1:1:tsim;
+tplot = 0:1:tsim-1;
 ax1 = subplot(2,2,1);
 plot(tplot,phi.*180/pi,'DisplayName','phi','LineWidth',2); hold on;
 % legend;
@@ -128,19 +168,22 @@ grid on;
 title('Hand Angular Velocity');
 
 ax4 = subplot(2,2,4); hold on;
-plot(tplot,Vd(1:tsim),'LineWidth',2,'DisplayName','Demanded Voltage');
+plot(tplot,Va,'LineWidth',2,'DisplayName','Va');
 ylabel('Voltage [V]');
+plot(tplot,tauHat(1:length(tplot)),'LineWidth',2,'DisplayName','tauHat');
 % legend('location','best');
 grid on;
+% yyaxis right
+% plot(tplot,phi.*180/pi,'DisplayName','phi','LineWidth',2); hold on;
 title('Demanded Voltage');
 xlabel('Time [s]');
-
+legend('location','best');
 linkaxes([ax1 ax2 ax3 ax4],'x');
 
 
 %% Save video
 writerObj = VideoWriter('lastExperiment.mp4');
-writerObj.FrameRate = tsim/elapsed_time;
+writerObj.FrameRate = loopRate;
 open(writerObj);
 
 for i=1:tsim

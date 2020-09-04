@@ -112,9 +112,38 @@ void log_data_cmd(int argc, char *argv[])
         _last_position = 0.0f;
         printf("Time [sec], Encoder [-], Position [rad], Speed [rad/s], Voltage [V], Current [A]\n");
     }
+    else if (!strcmp(argv[1],"ctrl"))
+    {
+        // Get encoder count
+        _count = dc_motor_get_count();
+
+        // position = (count/steps_per_rev) * 2pi
+        _position = dc_motor_get_position();
+
+        // remember to conver timer ticks to seconds
+        _speed = (_position-_last_position)/((float)TIMER_TICKS/1000.0f);
+
+        _voltage = dc_motor_get_voltage();
+
+        _current = dc_motor_get_current();
+
+        printf("%12i,%15.4f,%14.6f,%12.4f,%12.2f\n", _count, _position, _speed, _voltage, _current);
+        _last_position = _position;
+        return;
+    }
+    else if (!strcmp(argv[1],"reset"))
+    {
+        encoder_set_count(0);
+        _last_position = 0.0f;
+        _position = 0.0f;
+        _speed = 0.0f;
+        _voltage = 0.0f;
+        _current = 0.0f;
+        return;
+    }
     else
     {
-        printf("%s: unknown device \"%s\", syntax is: %s [pot|enc] <samples>\n", argv[0], argv[1], argv[0]);
+        printf("%s: unknown device \"%s\", syntax is: %s [pot|enc|IMU|dc|ctrl] <samples>\n", argv[0], argv[1], argv[0]);
         return;
     }
 
@@ -135,6 +164,7 @@ void log_data_cmd(int argc, char *argv[])
             printf("Timer could not be started.\n");
         }
     }
+
  
 }
 

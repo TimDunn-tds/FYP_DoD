@@ -1,4 +1,4 @@
-function plantModel = getPlantModel()
+function plantModel = getPlantModel(T)
 plantParams = getPlantParams();
 % Unpack params
 Jh = plantParams.Jh;
@@ -47,6 +47,6 @@ plantModel.Bc  = plantModel.B(plantModel.idx,:);
 plantModel.Cc  = plantModel.Cr(:,plantModel.idx);
 plantModel.Dc  = plantModel.Dr;
 
-plantModel.T = 0.01;
+plantModel.T = T;
 
 

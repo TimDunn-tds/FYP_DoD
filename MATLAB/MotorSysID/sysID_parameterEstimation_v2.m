@@ -4,9 +4,9 @@ clear;
 
 %% Get data
 % Pick sysID input
-% type = "chirp_sig";
-% type = "sinWave";
-type = "sinWave1hz";
+% type = "chirp_sig"; % 0.0046
+type = "sinWave";
+% type = "sinWave1hz";
 % type = "sinWave3hz";
 % type = "deadZone";
 % type = "rampDown";
@@ -42,7 +42,7 @@ input = [V, vel, current];
 % Define initial parameter guess
 % Ra, Kw, La, Kt, B, 
 % param_vec = [2.5625; 0.0086; 0.1];
-param_vec = [0.1];
+param_vec = [0.0046];
 
 % La = 0.0135 or 0.021615 || 0.0281
 % Ra = 2.5625;
@@ -119,11 +119,12 @@ function y = runSim(param_vec, x0, t_sim, input)
 
 %     Ra = 2.5625;
 %     Kw = 0.0086;
-    Ra = 2.2886;
-    Kw = 0.0085;
+
     La = param_vec(1);
     
     % Fixed parameters
+    Ra = 2.5019;
+    Kw = 0.0089;
     N = 98.78;
     Jh = 0.0039;
     J = Jh/(N^2); % Inertia at the motor (low torque/High speed) side of gearbox

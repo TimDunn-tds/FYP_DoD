@@ -120,6 +120,10 @@ heavi_plus = 1./(1 + exp(-2.*25.*Ia));
 heavi_mins = 1./(1+ exp(-2.*10.*-Ia));
 Tf = a1.*(tanh(B1.*Ia) - tanh(B2.*Ia)) + a2.*tanh(B3.*Ia) + a3.*Ia;
 
+tauF    =@(w_m) (a1.*(tanh(B1.*w_m) - tanh(B2.*w_m)) + a2.*tanh(B3.*w_m) + a3.*w_m).*heavi_p(w_m)...
+                    + (a4.*(tanh(B4.*w_m) - tanh(B5.*w_m)) + a5.*tanh(B6.*w_m) + a6.*w_m).*heavi_m(w_m);
+
+
 Fs = exp(-((Ia./Ia_cut).^2));
 
 figure(9); clf; grid on; hold on;
@@ -128,5 +132,29 @@ plot(Ia,heavi_plus);
 plot(Ia,heavi_mins);
 
 
+%%
+frictParams = getFrictionParams();
+a1 = frictParams.a1;
+a2 = frictParams.a2;
+a3 = frictParams.a3;
+B1 = frictParams.B2;
+B2 = frictParams.B2;
+B3 = frictParams.B3;
+a4 = frictParams.a4;
+a5 = frictParams.a5;
+a6 = frictParams.a6;
+B4 = frictParams.B4;
+B5 = frictParams.B5;
+B6 = frictParams.B6;
 
+w_m = linspace(-0.1, 0.1, 20000);
 
+heavi_p =@(x) 1./(1 + exp(-2.*10000.*x));
+heavi_m =@(x) 1./(1 + exp(-2.*100.*-x));
+tauF    =@(w_m) (a1.*(tanh(B1.*w_m) - tanh(B2.*w_m)) + a2.*tanh(B3.*w_m) + a3.*w_m).*sign(w_m)...
+                    + (a4.*(tanh(B4.*w_m) - tanh(B5.*w_m)) + a5.*tanh(B6.*w_m) + a6.*w_m).*-sign(w_m);
+figure(10)
+Ff = tauF(w_m);
+plot(w_m,heavi_p(w_m))
+
+tauF(0.00001)

@@ -11,7 +11,10 @@ try
     
     % Tell user its starting
     fprintf("Connection to STM32 successful.\n");
-
+    
+    % Turn motor off.
+    fprintf(stm32, 'motor %f supOut\n',0);
+    pause(2);
 catch
     fprintf('An error occured while attempting to connect.\n');
     fclose(stm32); delete(stm32); clear stm32   % Close serial connection and clean up

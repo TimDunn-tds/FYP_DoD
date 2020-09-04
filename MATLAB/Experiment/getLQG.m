@@ -1,12 +1,17 @@
-function LQG = getLQG()
+function LQG = getLQG(T)
 % Design LQG
+% State variables:
+% x(1) = hand angular velocity [rad/s]                  dtheta
+% x(2) = object angular velocity about hand CoM [rad/s] dphi
+% x(4) = object CoM angle relative to hand CoM [rad]    phi
 Qc = [
-    1000, 0, 0;
+    1, 0, 0;
     0, 1, 0;
     0, 0, 1]; % penalise state
-Rc = 1e9;      % penalise actuator
+% Rc = 1.1e2;      % penalise actuator
+Rc = 1e10;      % penalise actuator
 
-plantModel = getPlantModel();
+plantModel = getPlantModel(T);
 idx = plantModel.idx;
 Ac  = plantModel.Ac;
 Bc  = plantModel.Bc;

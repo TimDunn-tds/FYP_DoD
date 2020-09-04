@@ -33,7 +33,7 @@ blobAnalysis = vision.BlobAnalysis('AreaOutputPort', true,...
 'ExcludeBorderBlobs', true,...
 'MaximumCount', 2);
 
-[areas, centroid, boxes] = blobAnalysis(imCircles);
+[areas, centroids, boxes] = blobAnalysis(imCircles);
 
 % Sort connected components in descending order by area
 [~, idx] = sort(areas, 'Descend');
@@ -41,8 +41,8 @@ blobAnalysis = vision.BlobAnalysis('AreaOutputPort', true,...
 if size(boxes,1) == 2    
     % Get the two largest components.
     boxes = double(boxes(idx(1:2), :));
-    centroid = double(centroid(idx(1:2),:));
-    circles = [centroid, [mean(boxes(1,3:4))/2; mean(boxes(2,3:4))/2]];
+    centroids = double(centroids(idx(1:2),:));
+    circles = [centroids, [mean(boxes(1,3:4))/2; mean(boxes(2,3:4))/2]];
 
     % Reduce the size of the image for display.
     scale = magnification / 100;
@@ -53,18 +53,18 @@ if size(boxes,1) == 2
     scale * circles(1,:), 'hand');
     imDetectedCoins = insertObjectAnnotation(imDetectedCoins, 'circle', ...
     scale * circles(2,:), 'object');
-    imDetectedCoins = insertMarker(imDetectedCoins, centroid);
+    imDetectedCoins = insertMarker(imDetectedCoins, centroids);
 
     frame = imDetectedCoins;
 
     %% Measure the circles and the angle
     % Calculate world points from image points
-    centWP = pointsToWorld(cameraParams, R, T, centroid);
+%     centWP = pointsToWorld(cameraParams, R, T, centroids);
 
     % Calculate the angle
-    phi_mark = atan2(centWP(1,2) - centWP(1,1), centWP(2,1) - centWP(2,2)) + pi/2;
+    phi_mark = atan2(centroids(1,2) - centroids(2,2), centroids(2,1) - centroids(1,1)) + pi/2;
 
-    phi = asin(0.13*sin(pi-phi_mark)/0.18);
+    phi = -1*asin(0.13*sin(pi-phi_mark)/0.18);
 
 else
     phi = phi_prev;

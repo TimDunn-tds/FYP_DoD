@@ -6,7 +6,7 @@ vid = webcam(1);
 % vid.Resolution = '320x240';
 vid.Resolution = '640x480';
 preview(vid);
-tsim = 1000;
+tsim = 200;
 
 
 % Create rotation and Translation matrices
@@ -16,6 +16,8 @@ T = cameraParams.TranslationVectors(end,:);
 angle = zeros(tsim,1);
 frames = uint8(zeros(480,640,3,tsim));
 tic
+loopRate = 30;
+r = robotics.Rate(loopRate);
 for i = 1:tsim
     %% Capture the image
     imOrig = snapshot(vid);
@@ -52,7 +54,7 @@ for i = 1:tsim
     'CentroidOutputPort', true,...
     'BoundingBoxOutputPort', true,...
     'MaximumBlobArea', 4500,...
-    'MinimumBlobArea', 2500,...
+    'MinimumBlobArea', 2000,...
     'ExcludeBorderBlobs', true,...
     'MaximumCount', 2);
 %     [areas, centroid, boxes] = blobAnalysis(imCircles(1:460,138:555));
@@ -86,9 +88,8 @@ for i = 1:tsim
 %     imshow(imDetectedCoins);
 %     txt = ['Detected circles. Time = ', num2str(i)];
 %     title(txt);
-    drawnow limitrate;
+%     drawnow limitrate;
 %     pause(0.04);
-    frames(:,:,:,i) = imDetectedCoins;
     
     %% Measure the circles
     % Adjust upper left corners of bounding boxes for coordinate system shift 
@@ -127,16 +128,20 @@ for i = 1:tsim
     
 
     %% Measure angle between the coins
-    theta_marker = atan2(centWP(1,2) - centWP(1,1), centWP(2,1) - centWP(2,2)) + pi/2;
-    
-    theta_marker = asin(0.13*sin(pi-theta_marker)/0.18);
+%     theta_marker = atan2(centWP(1,2) - centWP(2,2), centWP(2,1) - centWP(2,2)) + pi/2;
+    theta_marker = atan2(centroids(1,2) - centroids(2,2), centroids(2,1) - centroids(1,1)) + pi/2;
+
+    theta_marker = -1*asin(0.13*sin(pi-theta_marker)/0.18);
     
     angle(i) = theta_marker;
     fprintf('Phi = %0.2f deg from positive y axis\n', rad2deg(theta_marker));
     
-    if (29 - abs(theta_marker ))<2
-        pause
-    end
+    text = ['Angle: ', num2str(angle(i)*180/pi)];
+    imDetectedCoins = insertText(imDetectedCoins, [1,240], text);
+    
+    frames(:,:,:,i) = imDetectedCoins;
+    waitfor(r);
+
     
 end
 elapsed_time = toc
@@ -146,7 +151,7 @@ elapsed_time = toc
 %% Save video
 
 writerObj = VideoWriter('CV_testing.mp4');
-writerObj.FrameRate = tsim/elapsed_time;
+writerObj.FrameRate = loopRate;
 open(writerObj);
 
 for i=1:tsim
