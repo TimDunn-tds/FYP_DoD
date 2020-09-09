@@ -10,9 +10,8 @@ params.mh   = pi*(params.rh^2)*params.thick*params.rho;  % kg
 
 params.Jo   = 0.5*params.mo*(params.ro^2);  % kg*m2
 % params.Jh   = 3.911e-3;                     % kg*m2
-params.Jh   = 0.0157;                     % kg*m2
-% params.Jh   = 0.0225;                     % kg*m2
+% params.Jh   = 0.1251;                     % kg*m2
+params.Jh   = 0.0225;                     % kg*m2
 
 params.g    = 9.8;  % m/s^2
 
-% params.Jm   = 0.0138;

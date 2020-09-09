@@ -1,4 +1,14 @@
 function LQG = getLQG(T)
+
+plantParams = getPlantParams();
+% Unpack params
+Jo = plantParams.Jo;
+rh = plantParams.rh;
+ro = plantParams.ro;
+g  = plantParams.g;
+mo = plantParams.mo;
+
+
 % Design LQG
 % State variables:
 % x(1) = hand angular velocity [rad/s]                  dtheta
@@ -7,17 +17,22 @@ function LQG = getLQG(T)
 Qc = [
     1, 0, 0;
     0, 1, 0;
-    0, 0, 0.1]; % penalise state
-Rc = 1e12;      % penalise actuator
+    0, 0, 1]; % penalise state
+Rc = 1e1;      % penalise actuator
 
-plantModel = getPlantModel(T);
-idx = plantModel.idx;
-Ac  = plantModel.Ac;
-Bc  = plantModel.Bc;
-T   = plantModel.T;
-Cc  = plantModel.Cc;
-Dc  = plantModel.Dc;
-Cr  = plantModel.Cr;
+% plantModel = getPlantModel(T);
+idx = [1 2 3];
+
+bot = mo*((rh+ro)^2) + Jo*((rh^2)/(ro^2));
+
+Ac = [0, 0, 0;
+     0, 0, (mo*g*(rh+ro))/bot;
+     0, 1, 0];
+
+Bc  = [1; (Jo*(rh^2/ro^2))/bot; 0];
+Cc  = [1, 0, 0];    % Regulate hand velocity
+Dc  = 0;            % No feedthrough
+Cr  = Cc;
 
 Kc = zeros(1,length(idx));
 Kc(:,idx)   = lqrd(Ac, Bc, Qc, Rc, T);	% Feedback gain matrix

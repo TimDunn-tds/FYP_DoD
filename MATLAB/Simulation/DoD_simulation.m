@@ -1,7 +1,7 @@
 %% Clear parameters
 % clc; clear; 
 
-T = 0.04;
+T = 0.01;
 tsim = 10;
 
 %% Parameters
@@ -64,9 +64,12 @@ p3 = 1.121;
 % x(3) = hand angle [rad]                               theta
 % x(4) = object CoM angle relative to hand CoM [rad]    phi
 
+% MM = [
+%     Jh + Jo*(rh^2/ro^2), -2*Jo*(rh^2/ro^2);
+%     -2*Jo*(rh^2/ro^2), Jo*(rh^2/ro^2) + mo*((rh + ro)^2)];
 MM = [
-    Jh + Jo*(rh^2/ro^2), 2*Jo*(rh^2/ro^2);
-    2*Jo*(rh^2/ro^2), Jo*(rh^2/ro^2) + mo*((rh + ro)^2)];
+    Jh + Jo*(rh^2/ro^2), -Jo*(rh^2/ro^2);
+    -Jo*(rh^2/ro^2), Jo*(rh^2/ro^2) + mo*((rh + ro)^2)];
 
 KK = [0, 0; 0, -mo*g*(rh + ro)];
 

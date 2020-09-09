@@ -1,7 +1,7 @@
-function [mup,Pp] = runKF(mup, u, y, Pp, KF, plantModel, t)
+function [mup,Pp] = runKF(mup, u, y, Pp, KF, t)
 % Extrat parameters
-Cm      = plantModel.Cm;
-Dm      = plantModel.Dm;
+Cm      = KF.Cm;
+Dm      = KF.Dm;
 Bod     = KF.Bod;
 Qo      = KF.Qo;
 Ro      = KF.Ro;

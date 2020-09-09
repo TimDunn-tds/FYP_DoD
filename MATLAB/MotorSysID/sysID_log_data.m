@@ -7,11 +7,11 @@ TIMEOUT = 0.5; % Time to wait for data before aborting
 % Pick sysID input
 % type = "chirp_sig";
 % type = "sinWave_load_05hz";
-type = "sinWave_005";
+% type = "sinWave_005";
 % type = "sinWave";
 % type = "sinWave1hz";
 % type = "sinWave2hz";
-% type = "sinWave3hz";
+type = "sinWave3hz";
 % type = "sinWave4hz";
 % type = "deadZone";
 % type = "rampDown";

@@ -1,4 +1,4 @@
-function tauHat = runController(mup, ref, LQG)
+function wHat = runController(mup, ref, LQG)
 % Extract states
 % theta    = mup(1);
 % phi      = mup(2);
@@ -9,13 +9,13 @@ Nu      = LQG.Nu;
 Nx      = LQG.Nx;
 Kc      = LQG.Kc;
 
-tauHat = (Nu + Kc*Nx)*ref + Kc*mup;
+wHat = (Nu + Kc*Nx)*ref + Kc*mup;
 
-maxT = 0.8;
-if tauHat>maxT
-    tauHat = maxT;
-elseif tauHat<-maxT
-    tauHat = -maxT;
-end
+% maxT = 0.8;
+% if wHat>maxT
+%     wHat = maxT;
+% elseif wHat<-maxT
+%     wHat = -maxT;
+% end
 
 

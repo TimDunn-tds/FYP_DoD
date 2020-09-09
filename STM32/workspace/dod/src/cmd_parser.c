@@ -63,7 +63,7 @@ static CMD_T cmd_table[] =
     // {controller_cmd,    "ctrl",         "[start|stop]",      "Get status or start/stop controller task"},
     {dc_motor_cmd,      "motor",        "[<value>] [supOut]",                            "Get or set motor voltage"},
     {cc_cmd,            "current",      "[<value>] [supOut]",                       "Get or set motor current"},
-    {ctrl_allc_cmd,     "ctrl",         "[<start>|<stop>], [<tauHat>]",         "Start or stop control allocation, or set demanded torque"},
+    {ctrl_allc_cmd,     "ctrl",         "[<start>|<stop>], [<wd>]",         "Start or stop control allocation, or set demanded torque"},
     // {MPC_cmd,           "MPC",          "[start|stop]",      "Start or stop MPC controller"},
     // {sysID_cmd,         "sysID",        "[cart|pend|stop] [<samples> [<amplitude> <frequency>]]", "Perform experiment/collect sysID data"},
     // {MPU6050_cmd,       "MPU",          "",                                       "Retrieve a single measurement from IMU"},

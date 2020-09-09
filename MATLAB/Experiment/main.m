@@ -19,9 +19,9 @@ KF          = getKalmanFilter(T);
 
 % Initialise Kalman Filter
 x0          = getInitialPosition();
-mup         = nan(size(plantModel.A,1),tsim + 1);
+mup         = nan(size(KF.Aod,1),tsim + 1);
 mup(:,1)    = KF.mup_init; 
-Pp          = nan([size(plantModel.A), tsim + 1]);
+Pp          = nan([size(KF.Aod), tsim + 1]);
 Pp(:,:,1)   = KF.Pp_init;
 % muf         = zeros(size(plantModel.A,1), tsim);
 % Pf          = zeros(size(Pp));
@@ -57,7 +57,7 @@ theta   = zeros(tsim,1);
 phi     = zeros(tsim,1);
 dtheta  = zeros(tsim,1);
 dphi    = zeros(tsim,1);
-tauHat  = zeros(tsim,1); 
+wHat  = zeros(tsim,1); 
 Vd      = zeros(tsim,1);
 Va      = zeros(tsim,1);
 Ia      = zeros(tsim,1);
@@ -100,10 +100,10 @@ for k = 2:tsim
     [phi_m(k), frames(:,:,:,k)] = getCV(vid, cameraParams, mup(4,k));
     % Run kalman filter
     y = [theta_m(k); phi_m(k); dtheta_m(k)];
-    u = tauHat(k);
+    u = wHat(k);
 
 %     [mup(:,k+1),Pp(:,:,k+1)] = runKF(mup(:,k), u, y, Pp(:,:,k), KF, plantModel);
-    [mup,Pp] = runKF(mup, u, y, Pp, KF, plantModel, k);
+    [mup,Pp] = runKF(mup, u, y, Pp, KF, k);
 
 %     mup = runObserver(mup, u, y, plantModel, obs, k);
     
@@ -113,26 +113,18 @@ for k = 2:tsim
 %     theta(k-1)    = mup(3,k);
 %     phi(k-1)      = mup(4,k);
     
-    % Run controller
-    dphi(k) = (phi_m(k) - phi_m(k-1))/T;
-    in = [dtheta_m(k); dphi(k); theta_m(k); phi_m(k)]; 
-%     tauHat(k+1) = runController(mup(:,k+1), ref, LQG);
-    tauHat(k+1) = runController(in, ref, LQG);
+    % Run controller (integrate output and apply)
+    wHat(k+1) = wHat(k) + T*runController(mup(KF.idx,k), ref, LQG);
+%     tauHat(k+1) = runController(in, ref, LQG);
 %     tauHat(k+1) = runController(mup(:,k), ref, LQG);
-    text = ['Angle: ', num2str(phi_m(k)*180/pi, 3), ', tau: ', num2str(tauHat(k+1),3)];
+    text = ['Angle: ', num2str(phi_m(k)*180/pi, 3), ', wHat: ', num2str(wHat(k+1), 3)];
     frames(:,:,:,k) = insertText(frames(:,:,:,k), [1,120], text);
 
-    % Command torque
+    % Command velocity
     waitfor(r);
-    fprintf(stm32, 'ctrl set %f\n', tauHat(k+1));
+    fprintf(stm32, 'ctrl set %f\n', wHat(k+1));
     
-    % Control allocation
-%     Vd(k+1) = controlAllocation(tauHat(k+1), dtheta(k), frictParams, motorParams);
-
-    % Command voltage 
-%     fprintf(stm32, 'motor %f supOut\n',Vd(k+1));
-
-    % Stop if it get stupid
+    % Stop it if it gets stupid
     if abs(phi(k))>pi/4
         fprintf(stm32, 'motor 0\n');
         fprintf(stm32, 'ctrl set 0\n');
@@ -192,12 +184,12 @@ title('Hand Angular Velocity');
 ax4 = subplot(2,2,4); hold on;
 % plot(tplot,Va,'LineWidth',2,'DisplayName','Va');
 % ylabel('Voltage [V]');
-plot(tplot,tauHat(1:length(tplot)),'LineWidth',2,'DisplayName','tauHat');
+plot(tplot,wHat(1:length(tplot)),'LineWidth',2,'DisplayName','wHat');
 % legend('location','best');
 grid on;
-ylim([-2, 2])
+% ylim([-2, 2])
 yyaxis right
-ylim([-10,10])
+% ylim([-10,10])
 p2 = plot(tplot,phi_m.*180/pi,'DisplayName','Phi','LineWidth',2); hold on;
 % title('Demanded Voltage');
 xlabel('Time [s]');

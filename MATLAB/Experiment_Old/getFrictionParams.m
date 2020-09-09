@@ -1,0 +1,26 @@
+function params = getFrictionParams()
+% params.a1 = 15.75;
+% params.a2 = 0.2250;
+% params.a3 = 1e-4;
+% params.B1 = 3.1045e3;
+% params.B2 = 2.2675e3;
+% params.B3 = 214460;
+% params.a4 = 17;
+% params.a5 = 0.1;
+% params.a6 = 1e-3;
+% params.B4 = 22108;
+% params.B5 = 37338;
+% params.B6 = 20280;
+
+params.a1 = 6.5035;
+params.a2 = 6.3853e-4;
+params.a3 = 0.0011;
+params.B1 = 3.0021e3;
+params.B2 = 986.7121;
+params.B3 = 210000;
+params.a4 = 0.0250;
+params.a5 = 0.1042;
+params.a6 = 0.0012;
+params.B4 = 19998;
+params.B5 = 35000;
+params.B6 = 19998;

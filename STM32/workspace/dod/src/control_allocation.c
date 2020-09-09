@@ -147,8 +147,9 @@ static float _last_position = 0.0f;
 static float _speed = 0.0f;
 static float _current = 0.0f;
 static float _time;
-static float _tauHat = 0.0f;
+static float _wd = 0.0f;
 static float _Vd = 0.0f;
+static float _err_sum = 0.0f;
 
 
 
@@ -191,68 +192,28 @@ void ctrl_allc_cmd(int argc, char *argv[])
 
 	if (argc == 3)
 	{
-		_tauHat = atof(argv[2]);
+		_wd = atof(argv[2]);
 	}
 }
 
 void ctrl_allc_task(void *argument)
 {
 	UNUSED(argument);
+	float err = 0.0f;
 
-	float Tm = 0.0f;
-	float w_cutoff = 0.1f;
-	float stiction = 0.4f;
-
-	// float w_cutoff = 0.01f;
-	// // float stiction = 0.665f;
-	// float stiction = 1.5f;
-
-    // position
     _position = dc_motor_get_position();
 
     // remember to conver timer ticks to seconds
     _speed = (_position - _last_position)/((float)TIMER_TICKS/1000.0f);
 
-    // Correct velocity for high speed side of gearbox
-    _speed = _N*_speed;
+    // Error in speed
+    err = _wd - _speed;
+    _err_sum = _err_sum + err;
 
-    // if (_speed == 0.0f && _tauHat>0.0f)
-    // {
-    // 	_speed = 1.0E-6;
-    // }
-    // else if (_speed == 0.0f && _tauHat<0.0f)
-    // {
-    // 	_speed = -1.0E-6;
-    // }
+    // PI the Voltage
+    _Vd = 3.5f*err + 0.7f*_err_sum;
 
-    // Calculate friction force
-    // float tauF = (_a1*(tanh(_B1*_speed) - tanh(_B2*_speed)) + _a2*tanh(_B3*_speed) + _a3*_speed)*_heavi_p(_speed) + (_a4*(tanh(_B4*_speed) - tanh(_B5*_speed)) + _a5*tanh(_B6*_speed) + _a6*_speed)*_heavi_m(_speed);
-    float tauF = -(_a1*(tanh(_B1*_speed) - tanh(_B2*_speed)) + _a2*tanh(_B3*_speed) + _a3*_speed + 0.1)*_sign1(_speed) - (_a4*(tanh(_B4*_speed) - tanh(_B5*_speed)) + _a5*tanh(_B6*_speed) + _a6*_speed)*_sign2(_speed);
-
-    // Add condition for 0 velocity.
-    if ((_speed/_N) < w_cutoff && _tauHat>0.0f)
-    {
-    	tauF = (-stiction * (1.0f - (fabsf(_speed)/_N)/w_cutoff)) + tauF;
-    	// tauF = -0.665f * (1.0f - (fabsf(_speed)/_N)/w_cutoff);
-
-    	// tauF = -1.6f;
-    }
-    else if((_speed/_N) > -w_cutoff && _tauHat<0.0f)
-    {
-    	tauF = (stiction * (1.0f - (fabsf(_speed)/_N)/w_cutoff)) + tauF;
-    	// tauF = 0.665f * (1.0f - (fabsf(_speed)/_N)/w_cutoff);
-    }
-
-
-	Tm = _tauHat + tauF;
-
-    // Calculate current
-    float Ia = _p1*pow(Tm, 3.0f) + _p2*pow(Tm, 2.0f) + _p3*Tm;
-
-    // Voltage
-   	_Vd = _Kw*_speed + _Ra*Ia;
-
-
+    // Limit voltage
     if (_Vd>UMAX_SOFT)
     {
         _Vd = UMAX_SOFT;
@@ -263,7 +224,7 @@ void ctrl_allc_task(void *argument)
     }
 
     dc_motor_set(_Vd);
-    // printf("Speed: %3.2f, V: %3.2f, Tm: %3.2f, Tf: %3.2f, tauHat: %3.2f\n", _speed/_N, _Vd, Tm, tauF, _tauHat);
+    // printf("Speed: %3.2f, V: %3.2f, wd: %3.2f, errsum: %3.2f\n", _speed, _Vd, _wd, _err_sum);
     // printf("%3.2f, %3.2f, %3.2f, %3.2f, %3.2f\n", _speed/_N, _Vd, Tm, tauF, _tauHat);
 
     // _time += TIMER_TICKS/1000.0f;

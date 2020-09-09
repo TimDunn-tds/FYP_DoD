@@ -96,16 +96,16 @@ current(k) = -1.*current(k);
 
 figure(10); clf; hold on;
 subplot(3,1,1);
-plot(time,V,'DisplayName','Voltage [V]','linewidth',2); hold on;
-plot(time,vel,'DisplayName','Velocity [rad/s]','linewidth',2);
+plot(time,input,'DisplayName','Demanded Velocity','linewidth',2); hold on;
+plot(time,vel,'DisplayName','Velocity [rad/s]','linewidth',2); hold on;
 grid on;
 legend('location','best');
 subplot(3,1,2);
-plot(time,pos,'DisplayName','Position [rad]','linewidth',2); hold on;
+plot(time,V,'DisplayName','Voltage [V]','linewidth',2); hold on;
 grid on;
 legend('location','best');
 subplot(3,1,3);
-plot(time,input,'DisplayName','tauHat','linewidth',2); hold on;
+plot(time,pos,'DisplayName','position','linewidth',2); hold on;
 grid on;
 legend('location', 'best');
 

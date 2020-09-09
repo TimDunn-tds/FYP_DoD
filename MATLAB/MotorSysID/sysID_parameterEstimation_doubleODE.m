@@ -172,8 +172,8 @@ function y = runSim(param_vec, x0, t_sim, input)
     % Unpack input
     V = input(:,1);
     % Interpolation function
-    Va  =@(t) interp1(t_sim,V,t);
-%     Va  =@(t) 3.947.*sin(2*pi*1*t);
+%     Va  =@(t) interp1(t_sim,V,t);
+    Va  =@(t) max(input(:,1)).*sin(2*pi*0.5*t);
     
     % Useful functions
     heavi_p =@(x) 1./(1 + exp(-2.*50.*x));
