@@ -122,7 +122,7 @@ static float _p3 =
 
 
 
-#define 	TIMER_TICKS 	10
+#define 	TIMER_TICKS 	5
 #define     UMAX_SOFT       5.0f
 
 
@@ -200,6 +200,12 @@ void ctrl_allc_task(void *argument)
 	UNUSED(argument);
 
 	float Tm = 0.0f;
+	float w_cutoff = 0.1f;
+	float stiction = 0.4f;
+
+	// float w_cutoff = 0.01f;
+	// // float stiction = 0.665f;
+	// float stiction = 1.5f;
 
     // position
     _position = dc_motor_get_position();
@@ -210,32 +216,35 @@ void ctrl_allc_task(void *argument)
     // Correct velocity for high speed side of gearbox
     _speed = _N*_speed;
 
+    // if (_speed == 0.0f && _tauHat>0.0f)
+    // {
+    // 	_speed = 1.0E-6;
+    // }
+    // else if (_speed == 0.0f && _tauHat<0.0f)
+    // {
+    // 	_speed = -1.0E-6;
+    // }
+
     // Calculate friction force
     // float tauF = (_a1*(tanh(_B1*_speed) - tanh(_B2*_speed)) + _a2*tanh(_B3*_speed) + _a3*_speed)*_heavi_p(_speed) + (_a4*(tanh(_B4*_speed) - tanh(_B5*_speed)) + _a5*tanh(_B6*_speed) + _a6*_speed)*_heavi_m(_speed);
-    float tauF = (_a1*(tanh(_B1*_speed) - tanh(_B2*_speed)) + _a2*tanh(_B3*_speed) + _a3*_speed + 0.1)*_sign1(_speed) + (_a4*(tanh(_B4*_speed) - tanh(_B5*_speed)) + _a5*tanh(_B6*_speed) + _a6*_speed)*_sign2(_speed);
+    float tauF = -(_a1*(tanh(_B1*_speed) - tanh(_B2*_speed)) + _a2*tanh(_B3*_speed) + _a3*_speed + 0.1)*_sign1(_speed) - (_a4*(tanh(_B4*_speed) - tanh(_B5*_speed)) + _a5*tanh(_B6*_speed) + _a6*_speed)*_sign2(_speed);
 
     // Add condition for 0 velocity.
-    if ((_speed/_N) < 0.9f && _tauHat>0.0f)
+    if ((_speed/_N) < w_cutoff && _tauHat>0.0f)
     {
-    	tauF = -1.6f * (1.0f - (fabsf(_speed)/_N)/0.9f) + tauF;
+    	tauF = (-stiction * (1.0f - (fabsf(_speed)/_N)/w_cutoff)) + tauF;
+    	// tauF = -0.665f * (1.0f - (fabsf(_speed)/_N)/w_cutoff);
+
     	// tauF = -1.6f;
     }
-    else if((_speed/_N) > -0.9f && _tauHat<0.0f)
+    else if((_speed/_N) > -w_cutoff && _tauHat<0.0f)
     {
-    	tauF = 1.6f * (1.0f - (fabsf(_speed)/_N)/0.9f) + tauF;
+    	tauF = (stiction * (1.0f - (fabsf(_speed)/_N)/w_cutoff)) + tauF;
+    	// tauF = 0.665f * (1.0f - (fabsf(_speed)/_N)/w_cutoff);
     }
 
-    // Motor torque
-    // if(fabsf(_tauHat)>0.0f)
-    // {
-   	// 	Tm = _tauHat + tauF;
-    // }
-    // else
-    // {
-    // 	Tm = 0.0f;
-    // }
 
-	Tm = _tauHat - tauF;
+	Tm = _tauHat + tauF;
 
     // Calculate current
     float Ia = _p1*pow(Tm, 3.0f) + _p2*pow(Tm, 2.0f) + _p3*Tm;
@@ -275,12 +284,12 @@ float _heavi_m(float x)
 
 float _sign1(float x)
 {
-	if (x > 0) return 1;
-	return 0;
+	if (x > 0) return 1.0f;
+	return 0.0f;
 }
 
 float _sign2(float x)
 {
-	if (x < 0) return 1;
-	return 0;
+	if (x < 0) return 1.0f;
+	return 0.0f;
 }

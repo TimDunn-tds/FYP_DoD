@@ -7,9 +7,8 @@ function LQG = getLQG(T)
 Qc = [
     1, 0, 0;
     0, 1, 0;
-    0, 0, 1]; % penalise state
-% Rc = 1.1e2;      % penalise actuator
-Rc = 1e10;      % penalise actuator
+    0, 0, 0.1]; % penalise state
+Rc = 1e12;      % penalise actuator
 
 plantModel = getPlantModel(T);
 idx = plantModel.idx;

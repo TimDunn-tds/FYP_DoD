@@ -1,12 +1,13 @@
-clear; clc; %close all;
-load('apparatusParams.mat');
+clc; %close all;
+load('apparatusParams2.mat');
 % load('cameraParams.mat');
 
-% vid = webcam(1);
-% vid.Resolution = '320x240';
-vid.Resolution = '640x480';
+vid = videoinput('winvideo',1, 'RGB24_320x240');
+% vid = videoinput('winvideo',3, 'RGB24_640x480');
+triggerconfig(vid, 'manual');
+start(vid);
 preview(vid);
-tsim = 1000;
+tsim = 200;
 
 
 % Create rotation and Translation matrices
@@ -14,13 +15,14 @@ R = cameraParams.RotationMatrices(:,:,end);
 T = cameraParams.TranslationVectors(end,:);
 
 angle = zeros(tsim,1);
-frames = uint8(zeros(480,640,3,tsim));
+frames = uint8(zeros(240,320,3,tsim));
 tic
 loopRate = 30;
 r = robotics.Rate(loopRate);
+%%
 for i = 1:tsim
     %% Capture the image
-    imOrig = snapshot(vid);
+    imOrig = getsnapshot(vid);
     
     %% Undistort the image
     [im, newOrigin] = undistortImage(imOrig, cameraParams, 'OutputView', 'same');
@@ -53,9 +55,9 @@ for i = 1:tsim
     blobAnalysis = vision.BlobAnalysis('AreaOutputPort', true,...
     'CentroidOutputPort', true,...
     'BoundingBoxOutputPort', true,...
-    'MaximumBlobArea', 4500,...
-    'MinimumBlobArea', 2000,...
-    'ExcludeBorderBlobs', true,...
+    'MaximumBlobArea', 1100,...
+    'MinimumBlobArea', 650,...
+    'ExcludeBorderBlobs', false,...
     'MaximumCount', 2);
 %     [areas, centroid, boxes] = blobAnalysis(imCircles(1:460,138:555));
     [areas, centroid, boxes] = blobAnalysis(imCircles);
@@ -140,12 +142,15 @@ for i = 1:tsim
     imDetectedCoins = insertText(imDetectedCoins, [1,240], text);
     
     frames(:,:,:,i) = imDetectedCoins;
+%     imshow(imDetectedCoins, 'InitialMagnification', magnification);
     waitfor(r);
 
     
 end
+%%
 elapsed_time = toc
-
+delete(vid)
+clear('vid')
 
 
 %% Save video

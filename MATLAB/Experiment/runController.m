@@ -11,4 +11,11 @@ Kc      = LQG.Kc;
 
 tauHat = (Nu + Kc*Nx)*ref + Kc*mup;
 
+maxT = 0.8;
+if tauHat>maxT
+    tauHat = maxT;
+elseif tauHat<-maxT
+    tauHat = -maxT;
+end
+
 

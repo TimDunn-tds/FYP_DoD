@@ -5,7 +5,9 @@ TIMEOUT = 0.5; % Time to wait for data before aborting
 
 
 % Pick sysID input
-type = "sinWave_ctrl";
+type = "sinWave_1_ctrl";
+% type = "sinWave_ctrl";
+% type = 'sinWave_005_ctrl';
 % type = "stepUp_ctrl";
 % type = "stepDown_ctrl";
 
@@ -41,6 +43,7 @@ try
     
     for k = 1:N
         fprintf(stm32, 'ctrl set %f\n',input(k));
+        fprintf('ctrl set %f\n', input(k));
         rxStr = fgets(stm32);
         data(k,:) = sscanf(rxStr,'%f,%f,%f,%f,%f,%f\n',[1,6]);
     end
@@ -98,7 +101,7 @@ plot(time,vel,'DisplayName','Velocity [rad/s]','linewidth',2);
 grid on;
 legend('location','best');
 subplot(3,1,2);
-plot(time,current,'DisplayName','Current [A]','linewidth',2); hold on;
+plot(time,pos,'DisplayName','Position [rad]','linewidth',2); hold on;
 grid on;
 legend('location','best');
 subplot(3,1,3);

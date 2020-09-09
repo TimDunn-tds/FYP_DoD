@@ -24,7 +24,7 @@ Jo = 0.5*mo*(ro^2);
 %    Jdisk      + Jcoupling + Jshaft
 Jh = 3.908e-3   + 1.103e-6  + 2.38e-6;
 
-Jh = 5.61245997629224;
+Jh = 0.0138;
 
 g = 9.82;                   % m/s^2
 
@@ -70,7 +70,7 @@ MM = [
 
 KK = [0, 0; 0, -mo*g*(rh + ro)];
 
-DD = [0.00, 0; 0, 0];
+DD = [0.1895, 0; 0, 0];
 
 e = [1;0];
 
@@ -133,10 +133,10 @@ Pp_init = 1e2*eye(4);
 
 [Aod, Bod] = c2d(A, B, T);
 
-Qo = diag([1e-2, 1e-2, 1e-5, 1e-5]);
+Qo = diag([1e4, 1e2, 1e2, 1e-0]);
 % Ro = 2.5e-07*eye(size(Cm,1));
 % Ro = 2.5e-07*eye(size(Cm,1));
-Ro = diag([1e-6, 1e-6, 9.0851e-04]);
+Ro = diag([1e-4, 1e-4, 9.0851e-04]);
 % Ro = 1e0*eye(3);
 Lo = dlqr(Aod.',Cm.',Qo,Ro).';
 sys = ss(Aod, [Bod eye(length(B))], Cm, [Dm zeros(size(Dm,1),length(B))], -1);

@@ -1,17 +1,17 @@
 close all; clear;
 %% Prepare calibration images
-numImages = 47;
+numImages = 51;
 files = cell(1, numImages);
 
 for i = 1:numImages
 %     files{i} = fullfile('checkerboardTest', sprintf('img_%d.jpg', i));
-    files{i} = fullfile('experimentCalibration', sprintf('img_%d.jpg', i));
+    files{i} = fullfile('experimentCalibration2', sprintf('img_%d.jpg', i));
 
 end
 
 % Display a calibration image
 magnification = 100;
-I = imread(files{2});
+I = imread(files{1});
 figure(1);
 imshow(I, 'InitialMagnification', magnification);
 title('One of the images');
@@ -49,7 +49,7 @@ title('Reprojection Errors');
 
 
 %% Pick the image to be used for measuring
-imOrig = imread(fullfile('experimentCalibration','img_21.jpg'));
+imOrig = imread(fullfile('experimentCalibration2','img_7.jpg'));
 figure(4);
 imshow(imOrig, 'InitialMagnification', magnification);
 title('Input Image');
@@ -116,8 +116,8 @@ title('Segmented Circles');
     blobAnalysis = vision.BlobAnalysis('AreaOutputPort', true,...
     'CentroidOutputPort', true,...
     'BoundingBoxOutputPort', true,...
-    'MaximumBlobArea', 4500,...
-    'MinimumBlobArea', 2500,...
+    'MaximumBlobArea', 1500,...
+    'MinimumBlobArea', 500,...
     'ExcludeBorderBlobs', true,...
     'MaximumCount', 2);
 [areas, centroid, boxes] = blobAnalysis(imCoin);
@@ -214,5 +214,5 @@ fprintf('Measured angle between the two circle centres = %0.2f deg from positive
 %% Save params
 figure;
 showExtrinsics(cameraParams,'CameraCentric')
-save('apparatusParams.mat','cameraParams');
+save('apparatusParams2.mat','cameraParams');
 

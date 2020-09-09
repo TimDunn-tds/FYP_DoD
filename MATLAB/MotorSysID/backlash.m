@@ -39,7 +39,7 @@ current(k) = -1.*current(k);
 w_a0 = 0;
 Ia0 = 0;
 Va0 = 0;
-x0 = [Ia0; w_a0];
+x0 = [Ia0; w_a0; 0];
 
 % Simulation time
 dt = 0.01;
@@ -58,15 +58,16 @@ Jh = 0.0039;
 % param_vec = [2; 0.1; 1e-3; 3e4; 2e5; 2e4; 1.5; 1; 0.1; 1e-3; 2e4; 1e3; 1e4];
 % param_vec = [2; 0.1; 1e-3; 3e3; 1e3; 2.1e5; 1.5; 1; 0.1; 1e-3; 2e4; 3.5e4; 2e4];
 param_vec = [6.5035; 6.3853e-4; 0.0011; 3.0021e3; 986.7121; 2.1e5; 5.6125; 0.0250; 0.1042; 0.0012; 1.9998e4; 3.5e4; 1.9998e4];
-
+% param_vec = [1, 1];
 % Compute cost
-y_true = [V, current, vel];
+y_true = [V, current, vel, pos];
 
 % V_y = @(y) (y(:,1) - y_true(:,1)).'*(y(:,1) - y_true(:,1));
 % V_y = @(y) (y(:,2) - y_true(:,2)).'*(y(:,2) - y_true(:,2));
 % V_y = @(y) (y(:,3) - y_true(:,3)).'*(y(:,3) - y_true(:,3));
 V_y =@(y) 0.3*((y(:,3) - y_true(:,3)).'*(y(:,3) - y_true(:,3)))...
-            + 0.7*((y(:,2) - y_true(:,2)).'*(y(:,2) - y_true(:,2)));
+            + 0.4*((y(:,2) - y_true(:,2)).'*(y(:,2) - y_true(:,2)))...
+            + 0.3*((y(:,4) - y_true(:,4)).'*(y(:,4) - y_true(:,4)));
 
 V_theta = @(theta) V_y(runSim(theta,x0,t_sim,input));
 
@@ -79,15 +80,15 @@ V_theta = @(theta) V_y(runSim(theta,x0,t_sim,input));
 % final_cost = V_theta(param_opt)
 
 %% Run optimisation with patternsearch
-% A = -eye(length(param_vec));
-% b = zeros(length(param_vec),1);
-% lb = 1e-8.*ones(length(param_vec),1);
-% % ub = 2.1e5.*ones(length(param_vec),1);
-% options = optimoptions('patternsearch','Display','iter','StepTolerance',1e-10,...
-%     'MaxFunctionEvaluations', 5000, ...
-%     'MaxMeshSize', 1024);
-% param_opt = patternsearch(V_theta, param_vec, A, b, [], [], lb, [], [], options);
-% final_cost = V_theta(param_opt)
+A = -eye(length(param_vec));
+b = zeros(length(param_vec),1);
+lb = 1e-8.*ones(length(param_vec),1);
+% ub = 2.1e5.*ones(length(param_vec),1);
+options = optimoptions('patternsearch','Display','iter','StepTolerance',1e-10,...
+    'MaxFunctionEvaluations', 5000, ...
+    'MaxMeshSize', 1024);
+param_opt = patternsearch(V_theta, param_vec, A, b, [], [], lb, [], [], options);
+final_cost = V_theta(param_opt)
 
 %% Run optimisation with global search
 % gs = GlobalSearch;
@@ -133,6 +134,15 @@ legend;
 
 linkaxes([ax1,ax2,ax3],'x');
 
+figure(2); clf;
+plot(t_sim,y_true(:,4).*180/pi,'DisplayName','Measured Theta', 'LineWidth', 2); hold on;
+plot(t_sim, y_cts(:,4).*180/pi, 'DisplayName', 'Simulated Theta', 'LineWidth', 2); hold on;
+ylabel('Position [deg]');
+xlabel('Time [s]');
+grid on;
+legend;
+
+
 %% Prompt for save of file
 % answer = questdlg("Save parameters?","Save prompt","Yes","No","No");
 % if answer == "Yes"
@@ -172,8 +182,8 @@ function y = runSim(param_vec, x0, t_sim, input)
     % Unpack input
     V = input(:,1);
     % Interpolation function
-    Va  =@(t) interp1(t_sim,V,t);
-%     Va  =@(t) 3.947.*sin(2*pi*1*t);
+%     Va  =@(t) interp1(t_sim,V,t);
+    Va  =@(t) max(input(:,1)).*sin(2*pi*0.5*t);
     
     % Useful functions
     heavi_p =@(x) 1./(1 + exp(-2.*50.*x));
@@ -182,7 +192,7 @@ function y = runSim(param_vec, x0, t_sim, input)
     % CCRs
     eb      =@(w_m) Kw.*w_m;
     tauF    =@(w_m) (a1.*(tanh(B1.*w_m) - tanh(B2.*w_m)) + a2.*tanh(B3.*w_m) + a3.*w_m).*heavi_p(w_m)...
-                    + (a4.*(tanh(B4.*w_m) - tanh(B5.*w_m)) + a5.*tanh(B6.*w_m) + a6.*w_m).*heavi_m(w_m);
+                  + (a4.*(tanh(B4.*w_m) - tanh(B5.*w_m)) + a5.*tanh(B6.*w_m) + a6.*w_m).*heavi_m(w_m);
 %      tauF =@(w_m) (a1.*(tanh(B1.*w_m) - tanh(B2.*w_m)) + a2.*tanh(B3.*w_m)).*heavi_p(w_m)...
 %                 + (a4.*(tanh(B4.*w_m) - tanh(B5.*w_m)) + a5.*tanh(B6.*w_m)).*heavi_m(w_m);       
             
@@ -191,18 +201,20 @@ function y = runSim(param_vec, x0, t_sim, input)
 
 %     tauM=@(Ia) (0.06085.*Ia.^2 + 0.6843.*Ia).*heavi_m(Ia) + (0.5702.*exp(0.3512.*Ia) - 0.5703.*exp(-1.82.*Ia)).*heavi_p(Ia);
     tauM =@(Ia) 0.06761.*Ia.^4 + 0.2721.*Ia.^3 - 0.02975.*Ia.^2 + 1.417.*Ia;
+%     tauF =@(w_m) B*w_m;
 
 
     % SSRs
 %     dw_m    =@(w_m,Ia,Va) (motorTorque(Ia) - tauF(w_m))./J; 
     dw_m    =@(w_m,Ia,Va) (tauM(Ia) - tauF(w_m))./J; 
     dIa     =@(w_m,Ia,Va) (Va - Ra*Ia - eb(w_m))/La;
+    dtheta  =@(w_m,Ia,Va) w_m;
     
     % Create ode function
-    dx =@(w_m,Ia,Va) [dIa(w_m,Ia,Va); dw_m(w_m,Ia,Va)];
+    dx =@(w_m,Ia,Va) [dIa(w_m,Ia,Va); dw_m(w_m,Ia,Va); dtheta(w_m,Ia,Va)];
     
     % Create wrapper function
-    dx_wrap = @(t,x) dx(x(2),x(1),Va(t));
+    dx_wrap = @(t,x) dx(x(2), x(1), Va(t));
 
     % Run simulation
 %     options = odeset("OutputFcn",@odeplot);
@@ -212,6 +224,7 @@ function y = runSim(param_vec, x0, t_sim, input)
     % Calculate dIa
     w_sim = res.x(:,2);
     Ia_sim = res.x(:,1);
+    theta_sim = res.x(:,3);
     try
         dIa_eq = (Va(t_sim) - Ra.*Ia_sim - eb(w_sim))./La;
     catch
@@ -226,9 +239,10 @@ function y = runSim(param_vec, x0, t_sim, input)
     res.x(:,1) = V_hat(Ia_sim,w_sim);
     res.x(:,2) = Ia_sim;
     res.x(:,3) = w_sim;
-    output =@(x) [x(1); x(2); x(3)./N];
+    res.x(:,4) = theta_sim;
+    output =@(x) [x(1); x(2); x(3)./N; x(4)./N];
     % Generate output
-    y = zeros(length(res.t),3);
+    y = zeros(length(res.t),4);
     for i=1:length(res.t)
         y(i,:) = output(res.x(i,:)).';
     end

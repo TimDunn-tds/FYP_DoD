@@ -2,24 +2,9 @@
 % clc; clear;
 
 % Pick sysID input
-% type = "chirp_sig";
-% type = "sinWave_load_05hz";
-type = "sinWave";
-% type = "sinWave1hz";
-% type = "sinWave2hz";
-% type = "sinWave3hz";
-% type = "sinWave4hz";
-% type = "deadZone";
-% type = "rampDown";
-% type = "rampUpDown";
-% type = "rampUp";
+type = "sinWave_ctrl";
 % type = "stepDown";
 % type = "stepUp";
-% type = "constant4V";
-% type = "sinWave1hzPos";
-% type = "sinWave1hzNeg";
-% type = "constant6V";
-% type = "oneV_torque";
 
 filename = sprintf("%s_data.mat",type);
 data = importdata(filename);
@@ -50,8 +35,6 @@ subplot(2,1,1);
 % yyaxis left
 plot(time,V,'DisplayName','Voltage [V]','linewidth',2); hold on;
 plot(time,vel,'DisplayName','Velocity [rad/s]','linewidth',2);
-yyaxis right
-plot(time,pos,'DisplayName','Position [rad]','linewidth',2);
 grid on;
 legend('location','best');
 % ylim([0,1.4]);

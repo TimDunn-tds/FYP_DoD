@@ -45,6 +45,7 @@ sinWave = [V*sin(2*pi*freq*linspace(0,10,10/d))];
 
 plot(sinWave);
 
+
 % Sin
 figure(7);
 V = 4; % Volts
@@ -129,6 +130,16 @@ V = 6;
 constant6V = V*ones(1000,1);
 plot(constant6V);
 
+% Sin
+figure(16);
+V = 3; % Volts
+freq = 0.05; % Hz
+
+% sinWave = [zeros(1,0.5/d), V*sin(2*pi*freq*linspace(0,10,10/d))];
+sinWave_005 = [V*sin(2*pi*freq*linspace(0,20,20/d))];
+
+plot(sinWave_005);
+
 
 close all;
 %% Save files
@@ -147,5 +158,6 @@ save('sinWave_load_05hz.mat','sinWave_load_05hz');
 save('sinWave1hzPos.mat','sinWave1hzPos');
 save('sinWave1hzNeg.mat','sinWave1hzNeg');
 save('constant6V.mat','constant6V');
+save('sinWave_005.mat','sinWave_005');
 
 

@@ -1,11 +1,11 @@
 function [phi, frame] = getCV(vid, cameraParams, phi_prev)
 %% Unpack params
-R = cameraParams.RotationMatrices(:,:,end);
-T = cameraParams.TranslationVectors(end,:);
+% R = cameraParams.RotationMatrices(:,:,end);
+% T = cameraParams.TranslationVectors(end,:);
 
 %% Get image
 % Capture image from video stream
-imOrig = snapshot(vid);
+imOrig = getsnapshot(vid);
 
 % Undistort the image
 im = undistortImage(imOrig, cameraParams, 'OutputView', 'same');
@@ -28,9 +28,9 @@ imCircles = (sat > t(2));
 blobAnalysis = vision.BlobAnalysis('AreaOutputPort', true,...
 'CentroidOutputPort', true,...
 'BoundingBoxOutputPort', true,...
-'MaximumBlobArea', 5000,...
-'MinimumBlobArea', 2000,...
-'ExcludeBorderBlobs', true,...
+'MaximumBlobArea', 1100,...
+'MinimumBlobArea', 500,...
+'ExcludeBorderBlobs', false,...
 'MaximumCount', 2);
 
 [areas, centroids, boxes] = blobAnalysis(imCircles);
@@ -46,16 +46,15 @@ if size(boxes,1) == 2
 
     % Reduce the size of the image for display.
     scale = magnification / 100;
-    imDetectedCoins = imresize(im, scale);
+    imDetectedCircles = imresize(im, scale);
 
     % Insert labels for the circles.
-    imDetectedCoins = insertObjectAnnotation(imDetectedCoins, 'circle', ...
+    imDetectedCircles = insertObjectAnnotation(imDetectedCircles, 'circle', ...
     scale * circles(1,:), 'hand');
-    imDetectedCoins = insertObjectAnnotation(imDetectedCoins, 'circle', ...
+    imDetectedCircles = insertObjectAnnotation(imDetectedCircles, 'circle', ...
     scale * circles(2,:), 'object');
-    imDetectedCoins = insertMarker(imDetectedCoins, centroids);
+    imDetectedCircles = insertMarker(imDetectedCircles, centroids);
 
-    frame = imDetectedCoins;
 
     %% Measure the circles and the angle
     % Calculate world points from image points
@@ -65,11 +64,20 @@ if size(boxes,1) == 2
     phi_mark = atan2(centroids(1,2) - centroids(2,2), centroids(2,1) - centroids(1,1)) + pi/2;
 
     phi = -1*asin(0.13*sin(pi-phi_mark)/0.18);
+    
+%     text = ['Angle: ', num2str(phi*180/pi)];
+%     imDetectedCircles = insertText(imDetectedCircles, [1,120], text);
+    frame = imDetectedCircles;
+%     frame = imHSV;
+
+%     imshow(frame, 'InitialMagnification', magnification);
 
 else
     phi = phi_prev;
     scale = magnification / 100;
     frame = imresize(im, scale);
+%     frame = imHSV;
+
 end
 
     

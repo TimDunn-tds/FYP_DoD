@@ -1,3 +1,3 @@
 function params = getCameraParams()
-load 'apparatusParams.mat' cameraParams
+load 'apparatusParams2.mat' cameraParams
 params = cameraParams;
