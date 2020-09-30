@@ -164,3 +164,7 @@ Thumbs.db
 Desktop.ini
 $RECYCLE.BIN/
 
+#.VC.db
+MATLAB/cSerial/.vs/cmake.db
+MATLAB/cSerial/.vs/cserial/v16/Browse.VC.db
+MATLAB/cSerial/.vs/cserial/v16/Solution.VC.db

@@ -5,8 +5,8 @@
 
 #include "uart.h"
 // #include "button.h"
-// #include "led_rgb.h"
-// #include "light.h"
+#include "led_rgb.h"
+#include "light.h"
 // #include "potentiometer.h"
 #include "encoder.h"
 // #include "motor.h"
@@ -43,7 +43,7 @@ int main(void)
 
     // Initialise hardware modules
     uart_init();
-    // led_rgb_init();
+    led_rgb_init();
     // button_init(); // this also starts the button task
     encoder_init(); 
     // pot_init();
@@ -60,7 +60,7 @@ int main(void)
 
     
     // Initialise other modules
-    // light_init();
+    light_init();
     // kf_init();
 
     // Initialise task modules

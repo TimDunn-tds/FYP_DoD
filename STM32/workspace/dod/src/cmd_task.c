@@ -11,7 +11,7 @@ static osThreadId_t _cmdTaskHandle = NULL;
 static void CmdTask_function(void *argument);
 
 const osThreadAttr_t cmdTask_attr = {
-  .priority = osPriorityNormal,             //Set initial thread priority to Normal   
+  .priority = osPriorityHigh,             //Set initial thread priority to Normal   
   .stack_size = 1024                        //Set stack size to be larger to avoid crashes
 };
 

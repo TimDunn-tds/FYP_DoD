@@ -1,4 +1,4 @@
-function wHat = runController(mup, ref, LQG)
+function alphaHat = runController(mup, ref, LQG)
 % Extract states
 % theta    = mup(1);
 % phi      = mup(2);
@@ -9,7 +9,7 @@ Nu      = LQG.Nu;
 Nx      = LQG.Nx;
 Kc      = LQG.Kc;
 
-wHat = (Nu + Kc*Nx)*ref + Kc*mup;
+alphaHat = (Nu + Kc*Nx)*ref - Kc*mup;
 
 % maxT = 0.8;
 % if wHat>maxT

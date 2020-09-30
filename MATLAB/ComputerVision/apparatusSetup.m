@@ -1,11 +1,12 @@
 close all; clear;
 %% Prepare calibration images
-numImages = 51;
+numImages = 44;
 files = cell(1, numImages);
 
 for i = 1:numImages
 %     files{i} = fullfile('checkerboardTest', sprintf('img_%d.jpg', i));
-    files{i} = fullfile('experimentCalibration2', sprintf('img_%d.jpg', i));
+%     files{i} = fullfile('experimentCalibration2', sprintf('img_%d.jpg', i));
+    files{i} = fullfile('piCamCali', sprintf('img_%d.jpg', i));
 
 end
 
@@ -34,7 +35,7 @@ end
 % Generate world coordinates of the board corners in the pattern-centric
 % coordinate system, with the upper-left corner at 0,0
 % squareSize = 24; % [mm]
-squareSize = 5.6; % [mm]
+squareSize = 5.8; % [mm]
 worldPoints = generateCheckerboardPoints(boardSize, squareSize);
 
 % Calibrate the camera
@@ -49,7 +50,7 @@ title('Reprojection Errors');
 
 
 %% Pick the image to be used for measuring
-imOrig = imread(fullfile('experimentCalibration2','img_7.jpg'));
+imOrig = imread(fullfile('piCamCali','img_7.jpg'));
 figure(4);
 imshow(imOrig, 'InitialMagnification', magnification);
 title('Input Image');
@@ -116,8 +117,8 @@ title('Segmented Circles');
     blobAnalysis = vision.BlobAnalysis('AreaOutputPort', true,...
     'CentroidOutputPort', true,...
     'BoundingBoxOutputPort', true,...
-    'MaximumBlobArea', 1500,...
-    'MinimumBlobArea', 500,...
+    'MaximumBlobArea', 6000,...
+    'MinimumBlobArea', 2500,...
     'ExcludeBorderBlobs', true,...
     'MaximumCount', 2);
 [areas, centroid, boxes] = blobAnalysis(imCoin);
@@ -214,5 +215,5 @@ fprintf('Measured angle between the two circle centres = %0.2f deg from positive
 %% Save params
 figure;
 showExtrinsics(cameraParams,'CameraCentric')
-save('apparatusParams2.mat','cameraParams');
+save('piCam.mat','cameraParams');
 

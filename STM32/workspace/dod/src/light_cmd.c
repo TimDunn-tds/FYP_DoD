@@ -51,10 +51,10 @@ void light_cmd(int argc, char *argv[])
         led_rgb_set_green(light_get_green());
         led_rgb_set_blue(light_get_blue());
 
-        printf("Set LED hue = %.0fdeg, sat = %.0f%%, val = %.0f%%\n",
-            (float)light_get_hue()/LIGHT_HUE_DEGREE,
-            100.0*light_get_saturation()/UINT16_MAX,
-            100.0*light_get_brightness()/UINT16_MAX);
+        // printf("Set LED hue = %.0fdeg, sat = %.0f%%, val = %.0f%%\n",
+        //     (float)light_get_hue()/LIGHT_HUE_DEGREE,
+        //     100.0*light_get_saturation()/UINT16_MAX,
+        //     100.0*light_get_brightness()/UINT16_MAX);
     }
     else
     {

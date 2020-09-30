@@ -16,12 +16,13 @@ mo = plantParams.mo;
 % x(4) = object CoM angle relative to hand CoM [rad]    phi
 Qc = [
     1, 0, 0;
-    0, 1, 0;
+    0, 0, 0;
     0, 0, 1]; % penalise state
-Rc = 1e1;      % penalise actuator
+Rc = 1e10;      % penalise actuator
 
 % plantModel = getPlantModel(T);
 idx = [1 2 3];
+% idx = [3];
 
 bot = mo*((rh+ro)^2) + Jo*((rh^2)/(ro^2));
 
@@ -44,6 +45,10 @@ Nx          = zeros(length(Cr),1);
 Nx(idx,:)   = NN(1:length(idx));
 Nu          = NN(end);
 
+LQG.Acd = Acd;
+LQG.Bcd = Bcd;
+LQG.Cc = Cc;
+LQG.Dc = Dc;
 
 LQG.Kc = Kc;
 LQG.Nx = Nx;

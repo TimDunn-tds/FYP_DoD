@@ -14,6 +14,7 @@
 #include "log_data.h"
 #include "kalman.h"
 #include "dc_motor.h"
+#include "control_allocation.h"
 
 #define COUNT_PER_REV 4741.44f
 #define PI 3.141592653589793f
@@ -121,13 +122,16 @@ void log_data_cmd(int argc, char *argv[])
         _position = dc_motor_get_position();
 
         // remember to conver timer ticks to seconds
-        _speed = (_position-_last_position)/((float)TIMER_TICKS/1000.0f);
+        // _speed = (_position-_last_position)/((float)TIMER_TICKS/1000.0f);
+        _speed = ctrl_get_speed();
 
         _voltage = dc_motor_get_voltage();
 
         _current = dc_motor_get_current();
 
-        printf("%12i,%15.4f,%14.6f,%12.4f,%12.2f\n", _count, _position, _speed, _voltage, _current);
+        // printf("%12i,%15.4f,%14.6f,%12.4f,%12.2f\n", _count, _position, _speed, _voltage, _current);
+        printf("%15.4f,%14.6f\n", _position, _speed);
+
         _last_position = _position;
         return;
     }

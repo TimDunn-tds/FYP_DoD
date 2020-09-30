@@ -1,0 +1,10 @@
+^C:\FYP\MATLAB\CSERIAL\CMAKEFILES\471926F563F3A50D9283526261824A06\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SD:/Downloads/CSerial-master/CSerial-master -BC:/FYP/MATLAB/cSerial --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/FYP/MATLAB/cSerial/cserial.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

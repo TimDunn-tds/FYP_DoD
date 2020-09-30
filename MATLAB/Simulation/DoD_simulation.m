@@ -109,7 +109,7 @@ Qc = [
     0, 1, 0;
     0, 0, 1];           % penalise state
 % Qc = eye(4);
-Rc = 1e5;                 % penalise actuator 
+Rc = 1e0;                 % penalise actuator 
 
 Kc = zeros(1,length(idx));
 Kc(:,idx)   = lqrd(Ac, Bc, Qc, Rc, T);	% Feedback gain matrix

@@ -1,0 +1,7 @@
+WEBCAM
+time step was 0.05 seconds.
+5 frames is 0.25 seconds.
+
+PICAM
+time step was 0.0167 seconds (60fps)
+5 frames is 0.0833 seconds

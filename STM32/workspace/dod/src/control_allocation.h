@@ -5,6 +5,7 @@
 void ctrl_allc_cmd(int agrc, char *argv[]);
 
 void ctrl_allc_task(void *argument);
+float ctrl_get_speed();
 
 
 

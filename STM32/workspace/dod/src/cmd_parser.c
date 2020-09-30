@@ -56,7 +56,7 @@ static CMD_T cmd_table[] =
     {heartbeat_cmd,     "heartbeat",    "[start|stop]",                         "Get status or start/stop heartbeat task"},
     {dc_motor_task_cmd, "cc_task",      "[start|stop]",                         "Get status or start/stop current control task"},
     // {dimmer_cmd,        "dimmer",       "[start|stop]",                         "Get status or start/stop dimmer task"},
-    // {light_cmd,         "light",        "[<H> <S> <V>]",                        "Get or set light HSV values"},
+    {light_cmd,         "light",        "[<H> <S> <V>]",                        "Get or set light HSV values"},
     {sin_table_cmd,     "sin",          "[<#> <amp> <freq>]",                   "Remember to match the definition"},
     {log_data_cmd,      "log",          "[pot|enc|mpu|dc|ctrl|reset] <#>",                  "Otherwise memory mad."},
     // {manual_reference_cmd,  "ref",          "[<m/s>]",                               "Set manual reference"},

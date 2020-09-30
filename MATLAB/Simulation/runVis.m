@@ -34,7 +34,7 @@ pbaspect([1 1 1]);
 
 F(1) = getframe(gcf);
 
-for i=2:5:size(tout)
+for i=2:1:size(tout)
     delete(h);
     delete(line_h);
     

@@ -1,4 +1,4 @@
-clc; %close all;
+clc; close all;
 load('apparatusParams2.mat');
 % load('cameraParams.mat');
 
@@ -151,7 +151,6 @@ end
 elapsed_time = toc
 delete(vid)
 clear('vid')
-
 
 %% Save video
 

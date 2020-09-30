@@ -1,0 +1,5 @@
+C:/Program Files (x86)/cserial/lib/cserial.lib
+C:/Program Files (x86)/cserial/bin/cserial.dll
+C:/Program Files (x86)/cserial/lib/cserial_static.lib
+C:/Program Files (x86)/cserial/include/cserial/c_serial.h
+C:/Program Files (x86)/cserial/include/cserial/simplelogger_defs.h

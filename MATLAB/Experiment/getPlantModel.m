@@ -27,13 +27,13 @@ mo = plantParams.mo;
 
 % Cm = [0, 0, 1, 0;
 %       0, 0, 0, 1]; % Measure hand and object positions
-plantModel.Cm = [0, 0, 1, 0;
-                0, 0, 0, 1;
-                1, 0, 0, 0]; % Measure hand and object positions, and hand velocity
-plantModel.Dm = [0;0;0];
+% plantModel.Cm = [0, 0, 1, 0;
+%                 0, 0, 0, 1;
+% %                 1, 0, 0, 0]; % Measure hand and object positions, and hand velocity
+% plantModel.Dm = [0;0;0];
 
 % Reduced-state continuous-time model for control design
-plantModel.idx = [1 2 3];                % Only include these states
+% plantModel.idx = [1 2 3];                % Only include these states
 % plantModel.Ac  = plantModel.A(plantModel.idx,plantModel.idx);
 % plantModel.Bc  = plantModel.B(plantModel.idx,:);
 % plantModel.Cc  = plantModel.Cr(:,plantModel.idx);

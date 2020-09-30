@@ -1,0 +1,5 @@
+C:/FYP/MATLAB/cSerial/CMakeFiles/cserial.dir
+C:/FYP/MATLAB/cSerial/CMakeFiles/cserial_static.dir
+C:/FYP/MATLAB/cSerial/CMakeFiles/INSTALL.dir
+C:/FYP/MATLAB/cSerial/CMakeFiles/ALL_BUILD.dir
+C:/FYP/MATLAB/cSerial/CMakeFiles/ZERO_CHECK.dir

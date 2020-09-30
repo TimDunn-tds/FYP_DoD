@@ -1,0 +1,10 @@
+^D:\DOWNLOADS\CSERIAL-MASTER\CSERIAL-MASTER\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SD:/Downloads/CSerial-master/CSerial-master -BC:/FYP/MATLAB/cSerial --check-stamp-file C:/FYP/MATLAB/cSerial/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
